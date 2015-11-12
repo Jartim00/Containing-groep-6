@@ -1,6 +1,7 @@
 package robin.containingtest2;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -17,11 +18,14 @@ public class grafiek extends AppCompatActivity {
     int aantalVrachtwagen;
     int aantalBoot;
     int aantalOpslag;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grafiek);
+
+
 
         aantalAgv = 45;
         aantalKraan = 55;
@@ -53,7 +57,20 @@ public class grafiek extends AppCompatActivity {
         chart.setDescription("Aantal containers per platform");
 
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
-
+        if(counter == 0) {
         chart.animateY(2500);
+        counter++;
+        }
+//        new CountDownTimer(5000, 50) {
+//
+//            @Override
+//            public void onTick(long arg0) {}
+//
+//            @Override
+//            public void onFinish() {
+//                finish();
+//                startActivity(getIntent());
+//            }
+//        }.start();
     }
 }
