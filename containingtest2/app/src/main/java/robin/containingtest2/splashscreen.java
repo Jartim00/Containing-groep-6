@@ -9,7 +9,6 @@ public class splashscreen extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
@@ -20,7 +19,7 @@ public class splashscreen extends Activity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(splashscreen.this,MainActivity.class);
+                    Intent intent = new Intent(splashscreen.this,MainMenu.class);
                     startActivity(intent);
                 }
             }
