@@ -1,40 +1,57 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/menu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#000000">
+
+
+
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
-    android:orientation="vertical" >
+    android:layout_above="@+id/BottomButtons">
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="     Containing Groep 9"
+        android:id="@+id/button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:background="#4052b5"
+        android:gravity="center_vertical|left" />
+</RelativeLayout>
 
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:id="@+id/BottomButtons"
     android:layout_height="wrap_content"
-    android:layout_marginRight="2dp"
-    android:layout_marginLeft="2dp"
-    android:orientation="horizontal" >
-
-</LinearLayout>
-
-<Button
-    android:id="@+id/grafiek"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="0.5"
-    android:text="Grafiek"
-    android:textColor="#ffffff"
-    android:background="#000000"
-    android:textSize="40sp" />
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical" >
+    <Button
+        android:id="@+id/grafiek"
+        android:layout_width="fill_parent"
+        android:layout_height="100sp"
+        android:text="Grafiek"
+        android:textColor="#ffffff"
+        android:background="#000000"
+        android:textSize="40sp"
+        android:layout_weight="1" />
 
-
-<Button
-    android:id="@+id/button2"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="0.5"
-    android:text="Zoeken"
-    android:layout_marginTop="1sp"
-    android:textColor="#ffffff"
-    android:background="#000000"
-    android:textSize="40sp" />
-
-</LinearLayout>
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="fill_parent"
+        android:layout_height="100sp"
+        android:text="Zoeken"
+        android:layout_marginTop="1sp"
+        android:textColor="#ffffff"
+        android:background="#000000"
+        android:textSize="40sp"
+        android:layout_weight="1"
+        android:paddingTop="3sp"
+        android:paddingBottom="3sp"/>
+    </LinearLayout>
+    </RelativeLayout>
