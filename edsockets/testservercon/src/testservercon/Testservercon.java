@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -24,12 +25,15 @@ public class Testservercon {
      
     public static void main(String args[]) throws IOException, ClassNotFoundException{
         //create the socket server object
-        server = new ServerSocket(port);
+        server = new ServerSocket(port, 0, InetAddress.getByName(null));
         //keep listens indefinitely until receives 'exit' call or program terminates
         while(true){
             System.out.println("Waiting for client request");
             //creating socket and waiting for client connection
             Socket socket = server.accept();
+                        if (socket.isConnected()) { // Test om te zien of connectie gemaakt is
+                System.out.println("Connection established");
+            }
             //read from socket to ObjectInputStream object
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             //convert ObjectInputStream object to String
