@@ -42,7 +42,8 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
         
-        Opslagkraan kraan1 = new Opslagkraan(assetManager);
+        Opslagkraan opslagKraan1 = new Opslagkraan(assetManager);
+        Zeeschipkraan zeeschipKraan1 = new Zeeschipkraan(assetManager);
         //create terrain
         Box opslagBox = new Box(155, 0.01f, 60);
         Box wegBox = new Box(157.4f, 0, 62.4f);
@@ -86,6 +87,7 @@ public class Main extends SimpleApplication {
         binnenvaart.setLocalTranslation(-78.7f, 0, 65.4f);
         treinplatform.setLocalTranslation(0, 0, -65.4f);
         zeevaart.setLocalTranslation(-160.4f, 0, 0);
+        zeeschipKraan1.setLocalTranslation(-160, 2, 0);
         
         rootNode.attachChild(Opslag);
         rootNode.attachChild(weg);
@@ -93,7 +95,8 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(binnenvaart);
         rootNode.attachChild(treinplatform);
         rootNode.attachChild(zeevaart);
-        rootNode.attachChild(kraan1);
+        rootNode.attachChild(opslagKraan1);
+        rootNode.attachChild(zeeschipKraan1);
         
         //create processor
         waterProcessor = new SimpleWaterProcessor(assetManager);
@@ -114,7 +117,7 @@ public class Main extends SimpleApplication {
     
 
     public void initScene(){
-        flyCam.setMoveSpeed(50.0f);
+        flyCam.setMoveSpeed(10.0f);
         
         sceneNode = new Node("Scene");
         
