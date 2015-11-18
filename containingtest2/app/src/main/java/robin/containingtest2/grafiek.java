@@ -1,7 +1,6 @@
 package robin.containingtest2;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -10,14 +9,21 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+
 public class grafiek extends AppCompatActivity {
+
+
     int aantalAgv;
-    int aantalKraan;
+    int aantalBinnenschip;
     int aantalVrachtwagen;
-    int aantalBoot;
+    int aantalZeeschip;
     int aantalOpslag;
+    int aantalTrein;
+    int aantalDiversen;
     int counter = 0;
 
     @Override
@@ -26,27 +32,32 @@ public class grafiek extends AppCompatActivity {
         setContentView(R.layout.grafiek);
 
 
-
-        aantalAgv = 45;
-        aantalKraan = 55;
+        aantalAgv = 32;
+        aantalBinnenschip = 55;
         aantalVrachtwagen = 120;
-        aantalBoot = 550;
+        aantalZeeschip = 550;
         aantalOpslag = 200;
+        aantalTrein = 30;
+        aantalDiversen = 5;
 
         ArrayList<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(aantalAgv, 0));
-        entries.add(new BarEntry(aantalKraan, 1));
+        entries.add(new BarEntry(aantalBinnenschip, 1));
         entries.add(new BarEntry(aantalVrachtwagen, 2));
-        entries.add(new BarEntry(aantalBoot, 3));
+        entries.add(new BarEntry(aantalZeeschip, 3));
         entries.add(new BarEntry(aantalOpslag, 4));
+        entries.add(new BarEntry(aantalTrein, 5));
+        entries.add(new BarEntry(aantalDiversen, 6));
         BarDataSet dataset = new BarDataSet(entries, "Aantal containers");
 
         ArrayList<String> labels = new ArrayList<String>();
         labels.add("AGV");
-        labels.add("Kraan");
+        labels.add("Binnenschip");
         labels.add("Vrachtwagen");
-        labels.add("Boot");
+        labels.add("Zeeschip");
         labels.add("Opslag");
+        labels.add("Trein");
+        labels.add("Diversen");
 
         BarChart chart = new BarChart(this);
         setContentView(chart);
@@ -74,3 +85,4 @@ public class grafiek extends AppCompatActivity {
 //        }.start();
     }
 }
+
