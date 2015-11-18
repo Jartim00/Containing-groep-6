@@ -3,30 +3,40 @@
    	
    	$link=Connection();
 
-	$query = 'SELECT agv FROM grafiek ORDER BY agv DESC LIMIT 1';
+	$query = 'SELECT agv FROM grafiek ORDER BY id DESC LIMIT 1';
 	$result = mysql_query($query,$link);
    	$agvArray = mysql_fetch_array($result);
 	$agv = $agvArray[0];
 
-	$query = 'SELECT kraan FROM grafiek ORDER BY kraan DESC LIMIT 1';
+	$query = 'SELECT binnenschip FROM grafiek ORDER BY id DESC LIMIT 1';
 	$result = mysql_query($query,$link);
-   	$kraanArray = mysql_fetch_array($result);
-	$kraan = $kraanArray[0];
+   	$binnenArray = mysql_fetch_array($result);
+	$binnenschip = $binnenArray[0];
 	
-	$query = 'SELECT vrachtwagen FROM grafiek ORDER BY vrachtwagen DESC LIMIT 1';
+	$query = 'SELECT vrachtwagen FROM grafiek ORDER BY id DESC LIMIT 1';
 	$result = mysql_query($query,$link);
    	$vrachtwagenArray = mysql_fetch_array($result);
 	$vrachtwagen = $vrachtwagenArray[0];
 
-	$query = 'SELECT boot FROM grafiek ORDER BY boot DESC LIMIT 1';
+	$query = 'SELECT zeeschip FROM grafiek ORDER BY id DESC LIMIT 1';
 	$result = mysql_query($query,$link);
-	$bootArray = mysql_fetch_array($result);
-	$boot = $bootArray[0];
+	$zeeArray = mysql_fetch_array($result);
+	$zeeschip = $zeeArray[0];
 	
-	$query = 'SELECT opslag FROM grafiek ORDER BY opslag DESC LIMIT 1';
+	$query = 'SELECT opslag FROM grafiek ORDER BY id DESC LIMIT 1';
 	$result = mysql_query($query,$link);
 	$opslagArray = mysql_fetch_array($result);
 	$opslag = $opslagArray[0];
+	
+	$query = 'SELECT trein FROM grafiek ORDER BY id DESC LIMIT 1';
+	$result = mysql_query($query,$link);
+	$treinArray = mysql_fetch_array($result);
+	$trein = $treinArray[0];
+	
+	$query = 'SELECT diversen FROM grafiek ORDER BY id DESC LIMIT 1';
+	$result = mysql_query($query,$link);
+	$diversenArray = mysql_fetch_array($result);
+	$diversen = $diversenArray[0];
 	
 	//echo "$agv $kraan $vrachtwagen $boot $opslag";
 	
@@ -34,10 +44,12 @@
 	
 	$data = Array();
 	$data["agv"] = $agv;
-	$data["kraan"] = $kraan;
+	$data["binnenschip"] = $binnenschip;
 	$data["vrachtwagen"] = $vrachtwagen;
-	$data["boot"] = $boot;
+	$data["zeeschip"] = $zeeschip;
 	$data["opslag"] = $opslag;
+	$data["trein"] = $trein;
+	$data["diversen"] = $diversen;
 	
 	echo json_encode($data);
   
