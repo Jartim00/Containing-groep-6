@@ -1,6 +1,5 @@
 // OpenXML.cpp : Defines the entry point for the console application.
 //
-
 #include "stdafx.h"
 #include <iostream>
 #include <algorithm>
@@ -127,7 +126,7 @@ int main()
 	map<string, string> container;
 	for (auto x : containergegevens)
 		container[x] = "";
-	vector<string> fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml"};
+	vector<string> fname = { "xml1.xml", "xml2.xml", /* "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml" */};
 	cout << "press any key to start" << endl;
 	cin.get();
 
@@ -285,7 +284,7 @@ int main()
 							}
 						}
 						if (!error & goodContainer){
-							//querey
+							
 						}
 						else
 						{
@@ -300,7 +299,6 @@ int main()
 			} while (iss);
 		}
 	}
-	
 	cout << "end" << endl;
 	for (;;){}
 }
