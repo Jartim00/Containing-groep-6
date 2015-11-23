@@ -9,7 +9,7 @@
 		$connection = mysql_connect($server, $user, $pass);
 
 		if (!$connection) {
-	   	die('TEST ' . mysql_error());
+	   	die('YO, KUT DING DOET HET NIET ' . mysql_error());
 		}
 
 		mysql_select_db($db) or die( 'MySQL ERROR: '. mysql_error() );
