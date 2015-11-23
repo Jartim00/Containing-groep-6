@@ -16,14 +16,15 @@ import com.jme3.scene.shape.Box;
  * @author seventhflame
  */
 
-public class Zeeschipkraan extends Node 
+public class ZeeschipKraan extends Node 
 {
     private AssetManager assetManager;
     
-    public Zeeschipkraan(AssetManager assetManager) 
+    public ZeeschipKraan(AssetManager assetManager) 
     {
     
         this.assetManager = assetManager;
+        
         Box poot = new Box(0.2f,2.5f,0.2f);
         Box xBalk = new Box(1.2f,0.2f,0.2f);
         Box zBalk = new Box(0.2f,0.2f,1.2f);
@@ -71,8 +72,8 @@ public class Zeeschipkraan extends Node
         zeeschipKraanXBalk2.setLocalTranslation(0, 1, 1.4f);
         zeeschipKraanZBalk1.setLocalTranslation(1.4f, 1, 0);
         zeeschipKraanZBalk2.setLocalTranslation(-1.4f, 1, 0);
-        zeeschipKraanArm1.setLocalTranslation(-2.5f, 2.5f, 1.4f);
-        zeeschipKraanArm2.setLocalTranslation(-2.5f, 2.5f, -1.4f);
+        zeeschipKraanArm1.setLocalTranslation(-3.4f, 2.5f, 1.4f);
+        zeeschipKraanArm2.setLocalTranslation(-3.4f, 2.5f, -1.4f);
         zeeschipKraanBallast.setLocalTranslation(3, 2.5f, 0);
         zeeschipKraanHaak.setLocalTranslation(0, 2.5f, 0); 
         

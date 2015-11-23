@@ -15,17 +15,17 @@ import com.jme3.scene.shape.Box;
  *
  * @author seventhflame
  */
-public class Opslagkraan extends Node 
+public class OpslagKraan extends Node 
 {
     private AssetManager assetManager;
 
     //maak opslagkraan
-    public Opslagkraan(AssetManager assetManager) 
+    public OpslagKraan(AssetManager assetManager) 
     {
         this.assetManager = assetManager;
         Box poot = new Box(0.2f,2.5f,0.2f);
         Box top = new Box(2,0.2f,0.2f);
-        Box haak = new Box(0.3f,0.3f,0.3f);
+        Box haak = new Box(0.25f,0.1f,1.2f);
         
         Geometry kraanPoot1 = new Geometry("Box", poot);
         Geometry kraanPoot2 = new Geometry("Box", poot);
@@ -46,7 +46,7 @@ public class Opslagkraan extends Node
         kraanPoot1.setLocalTranslation(-2, 0, 0);
         kraanPoot2.setLocalTranslation(2, 0, 0);
         topKraan.setLocalTranslation(0, 2.3f, 0);
-        kraanHaak.setLocalTranslation(0, 2.3f, 0);
+        kraanHaak.setLocalTranslation(0, 2.1f, 0);
         
         attachChild(kraanPoot1);
         attachChild(kraanPoot2);
