@@ -42,8 +42,11 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
         
-        Opslagkraan opslagKraan1 = new Opslagkraan(assetManager);
-        Zeeschipkraan zeeschipKraan1 = new Zeeschipkraan(assetManager);
+        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
+        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
+        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
+        VrachtwagenKraan vrachtwagenKraan1 = new VrachtwagenKraan(assetManager);
+        TreinKraan treinKraan1 = new TreinKraan(assetManager);
         //create terrain
         Box opslagBox = new Box(155, 0.01f, 60);
         Box wegBox = new Box(157.4f, 0, 62.4f);
@@ -87,7 +90,11 @@ public class Main extends SimpleApplication {
         binnenvaart.setLocalTranslation(-78.7f, 0, 65.4f);
         treinplatform.setLocalTranslation(0, 0, -65.4f);
         zeevaart.setLocalTranslation(-160.4f, 0, 0);
+        opslagKraan1.setLocalTranslation(0, 2, 0);
         zeeschipKraan1.setLocalTranslation(-160, 2, 0);
+        binnenvaartKraan1.setLocalTranslation(-78, 2, 65);
+        vrachtwagenKraan1.setLocalTranslation(78, 1, 65);
+        treinKraan1.setLocalTranslation(0, 1, -65);
         
         rootNode.attachChild(Opslag);
         rootNode.attachChild(weg);
@@ -97,6 +104,9 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(zeevaart);
         rootNode.attachChild(opslagKraan1);
         rootNode.attachChild(zeeschipKraan1);
+        rootNode.attachChild(binnenvaartKraan1);
+        rootNode.attachChild(vrachtwagenKraan1);
+        rootNode.attachChild(treinKraan1);
         
         //create processor
         waterProcessor = new SimpleWaterProcessor(assetManager);
@@ -117,7 +127,7 @@ public class Main extends SimpleApplication {
     
 
     public void initScene(){
-        flyCam.setMoveSpeed(10.0f);
+        flyCam.setMoveSpeed(20.0f);
         
         sceneNode = new Node("Scene");
         
@@ -125,12 +135,6 @@ public class Main extends SimpleApplication {
         sceneNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sceneNode);
         
-        
-        Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
-        S.scale(0.05f);
-        S.rotate(0.0f, -3.0f, 0.0f);
-        S.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        rootNode.attachChild(S);
            
         /** A white, directional light source */ 
         DirectionalLight sun = new DirectionalLight();
