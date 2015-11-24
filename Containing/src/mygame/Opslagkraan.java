@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -52,6 +53,9 @@ public class OpslagKraan extends Node
         attachChild(kraanPoot2);
         attachChild(topKraan);
         attachChild(kraanHaak);
+        
+        rotate(0,FastMath.HALF_PI,0);
+        setLocalTranslation(0,2.5f,0);
     }
 
 }
