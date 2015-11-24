@@ -6,6 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
 
@@ -19,7 +20,9 @@ public class Main extends SimpleApplication {
         Main app = new Main();
         app.start();
     }
-
+    
+    Node vrachtauto;
+    
     @Override
     public void simpleInitApp() {
         Box b = new Box(1, 1, 1);
@@ -38,7 +41,7 @@ public class Main extends SimpleApplication {
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
-        mat.getAdditionalRenderState().setWireframe(true);
+        //mat.getAdditionalRenderState().setWireframe(true);
         //set Materials
         geom.setMaterial(mat);
         geom2.setMaterial(mat);
@@ -62,18 +65,20 @@ public class Main extends SimpleApplication {
         geom6.rotate(0,r,0);
         geom6.move(-1,-1,2);
         //alles op de rootnode flikkeren
-        rootNode.attachChild(geom);
-        rootNode.attachChild(geom2);
-        rootNode.attachChild(geom3);
-        rootNode.attachChild(geom4);
-        rootNode.attachChild(geom5);
-        rootNode.attachChild(geom6);
+        vrachtauto = new Node();
+        vrachtauto.attachChild(geom);
+        vrachtauto.attachChild(geom2);
+        vrachtauto.attachChild(geom3);
+        vrachtauto.attachChild(geom4);
+        vrachtauto.attachChild(geom5);
+        vrachtauto.attachChild(geom6);
+        rootNode.attachChild(vrachtauto);
         
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        
+        //vrachtauto.rotate(0, 0, tpf);
     }
 
     @Override
