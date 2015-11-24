@@ -25,6 +25,7 @@ import com.jme3.water.SimpleWaterProcessor;
  */
 public class Main extends SimpleApplication {
 
+    
     //Material mat;
     Spatial waterPlane;
     Geometry lightSphere;
@@ -47,6 +48,7 @@ public class Main extends SimpleApplication {
         BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
         VrachtwagenKraan vrachtwagenKraan1 = new VrachtwagenKraan(assetManager);
         TreinKraan treinKraan1 = new TreinKraan(assetManager);
+        TreinPlatform trein = new TreinPlatform (assetManager);
         //create terrain
         Box opslagBox = new Box(155, 0.01f, 60);
         Box wegBox = new Box(157.4f, 0, 62.4f);
@@ -95,6 +97,7 @@ public class Main extends SimpleApplication {
         binnenvaartKraan1.setLocalTranslation(-78, 2, 65);
         vrachtwagenKraan1.setLocalTranslation(78, 1, 65);
         treinKraan1.setLocalTranslation(0, 1, -65);
+        trein.setLocalTranslation(50,0.4f,-65);
         
         rootNode.attachChild(Opslag);
         rootNode.attachChild(weg);
@@ -107,6 +110,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(binnenvaartKraan1);
         rootNode.attachChild(vrachtwagenKraan1);
         rootNode.attachChild(treinKraan1);
+        rootNode.attachChild(trein);
         
         //create processor
         waterProcessor = new SimpleWaterProcessor(assetManager);
