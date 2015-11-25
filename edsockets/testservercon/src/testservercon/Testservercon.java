@@ -4,10 +4,11 @@
  */
 package testservercon;
  
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.ClassNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,7 +22,7 @@ public class Testservercon {
     //static ServerSocket variable
     private static ServerSocket server;
     //socket server port on which it will listen
-    private static int port = 9876;
+    private static int port = 49876;
      
     public static void main(String args[]) throws IOException, ClassNotFoundException{
         //create the socket server object
@@ -34,21 +35,24 @@ public class Testservercon {
                         if (socket.isConnected()) { // Test om te zien of connectie gemaakt is
                 System.out.println("Connection established");
             }
-            //read from socket to ObjectInputStream object
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            //convert ObjectInputStream object to String
-            String message = (String) ois.readObject();
-            System.out.println("Message Received: " + message);
-            //create ObjectOutputStream object
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            //write object to Socket
-            oos.writeObject("Hi Client "+message);
-            //close resources
-            ois.close();
-            oos.close();
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            OutputStream os  = socket.getOutputStream();
+            String a = "atest\n";
+            os.write("test\n".getBytes());
+            //os.write(a.getBytes(), 0, a.length());
+            //os.flush();
+            
+            //hoezo werkt dit niet goed?
+            
+            int recv = br.read(); // <- deze int bepaalt of er output komt 2 regels hieronder
+            String charLine = br.readLine();
+            System.out.print(charLine);
+
             socket.close();
             //terminate the server if client sends exit request
-            if(message.equalsIgnoreCase("exit")) break;
+            if(br.readLine().equalsIgnoreCase("exit")) break;
         }
         System.out.println("Shutting down Socket server!!");
         //close the ServerSocket object
