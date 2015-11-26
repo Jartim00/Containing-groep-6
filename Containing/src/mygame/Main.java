@@ -30,12 +30,16 @@ public class Main extends SimpleApplication {
     SimpleWaterProcessor waterProcessor;
     Node sceneNode;
     Node opslagNode;
+    Node treinPlatformNode;
     
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
     
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
+    
+    
+    
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -49,7 +53,7 @@ public class Main extends SimpleApplication {
         initWater();
         initLight();
         initOpslag();
-        
+        initTreinPlatform();
 
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
@@ -141,9 +145,14 @@ public class Main extends SimpleApplication {
 //            }                   
 //        }
         
+        
         Container c1 = new Container(assetManager);
         opslagstroken[2].storeContainer(c1, 0, 0, 0);
         
+        
+        
+        
+
         for (int x = 0; x < 46; x++) {
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
@@ -190,7 +199,21 @@ public class Main extends SimpleApplication {
         
 
     }
+    public void initTreinPlatform()
+    {
+        treinPlatformNode = new Node("treinplatform");
+        TreinPlatform treinPlatform = new TreinPlatform(assetManager);
+        treinPlatformNode.attachChild(treinPlatform);
+        treinPlatform.setLocalTranslation(-60, 0, 0);
+        sceneNode.attachChild(treinPlatformNode);
+        treinPlatform.treinKomtAan();
+        Container c2 = new Container(assetManager);
+        treinPlatform.storeContainer(c2, 49);
+        
+    }
     
+
+        
     public void initOpslag(){        
         
         opslagNode = new Node("Opslag");
@@ -233,6 +256,8 @@ public class Main extends SimpleApplication {
     @Override 
     public void simpleUpdate(float tpf) {
         //TODO: add update code
+        
+        //treinPlatform.storeContainer(c2, 5);
     }
 
     @Override
