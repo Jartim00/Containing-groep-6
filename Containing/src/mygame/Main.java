@@ -5,6 +5,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -31,6 +33,8 @@ public class Main extends SimpleApplication {
     Node sceneNode;
     Node opslagNode;
     Node treinPlatformNode;
+    private MotionPath path;
+    private MotionEvent motionControl;
     
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
@@ -55,9 +59,26 @@ public class Main extends SimpleApplication {
         initOpslag();
         initTreinPlatform();
 
+        int a = 0;
+float b = 0;
+for(int j=1;j<9;j++){
         AGV agv = new AGV(assetManager);
-        agv.setLocalTranslation(-65,0.13f,2.5f);
+        agv.setLocalTranslation(-65 - a,0.13f,2.5f);
         rootNode.attachChild(agv);
+        path = new MotionPath();
+        for (int i=1;i< 20;i++){
+        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
+        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
+        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
+        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
+        }
+        path.setCycle(false);
+        motionControl = new MotionEvent(agv,path);
+        motionControl.setSpeed(0.012f + b);
+        motionControl.play();
+        a = a+2;
+        b = b+0.008f;
+}
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
