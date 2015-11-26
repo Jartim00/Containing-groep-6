@@ -34,5 +34,6 @@ int main(){
 	for (auto x : vias){
 		cout << x << endl;
 	}
+	for (;;){}
 }
 

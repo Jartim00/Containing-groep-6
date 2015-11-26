@@ -42,7 +42,7 @@ int main()
 						if (afstanden[make_pair(a, b)] + afstanden[make_pair(b, c)] < afstanden[make_pair(a, c)])
 						{
 							afstanden[make_pair(a, c)] = afstanden[make_pair(a, b)] + afstanden[make_pair(b, c)];
-							routes[make_pair(a, c)] = routes[make_pair(a, b)] + " " + b + " " + routes[make_pair(b, c)];
+							routes[make_pair(a, c)] = routes[make_pair(a, b)] + "," + b + "," + routes[make_pair(b, c)];
 						}
 						else
 						{
@@ -58,16 +58,7 @@ int main()
 	for (;;){}
 	//into database statement.
 
-	/*for (;;){
-	string plaatsA;
-	string plaatsB;
-	cout << "Plaatsnaam A:" << endl;
-	cin >> plaatsA;
-	cout << "Plaatsnaam B:" << endl;
-	cin >> plaatsB;
-	cout << "Afstand tussen A en B: " << afstanden[make_pair(plaatsA, plaatsB)] << endl;
-	cout << "Via:" << routes[make_pair(plaatsA, plaatsB)] << endl;
-	}
+	/*
 	for (auto p : afstanden)
 	cout << p.first.first << " " << p.first.second << " " << p.second << " " << endl;
 	for (auto r : routes)
