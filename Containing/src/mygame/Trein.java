@@ -31,7 +31,7 @@ public class Trein extends Node
             Box trein = new Box(1.5f,0.36f,0.3f);
             Box wagon = new Box(1.2f, 0.1f, 0.3f);
             Box kop = new Box(0.3f, 0.05f, 0.05f);
-            Cylinder wiel = new Cylinder(20, 50, 0.1f, 0, true);
+            Cylinder wiel = new Cylinder(20, 50, 0.1f, 0.05f, true);
     
             Geometry treinModel = new Geometry("Box", trein);
             Geometry wiel1 = new Geometry("Cylinder", wiel);

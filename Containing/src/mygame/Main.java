@@ -55,6 +55,9 @@ public class Main extends SimpleApplication {
         initOpslag();
         initTreinPlatform();
 
+        AGV agv = new AGV(assetManager);
+        agv.setLocalTranslation(-65,0.13f,2.5f);
+        rootNode.attachChild(agv);
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
