@@ -1,6 +1,7 @@
 // OpenXML.cpp : Defines the entry point for the console application.
 //
 #include "stdafx.h"
+#include "Containers.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -14,31 +15,32 @@ using namespace std;
 
 string split(const string a){
 	int count = 0;
-	for (auto n : a){
+	//checken of een string splitbaar is.
+	for (auto n : a)
 		if (n == '>')
 			count++;
-	}
 	if (count == 2)
 	{
 		stringstream xx(a);
 		string item;
 		vector<string> gesplit;
+		//split de string twee keer bij de >
 		while (getline(xx, item, '>'))
 			gesplit.push_back(item);
+		//pak de tweede split
 		string test2 = gesplit[1];
 		stringstream yy(test2);
 		vector<string> temp;
+		//split bij de < 
 		while (getline(yy, item, '<'))
 			temp.push_back(item);
 		return temp[0];
 	}
 	else
-	{
 		return a;
-	}
 }
 
-bool checkVervoer(string a){
+bool checkVervoersoort(string a){
 	a = split(a);
 	vector<string> vervoerssoorten = { "zeeschip", "trein", "binnenschip", "vrachtauto" };
 	for (auto x : vervoerssoorten)
@@ -49,10 +51,13 @@ bool checkVervoer(string a){
 
 bool checkTime(string time){
 	time = split(time).c_str();
+	//kijk op welke index de . zit.
 	int temp = time.find('.');
-	if (temp == -1) return false;
+	//kijk op welke positie de eerste char is welke geen getal of punt is.
 	size_t found = time.find_first_not_of("0123456789.");
-	if (found != string::npos) return true;
+	//als de gevonden positie 
+	if (found != string::npos) 
+		return false;
 	if (atoi(time.substr(0, temp).c_str()) < 12 && (atoi(time.substr(temp + 1).c_str()) <= 60)) return true;
 	if (atoi(time.substr(0, temp).c_str()) == 12 && atoi(time.substr(temp + 1).c_str()) == 0) return true;
 	return false;
@@ -62,16 +67,17 @@ bool checkTimes(string starttime, string endtime)
 {
 	starttime = split(starttime).c_str();
 	endtime = split(endtime).c_str();
+	//bekijkt de positie van de punt.
 	int starttemp = starttime.find('.');
 	int endtemp = endtime.find('.');
+	//bij de 0,starttemp pakt hij stukje voor de punt, bij starttemp + 1, stukje na de punt.
 	if (atoi(starttime.substr(0, starttemp).c_str()) > atoi(endtime.substr(0, endtemp).c_str())) return false;
 	if (atoi(starttime.substr(0, starttemp).c_str()) < atoi(endtime.substr(0, endtemp).c_str())) return true;
 	if (atoi(starttime.substr(0, starttemp).c_str()) == atoi(endtime.substr(0, endtemp).c_str()))
 	{
 		if (atoi(starttime.substr(starttemp + 1).c_str()) >= atoi(endtime.substr(endtemp + 1).c_str())) return false;
-		else return true;
 	}
-	return false;
+	return true;
 }
 
 bool checkDatum(string a, string b, string c){
@@ -110,12 +116,18 @@ bool checkData(string a, string b, string c, string d, string e, string f, strin
 	}
 }
 
+//Kijken of alle tekens getallen zijn.
 bool checkStringOnlyDigits(string a){
 	a = split(a).c_str();
 	if (all_of(a.begin(), a.end(), isdigit)) return true;
 	else return false;
 }
 
+bool checkPositie(string x, string y, string z, map<pair<string, string>, string> map, string vervoersmiddel){
+	for (auto a : map)
+		if (a.first.first == x && a.first.second == y && a.second == z) return false;
+	return true;
+}
 int main()
 {
 	vector<string> containergegevens = { "aankomstdag", "aankomstmaand", "aankomstjaar", "aankomstbegintijd", "aankomsteindtijd",
@@ -124,9 +136,16 @@ int main()
 		"vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
 		"naaminhoud", "soortinhoud", "gevaarinhoud", "iso" };
 	map<string, string> container;
+	map<pair<string, string>, string> treinposities;
+	map<pair<string, string>, string> binnenschipposities;
+	map<pair<string, string>, string> zeeschipposities;
+
+	vector<Container> containers;
+	int index = 0;
+	Container temp;
 	for (auto x : containergegevens)
 		container[x] = "";
-	vector<string> fname = { "xml1.xml", "xml2.xml", /* "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml" */};
+	vector<string> fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml"  };
 	cout << "press any key to start" << endl;
 	cin.get();
 
@@ -136,10 +155,12 @@ int main()
 		string tempdag;
 		string tempmaand;
 		string tempvan;
+		string tempx;
+		string tempy;
 		bool error = false;
 		bool aankomst = true;
 		bool eigenaar = true;
-		bool goodContainer = true;
+		bool goodContainer = true; 
 		while (file)
 		{
 			string line;
@@ -214,15 +235,13 @@ int main()
 									container["vertrekeindtijd"] = sub;
 								}
 								else
-								{
 									error = true;
-								}
 							}
 						}
 						tempvan = "";
 					}
 					if (sub.find("<soort_vervoer>") != string::npos)
-						if (!checkVervoer(sub))
+						if (!checkVervoersoort(sub))
 							error = true;
 						else
 						{
@@ -235,24 +254,60 @@ int main()
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
-							container["aankomstpositiex"] = sub;
+							tempx = sub;
 					if (sub.find("<y>") != string::npos)
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
-							container["aankomstpositiey"] = sub;
+							tempy = sub;
 					if (sub.find("<z>") != string::npos)
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
+						{
+							if (container["aankomstvervoersmiddel"] == "vrachtauto")
+								if (tempx != "<x>1</x>" || tempy != "<y>0</y>" || sub != "<z>0</z>")
+									error = true;
+							if (container["aankomstvervoersmiddel"] == "trein")
+							{
+								if (atoi(split(tempx).c_str()) <= 17 || tempy != "<y>0</y>" || sub != "<z>0</z>")
+									error = true;
+								if (!checkPositie(tempx, tempy, sub, treinposities, "trein"))
+									error = true;
+								else
+									treinposities[make_pair(tempx, tempy)] = sub;
+							}
+							if (container["aankomstvervoersmiddel"] == "zeeschip")
+							{
+								if (atoi(split(tempx).c_str()) <= 19 || atoi(split(tempy).c_str()) <= 15 || atoi(split(sub).c_str()) <= 5)
+									error = true;
+								if (!checkPositie(tempx, tempy, sub, zeeschipposities, "zeeschip"))
+									error = true;
+								else
+									zeeschipposities[make_pair(tempx, tempy)] = sub;
+							}
+							if (container["aankomstvervoersmiddel"] == "binnenschip")
+							{
+								if (atoi(split(tempx).c_str()) <= 5 || atoi(split(tempy).c_str()) <= 3 || atoi(split(sub).c_str()) <= 2)
+									error = true;
+								if (!checkPositie(tempx, tempy, sub, binnenschipposities, "binnenschip"))
+									error = true;
+								else
+									binnenschipposities[make_pair(tempx, tempy)] = sub;
+							}
 							container["aankomstpositiez"] = sub;
+							container["aankomstpositiex"] = tempx;
+							container["aankomstpositiey"] = tempy;
+							tempx = "";
+							tempy = "";
+					    }
 					if (sub.find("<eigenaar>") != string::npos)
 						eigenaar = true;
 					if (sub.find("<naam>") != string::npos)
 						if (eigenaar)
 						{
-						container["naameigenaar"] = sub;
-						eigenaar = false;
+							container["naameigenaar"] = sub;
+							eigenaar = false;
 						}
 						else
 							container["naaminhoud"] = sub;
@@ -278,13 +333,45 @@ int main()
 						{
 							x.second = split(x.second);
 							container[x.first] = x.second;
-							if (x.second == ""){
+							if (x.second == "")
+							{
 								cout << "Fout in de containerinformatie" << endl;
 								goodContainer = false;
 							}
 						}
-						if (!error & goodContainer){
-							
+						if (!error & goodContainer)
+						{
+							containers.push_back(temp);
+							containers[index].setAankomstbegintijd(container["aankomstbegintijd"]);
+							containers[index].setAankomstdag(container["aankomstdag"]);
+							containers[index].setAankomsteindtijd(container["aankomsteindtijd"]);
+							containers[index].setAankomstjaar(container["aankomstjaar"]);
+							containers[index].setAankomstmaand(container["aankomstmaand"]);
+							containers[index].setAankomstpositiex(container["aankomstpositiex"]);
+							containers[index].setAankomstpositiey(container["aankomstpositiey"]);
+							containers[index].setAankomstpositiez(container["aankomstpositiez"]);
+							containers[index].setAankomstvervoersmiddel(container["aankomstvervoersmiddel"]);
+							containers[index].setAankomstbedrijf(container["aankomstbedrijf"]);
+							containers[index].setBreedtecontainer(container["breedtecontainer"]);
+							containers[index].setContainernr(container["containernr"]);
+							containers[index].setHoogtecontainer(container["hoogtecontainer"]);
+							containers[index].setISO(container["iso"]);
+							containers[index].setLeeggewicht(container["leeggewicht"]);
+							containers[index].setLengtecontainer(container["lengtecontainer"]);
+							containers[index].setNaameigenaar(container["naameigenaar"]);
+							containers[index].setSoortinhoud(container["soortinhoud"]);
+							containers[index].setNaaminhoud(container["naaminhoud"]);
+							containers[index].setGevaarinhoud(container["gevaarinhoud"]);
+							containers[index].setVertrekvervoersmiddel(container["vertrekvervoersmiddel"]);
+							containers[index].setVertrekbedrijf(container["vertrekbedrijf"]);
+							containers[index].setVertrekbegintijd(container["vertrekbegintijd"]);
+							containers[index].setVertrekdag(container["vertrekdag"]);
+							containers[index].setVertrekeindtijd(container["vertrekeindtijd"]);
+							containers[index].setVertrekjaar(container["vertrekjaar"]);
+							containers[index].setVertrekmaand(container["vertrekmaand"]);
+							containers[index].setVolgewicht(container["volgewicht"]);
+							cout << "good container" << endl;
+							index++;
 						}
 						else
 						{
@@ -298,6 +385,13 @@ int main()
 				}
 			} while (iss);
 		}
+	}
+	//bool checkPosities
+	for (int i = 0; i < containers.size(); i++){
+		cout << containers[i].getVolgewicht() << endl;
+	}
+	for (auto x : zeeschipposities){
+		cout << x.first.first << " " << x.first.second << " " << x.second << endl;
 	}
 	cout << "end" << endl;
 	for (;;){}
