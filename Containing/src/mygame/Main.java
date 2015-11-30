@@ -19,12 +19,15 @@ import com.jme3.scene.shape.Box;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.ArrayList;
+import java.net.*;
+import java.io.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- * test
- * @author normenhansen
- */
-public class Main extends SimpleApplication {    
+
+public class Main extends SimpleApplication{    
 
     //Material mat;
     Spatial waterPlane;
@@ -42,8 +45,9 @@ public class Main extends SimpleApplication {
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     
-    
-    
+    //socketdeclaratie
+    private static ClientSocket s1;
+    private static int port = 49876;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -51,13 +55,18 @@ public class Main extends SimpleApplication {
     }
 
     @Override
-    public void simpleInitApp() {        
+    public void simpleInitApp(){        
         
         initScene();
         initWater();
         initLight();
         initOpslag();
         initTreinPlatform();
+        try {
+            initClientSocket();
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         int a = 0;
 float b = 0;
@@ -275,6 +284,17 @@ for(int j=1;j<9;j++){
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
         sun.setColor(ColorRGBA.White);
         rootNode.addLight(sun);  
+    }
+    
+    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
+        try {
+            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
+        }
+        catch (IOException e) {e.printStackTrace();}
+        if (s1.isConnected()) { //geen write acties tot connected, test, bug, etc.
+        s1.write("start?");   
+        }
+        System.out.print("\n" + s1.read());
     }
     
     @Override 
