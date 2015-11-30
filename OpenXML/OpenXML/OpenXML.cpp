@@ -82,6 +82,7 @@ bool checkTimes(string starttime, string endtime)
 
 bool checkDatum(string a, string b, string c){
 	vector<string> datum = { a, b, c };
+	//check of datum bestaat uit getallen
 	for (auto x : datum){
 		x = split(x).c_str();
 		if (any_of(x.begin(), x.end(), isalpha)) return false;
@@ -89,7 +90,7 @@ bool checkDatum(string a, string b, string c){
 	int dag = atoi(split(a).c_str()); int maand = atoi(split(b).c_str()); int jaar = atoi(split(c).c_str());
 	if (maand == 0 || maand > 12) return false;
 	if (jaar > 99) return false;
-	if (dag > 31) return false;
+	if (dag == 0 || dag > 31) return false;
 	else return true;
 }
 
@@ -124,6 +125,7 @@ bool checkStringOnlyDigits(string a){
 }
 
 bool checkPositie(string x, string y, string z, map<pair<string, string>, string> map, string vervoersmiddel){
+	//check of de positie x,y,z al in de map staat.
 	for (auto a : map)
 		if (a.first.first == x && a.first.second == y && a.second == z) return false;
 	return true;
@@ -131,10 +133,11 @@ bool checkPositie(string x, string y, string z, map<pair<string, string>, string
 int main()
 {
 	vector<string> containergegevens = { "aankomstdag", "aankomstmaand", "aankomstjaar", "aankomstbegintijd", "aankomsteindtijd",
-		"aankomstvervoersmiddel", "aankomstbedrijf", "aankomstpositiex", "aankomstpositiey", "aankomstpositiez", "naameigenaar",
-		"containernr", "vertrekdag", "vertrekmaand", "vertrekjaar", "vertrekbegintijd", "vertrekeindtijd", "vertrekvervoersmiddel",
-		"vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
-		"naaminhoud", "soortinhoud", "gevaarinhoud", "iso" };
+		"aankomstvervoersmiddel", "aankomstpositiex", "aankomstpositiey", "aankomstpositiez",
+		"containernr", "vertrekdag", "vertrekmaand", "vertrekjaar", "vertrekbegintijd", "vertrekeindtijd", "vertrekvervoersmiddel", };
+
+	//"aankomstbedrijf", "naameigenaar", "vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
+	//"naaminhoud", "soortinhoud", "gevaarinhoud", "iso"
 	map<string, string> container;
 	map<pair<string, string>, string> treinposities;
 	map<pair<string, string>, string> binnenschipposities;
@@ -143,12 +146,14 @@ int main()
 	vector<Container> containers;
 	int index = 0;
 	Container temp;
+	//aanmaken van een map met een gegeven uit de vector containergegevens en een lege string.
 	for (auto x : containergegevens)
 		container[x] = "";
-	vector<string> fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml"  };
+	vector<string> fname = {  "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml" };
 	cout << "press any key to start" << endl;
 	cin.get();
 
+	//voor alle bestanden in de vector fname.
 	for (auto x : fname)
 	{
 		ifstream file(x.c_str());
@@ -160,7 +165,7 @@ int main()
 		bool error = false;
 		bool aankomst = true;
 		bool eigenaar = true;
-		bool goodContainer = true; 
+		//zolang er tekst in de file zit
 		while (file)
 		{
 			string line;
@@ -170,6 +175,7 @@ int main()
 			do
 			{
 				string sub;
+				//elke regel wordt één voor één behandeld.
 				if (iss >> sub)
 				{
 					if (sub.find("<aankomst") != string::npos)
@@ -177,21 +183,23 @@ int main()
 					if (sub.find("<vertrek") != string::npos)
 						aankomst = false;
 					if (sub.find("<containernr>") != string::npos)
+						//check of containernr alleen getallen bevat.
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
 							container["containernr"] = sub;
-					if (sub.find("<bedrijf") != string::npos)
+					/*if (sub.find("<bedrijf") != string::npos)
 						if (aankomst)
 							container["aankomstbedrijf"] = sub;
 						else
-							container["vertrekbedrijf"] = sub;
+							container["vertrekbedrijf"] = sub;*/
 					if (sub.find("<d>") != string::npos)
 						tempdag = sub;
 					if (sub.find("<m>") != string::npos)
 						tempmaand = sub;
 					if (sub.find("<j>") != string::npos)
 					{
+						//check de datum.
 						if (!checkDatum(tempdag, tempmaand, sub))
 							error = true;
 						else
@@ -212,35 +220,43 @@ int main()
 						tempdag = "", tempmaand = "";
 					}
 					if (sub.find("<van>") != string::npos)
+						//Check de tijdnotering
 						if (!checkTime(sub))
 							error = true;
 						else
 							tempvan = sub;
 					if (sub.find("<tot>") != string::npos)
 					{
+						//Check de tijdsnotering
 						if (!checkTime(sub))
 							error = true;
 						else
 						{
-							if (aankomst)
-							{
-								container["aankomstbegintijd"] = tempvan;
-								container["aankomsteindtijd"] = sub;
-							}
-							else
-							{
-								if (checkData(container["aankomstdag"], container["aankomstmaand"], container["aankomstjaar"], container["vertrekdag"], container["vertrekmaand"], container["vertrekjaar"], container["aankomsteindtijd"], tempvan))
+							//Check of de tijden van de aankomst ofwel vertrek kloppen.
+							if (checkTimes(tempvan, sub))
+								if (aankomst)
 								{
-									container["vertrekbegintijd"] = tempvan;
-									container["vertrekeindtijd"] = sub;
+									container["aankomstbegintijd"] = tempvan;
+									container["aankomsteindtijd"] = sub;
 								}
 								else
-									error = true;
-							}
+								{
+									//Check of het vertrek moment na het aankomst moment ligt.
+									if (checkData(container["aankomstdag"], container["aankomstmaand"], container["aankomstjaar"], container["vertrekdag"], container["vertrekmaand"], container["vertrekjaar"], container["aankomsteindtijd"], tempvan))
+									{
+										container["vertrekbegintijd"] = tempvan;
+										container["vertrekeindtijd"] = sub;
+									}
+									else
+										error = true;
+								}
+							else
+								error = true;
 						}
 						tempvan = "";
 					}
 					if (sub.find("<soort_vervoer>") != string::npos)
+						//Check of de vervoerssoort geldig is.
 						if (!checkVervoersoort(sub))
 							error = true;
 						else
@@ -251,44 +267,50 @@ int main()
 								container["vertrekvervoersmiddel"] = sub;
 						}
 					if (sub.find("<x>") != string::npos)
+						//Check of de string alleen getallen bevat.
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
 							tempx = sub;
 					if (sub.find("<y>") != string::npos)
+						//Check of de string alleen getallen bevat.
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
 							tempy = sub;
 					if (sub.find("<z>") != string::npos)
+						//Check of de string alleen getallen bevat.
 						if (!checkStringOnlyDigits(sub))
 							error = true;
 						else
 						{
-							if (container["aankomstvervoersmiddel"] == "vrachtauto")
+							//Kijk eerste welke vervoerssoort het is, vervolgens de maximale coördinaten, dan kijken of positie reeds bezet is. 
+							//Indien niet bezet stop de coordinaten in de map van de vervoerssoort.
+							if (container["aankomstvervoersmiddel"] == "<soort_vervoer>vrachtauto</soort_vervoer>")
 								if (tempx != "<x>1</x>" || tempy != "<y>0</y>" || sub != "<z>0</z>")
 									error = true;
-							if (container["aankomstvervoersmiddel"] == "trein")
+							if (container["aankomstvervoersmiddel"] == "<soort_vervoer>trein</soort_vervoer>")
 							{
-								if (atoi(split(tempx).c_str()) <= 17 || tempy != "<y>0</y>" || sub != "<z>0</z>")
+								int check = atoi(split(tempx).c_str());
+								if (atoi(split(tempx).c_str()) > 17 || tempy != "<y>0</y>" || sub != "<z>0</z>")
 									error = true;
 								if (!checkPositie(tempx, tempy, sub, treinposities, "trein"))
 									error = true;
 								else
 									treinposities[make_pair(tempx, tempy)] = sub;
 							}
-							if (container["aankomstvervoersmiddel"] == "zeeschip")
+							if (container["aankomstvervoersmiddel"] == "<soort_vervoer>zeeschip</soort_vervoer>")
 							{
-								if (atoi(split(tempx).c_str()) <= 19 || atoi(split(tempy).c_str()) <= 15 || atoi(split(sub).c_str()) <= 5)
+								if (atoi(split(tempx).c_str()) > 19 || atoi(split(tempy).c_str()) > 15 || atoi(split(sub).c_str()) > 5)
 									error = true;
 								if (!checkPositie(tempx, tempy, sub, zeeschipposities, "zeeschip"))
 									error = true;
 								else
 									zeeschipposities[make_pair(tempx, tempy)] = sub;
 							}
-							if (container["aankomstvervoersmiddel"] == "binnenschip")
+							if (container["aankomstvervoersmiddel"] == "<soort_vervoer>binnenschip</soort_vervoer>")
 							{
-								if (atoi(split(tempx).c_str()) <= 5 || atoi(split(tempy).c_str()) <= 3 || atoi(split(sub).c_str()) <= 2)
+								if (atoi(split(tempx).c_str()) > 5 || atoi(split(tempy).c_str()) > 3 || atoi(split(sub).c_str()) > 2)
 									error = true;
 								if (!checkPositie(tempx, tempy, sub, binnenschipposities, "binnenschip"))
 									error = true;
@@ -301,7 +323,7 @@ int main()
 							tempx = "";
 							tempy = "";
 					    }
-					if (sub.find("<eigenaar>") != string::npos)
+					/*if (sub.find("<eigenaar>") != string::npos)
 						eigenaar = true;
 					if (sub.find("<naam>") != string::npos)
 						if (eigenaar)
@@ -319,6 +341,7 @@ int main()
 						container["hoogtecontainer"] = sub;
 					if (sub.find("<leeg>") != string::npos)
 						container["leeggewicht"] = sub;
+					//if regel bevat <inhoud>, maar de hele regel bevat meer dan <inhoud>
 					if (sub.find("<inhoud>") != string::npos && sub != ("<inhoud>"))
 						container["volgewicht"] = sub;
 					if (sub.find("<soort>") != string::npos)
@@ -326,22 +349,26 @@ int main()
 					if (sub.find("<gevaar>") != string::npos)
 						container["gevaarinhoud"] = sub;
 					if (sub.find("<ISO>") != string::npos)
-						container["iso"] = sub;
+						container["iso"] = sub;*/
+					//bij </record> is alle informatie van de container binnengehaald.
 					if (sub.find("</record>") != string::npos)
 					{
 						for (auto x : container)
 						{
 							x.second = split(x.second);
 							container[x.first] = x.second;
+							//loop alle informatie door per container en kijk of er informatie niet beschikbaar is, indien niet beschikbaar --> container fout.
 							if (x.second == "")
 							{
 								cout << "Fout in de containerinformatie" << endl;
-								goodContainer = false;
+								error = true;
 							}
 						}
-						if (!error & goodContainer)
+						if (!error)
 						{
+							//voeg een nieuwe container toe aan de vector met containers.
 							containers.push_back(temp);
+							//Zet alle informatie in de container class.
 							containers[index].setAankomstbegintijd(container["aankomstbegintijd"]);
 							containers[index].setAankomstdag(container["aankomstdag"]);
 							containers[index].setAankomsteindtijd(container["aankomsteindtijd"]);
@@ -351,34 +378,35 @@ int main()
 							containers[index].setAankomstpositiey(container["aankomstpositiey"]);
 							containers[index].setAankomstpositiez(container["aankomstpositiez"]);
 							containers[index].setAankomstvervoersmiddel(container["aankomstvervoersmiddel"]);
-							containers[index].setAankomstbedrijf(container["aankomstbedrijf"]);
-							containers[index].setBreedtecontainer(container["breedtecontainer"]);
+							//containers[index].setAankomstbedrijf(container["aankomstbedrijf"]);
+							//containers[index].setBreedtecontainer(container["breedtecontainer"]);
 							containers[index].setContainernr(container["containernr"]);
-							containers[index].setHoogtecontainer(container["hoogtecontainer"]);
-							containers[index].setISO(container["iso"]);
-							containers[index].setLeeggewicht(container["leeggewicht"]);
-							containers[index].setLengtecontainer(container["lengtecontainer"]);
-							containers[index].setNaameigenaar(container["naameigenaar"]);
-							containers[index].setSoortinhoud(container["soortinhoud"]);
-							containers[index].setNaaminhoud(container["naaminhoud"]);
-							containers[index].setGevaarinhoud(container["gevaarinhoud"]);
+							//containers[index].setHoogtecontainer(container["hoogtecontainer"]);
+							//containers[index].setISO(container["iso"]);
+							//containers[index].setLeeggewicht(container["leeggewicht"]);
+							//containers[index].setLengtecontainer(container["lengtecontainer"]);
+							//containers[index].setNaameigenaar(container["naameigenaar"]);
+							//containers[index].setSoortinhoud(container["soortinhoud"]);
+							//containers[index].setNaaminhoud(container["naaminhoud"]);
+							//containers[index].setGevaarinhoud(container["gevaarinhoud"]);
 							containers[index].setVertrekvervoersmiddel(container["vertrekvervoersmiddel"]);
-							containers[index].setVertrekbedrijf(container["vertrekbedrijf"]);
+							//containers[index].setVertrekbedrijf(container["vertrekbedrijf"]);
 							containers[index].setVertrekbegintijd(container["vertrekbegintijd"]);
 							containers[index].setVertrekdag(container["vertrekdag"]);
 							containers[index].setVertrekeindtijd(container["vertrekeindtijd"]);
 							containers[index].setVertrekjaar(container["vertrekjaar"]);
 							containers[index].setVertrekmaand(container["vertrekmaand"]);
-							containers[index].setVolgewicht(container["volgewicht"]);
-							cout << "good container" << endl;
+							//containers[index].setVolgewicht(container["volgewicht"]);
+							cout << "good container" << index << endl;
+							//index verhogen om de volgende container op de goede positie toe te voegen. 
 							index++;
 						}
 						else
 						{
 							cout << "error container" << endl;
 							error = false;
-							goodContainer = true;
 						}
+						//informatie weer uit de containermap halen, zodat deze klaar is voor de volgende container.
 						for (auto x : container)
 							x.second = "";
 					}
@@ -387,12 +415,12 @@ int main()
 		}
 	}
 	//bool checkPosities
-	for (int i = 0; i < containers.size(); i++){
+	/*for (int i = 0; i < containers.size(); i++){
 		cout << containers[i].getVolgewicht() << endl;
 	}
 	for (auto x : zeeschipposities){
 		cout << x.first.first << " " << x.first.second << " " << x.second << endl;
-	}
+	}*/
 	cout << "end" << endl;
 	for (;;){}
 }

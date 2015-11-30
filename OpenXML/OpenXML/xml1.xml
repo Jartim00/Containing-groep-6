@@ -15,7 +15,7 @@
 <soort_vervoer>vrachtauto</soort_vervoer>
 <bedrijf>DijckLogisticsBV</bedrijf>
 <positie>
-<x>1</x>
+<x>0</x>
 <y>0</y>
 <z>0</z>
 </positie>
@@ -32,7 +32,7 @@
 </datum>
 <tijd>
 <van>0.00</van>
-<tot>12.00</tot>
+<tot>1.00</tot>
 </tijd>
 <soort_vervoer>zeeschip</soort_vervoer>
 <bedrijf>ChinaShippingAgency</bedrijf>
