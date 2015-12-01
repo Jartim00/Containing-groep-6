@@ -2,7 +2,7 @@ package mygame;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
+//import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.cinematic.MotionPath;
@@ -88,6 +88,13 @@ for(int j=1;j<9;j++){
         a = a+2;
         b = b+0.008f;
 }
+
+
+BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
+binnenvaartplatform.setLocalTranslation(72,0.13f,80f);
+rootNode.attachChild(binnenvaartplatform);
+
+
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
