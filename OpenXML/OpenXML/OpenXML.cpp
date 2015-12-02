@@ -2,6 +2,7 @@
 //
 #include "stdafx.h"
 #include "Containers.h"
+#include "Server.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -149,7 +150,7 @@ int main()
 	//aanmaken van een map met een gegeven uit de vector containergegevens en een lege string.
 	for (auto x : containergegevens)
 		container[x] = "";
-	vector<string> fname = {  "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml" };
+	vector<string> fname = { "xml1.xml" };//, "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml" };
 	cout << "press any key to start" << endl;
 	cin.get();
 
@@ -422,5 +423,7 @@ int main()
 		cout << x.first.first << " " << x.first.second << " " << x.second << endl;
 	}*/
 	cout << "end" << endl;
-	for (;;){}
+
+	Server s1 = Server();
+	s1.Communicate();
 }
