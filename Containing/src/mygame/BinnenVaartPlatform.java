@@ -23,7 +23,7 @@ public class BinnenVaartPlatform extends Node {
 {
         this.assetManager = assetManager;
         float platformLengte = 80f;
-        Box platform = new Box(platformLengte, 0.001f, 8f);
+        Box platform = new Box(platformLengte, 0.001f, 6f);
         Box containers = new Box(7.2f,0.001f, 1f);
         Geometry platformAlles = new Geometry("Box", platform);
         Geometry containerPlaats1 = new Geometry("Box", containers);
@@ -37,8 +37,8 @@ public class BinnenVaartPlatform extends Node {
         platformAlles.setMaterial(mat);
         containerPlaats1.setMaterial(mat2);
         containerPlaats2.setMaterial(mat2);
-        containerPlaats1.setLocalTranslation(platformLengte/2 ,0.001f,2f);
-        containerPlaats2.setLocalTranslation(-(platformLengte/2) ,0.001f,2f);
+        containerPlaats1.setLocalTranslation(platformLengte/2 ,0.001f,0.4f);
+        containerPlaats2.setLocalTranslation(-(platformLengte/2) ,0.001f,0.4f);
         attachChild(containerPlaats1);
         attachChild(containerPlaats2);
         attachChild(platformAlles);
@@ -55,14 +55,14 @@ public class BinnenVaartPlatform extends Node {
         BinnenvaartKraan kraan7 = new BinnenvaartKraan(assetManager);
         BinnenvaartKraan kraan8 = new BinnenvaartKraan(assetManager);
         // 3
-        kraan1.setLocalTranslation(-70,2.5f,-0.9f);
-        kraan2.setLocalTranslation(-50,2.5f,-0.9f);
-        kraan3.setLocalTranslation(-0,2.5f,-0.9f);
-        kraan4.setLocalTranslation(-10,2.5f,-0.9f);
-        kraan5.setLocalTranslation(10,2.5f,-0.9f);
-        kraan6.setLocalTranslation(30,2.5f,-0.9f);
-        kraan7.setLocalTranslation(50,2.5f,-0.9f);
-        kraan8.setLocalTranslation(70,2.5f,-0.9f);
+        kraan1.setLocalTranslation(-70,2.5f,-2.5f);
+        kraan2.setLocalTranslation(-50,2.5f,-2.5f);
+        kraan3.setLocalTranslation(-0,2.5f,-2.5f);
+        kraan4.setLocalTranslation(-10,2.5f,-2.5f);
+        kraan5.setLocalTranslation(10,2.5f,-2.5f);
+        kraan6.setLocalTranslation(30,2.5f,-2.5f);
+        kraan7.setLocalTranslation(50,2.5f,-2.5f);
+        kraan8.setLocalTranslation(70,2.5f,-2.5f);
         
         attachChild(kraan1);
         attachChild(kraan2);

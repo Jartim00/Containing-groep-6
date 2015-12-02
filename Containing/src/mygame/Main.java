@@ -68,30 +68,31 @@ public class Main extends SimpleApplication{
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        int a = 0;
-float b = 0;
-for(int j=1;j<9;j++){
-        AGV agv = new AGV(assetManager);
-        agv.setLocalTranslation(-65 - a,0.13f,2.5f);
-        rootNode.attachChild(agv);
-        path = new MotionPath();
-        for (int i=1;i< 20;i++){
-        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-        }
-        path.setCycle(false);
-        motionControl = new MotionEvent(agv,path);
-        motionControl.setSpeed(0.012f + b);
-        motionControl.play();
-        a = a+2;
-        b = b+0.008f;
-}
+//        int a = 0;
+//float b = 0;
+//for(int j=1;j<9;j++){
+//        AGV agv = new AGV(assetManager);
+//        agv.setLocalTranslation(-65 - a,0.13f,2.5f);
+//        rootNode.attachChild(agv);
+//        path = new MotionPath();
+//        for (int i=1;i< 20;i++){
+//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
+//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
+//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
+//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
+//        }
+//        path.setCycle(false);
+//        motionControl = new MotionEvent(agv,path);
+//        motionControl.setSpeed(0.012f + b);
+//        motionControl.play();
+//        a = a+2;
+//        b = b+0.008f;
+//}
 
+        
 
 BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
-binnenvaartplatform.setLocalTranslation(72,0.13f,80f);
+binnenvaartplatform.setLocalTranslation(74,0.13f,80f);
 rootNode.attachChild(binnenvaartplatform);
 
 
