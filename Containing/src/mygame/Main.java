@@ -36,6 +36,7 @@ public class Main extends SimpleApplication{
     Node sceneNode;
     Node opslagNode;
     Node treinPlatformNode;
+    Node VrachtwagenplatformNode;
     private MotionPath path;
     private MotionEvent motionControl;
     
@@ -62,6 +63,7 @@ public class Main extends SimpleApplication{
         initLight();
         initOpslag();
         initTreinPlatform();
+	initVrachtwagenplatform();
         try {
             initClientSocket();
         } catch (Exception ex) {
@@ -251,6 +253,17 @@ rootNode.attachChild(binnenvaartplatform);
         Container c2 = new Container(assetManager);
         treinPlatform.storeContainer(c2, 49);
         
+    }
+	
+	public void initVrachtwagenplatform(){
+        VrachtwagenplatformNode = new Node();
+        Vrachtwagenplatform vrachtwagenplatform = new Vrachtwagenplatform(assetManager);
+        VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
+        vrachtwagenplatform.setLocalTranslation(70, 0, -70);
+        sceneNode.attachChild(VrachtwagenplatformNode);
+        //treinPlatform.treinKomtAan();
+        //Container c2 = new Container(assetManager);
+        //treinPlatform.storeContainer(c2, 49);
     }
     
 
