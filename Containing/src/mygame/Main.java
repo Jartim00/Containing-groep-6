@@ -37,8 +37,13 @@ public class Main extends SimpleApplication{
     Node opslagNode;
     Node treinPlatformNode;
     Node VrachtwagenplatformNode;
+    Node zeeschipPlatformNode;
     private MotionPath path;
     private MotionEvent motionControl;
+    
+    public static float opslagLengte = 154;
+    public static float opslagBreedte = 60;
+    public static float wegBreedte = 1.2f;
     
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
@@ -64,6 +69,7 @@ public class Main extends SimpleApplication{
         initOpslag();
         initTreinPlatform();
 	initVrachtwagenplatform();
+        initZeeschipPlatform();
         try {
             initClientSocket();
         } catch (Exception ex) {
@@ -224,12 +230,12 @@ rootNode.attachChild(binnenvaartplatform);
         sceneNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sceneNode);        
 
-        Box b = new Box(80.0f, 20.0f, 175.0f);
+        Box b = new Box(62.4f, 0.0f, 156.4f);
         Geometry floor = new Geometry("floor", b);
         Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floor.setMaterial(floorMat);
-        floor.setLocalTranslation(0.0f,-20.0f,0.0f);
+        floor.setLocalTranslation(0.0f,0.0f,1.8f);
         sceneNode.attachChild(floor);       
  
         Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
@@ -253,6 +259,14 @@ rootNode.attachChild(binnenvaartplatform);
         Container c2 = new Container(assetManager);
         treinPlatform.storeContainer(c2, 49);
         
+    }
+    public void initZeeschipPlatform()
+    {
+        zeeschipPlatformNode = new Node("zeeschipPlatform");
+        ZeeschipPlatform zeeschipPlatform = new ZeeschipPlatform(assetManager);
+        zeeschipPlatformNode.attachChild(zeeschipPlatform);
+        zeeschipPlatform.setLocalTranslation(0, 0, 157.2f);
+        sceneNode.attachChild(zeeschipPlatformNode);
     }
 	
 	public void initVrachtwagenplatform(){

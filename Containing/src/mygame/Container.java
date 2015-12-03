@@ -32,14 +32,13 @@ public class Container extends Node {
     private Point3d locatie;
     private final AssetManager assetManager;
     
-    private final float lengte = 1.2f;
-    private final float breedte = 0.25f;
-    private final float hoogte = 0.26f;    
+    public static float containerLengte = 1.2f;
+    public static float containerBreedte = 0.25f;
+    public static float containerHoogte = 0.26f;    
     
     public Container(AssetManager manager){
         this.assetManager = manager;
-        Box b = new Box(lengte, hoogte, breedte); 
-        //Box b = new Box(0.25f,0.26f,1.22f);        
+        Box b = new Box(containerLengte, containerHoogte, containerBreedte);      
         Geometry cont = new Geometry("cont", b);        
         Material contMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         contMat.setColor("Color", ColorRGBA.randomColor());
@@ -49,3 +48,4 @@ public class Container extends Node {
     
    
 }
+
