@@ -3,174 +3,174 @@
 
 using namespace std;
 
-Container::Container(){
+Containers::Containers(){
 
 }
-void Container::setAankomstdag(string dagaankomst){
+void Containers::setAankomstdag(string dagaankomst){
 	aankomstdag = dagaankomst;
 }
-string Container::getAankomstdag(){
+string Containers::getAankomstdag(){
 	return aankomstdag;
 }
-void Container::setAankomstmaand(string maandaankomst){
+void Containers::setAankomstmaand(string maandaankomst){
 	aankomstmaand = maandaankomst;
 }
-string Container::getAaankomstmaand(){
+string Containers::getAaankomstmaand(){
 	return aankomstmaand;
 }
-void Container::setAankomstjaar(string jaaraankomst){
+void Containers::setAankomstjaar(string jaaraankomst){
 	aankomstjaar = jaaraankomst;
 }
-string Container::getAankomstjaar(){
+string Containers::getAankomstjaar(){
 	return aankomstjaar;
 }
-void Container::setAankomstbegintijd(string begintijdaankomst){
+void Containers::setAankomstbegintijd(string begintijdaankomst){
 	aankomstbegintijd = begintijdaankomst;
 }
-string Container::getAankomstbegintijd(){
+string Containers::getAankomstbegintijd(){
 	return aankomstbegintijd;
 }
-void Container::setAankomsteindtijd(string eindtijdaankomst){
+void Containers::setAankomsteindtijd(string eindtijdaankomst){
 	aankomsteindtijd = eindtijdaankomst;
 }
-string Container::getAankomsteindtijd(){
+string Containers::getAankomsteindtijd(){
 	return aankomsteindtijd;
 }
-void Container::setAankomstvervoersmiddel(string vervoersmiddelaankomst){
+void Containers::setAankomstvervoersmiddel(string vervoersmiddelaankomst){
 	aankomstvervoersmiddel = vervoersmiddelaankomst;
 }
-string Container::getAankomstvervoermiddel(){
+string Containers::getAankomstvervoermiddel(){
 	return aankomstvervoersmiddel;
 }
-void Container::setAankomstbedrijf(string bedrijfaankomst){
+void Containers::setAankomstbedrijf(string bedrijfaankomst){
 	aankomstbedrijf = bedrijfaankomst;
 }
-string Container::getAankomstbedrijf(){
+string Containers::getAankomstbedrijf(){
 	return aankomstbedrijf;
 }
-void Container::setAankomstpositiex(string xpositieaankomst){
+void Containers::setAankomstpositiex(string xpositieaankomst){
 	aankomstpositiex = xpositieaankomst;
 }
-string Container::getAankomstpositiex(){
+string Containers::getAankomstpositiex(){
 	return aankomstpositiex;
 }
-void Container::setAankomstpositiey(string ypositieaankomst){
+void Containers::setAankomstpositiey(string ypositieaankomst){
 	aankomstpositiey = ypositieaankomst;
 }
-string Container::getAankomstpositiey(){
+string Containers::getAankomstpositiey(){
 	return aankomstpositiey;
 }
-void Container::setAankomstpositiez(string zpositieaankomst){
+void Containers::setAankomstpositiez(string zpositieaankomst){
 	aankomstpositiez = zpositieaankomst;
 }
-string Container::getAankomstpositiez(){
+string Containers::getAankomstpositiez(){
 	return aankomstpositiez;
 }
-void Container::setNaameigenaar(string eigenaarnaam){
+void Containers::setNaameigenaar(string eigenaarnaam){
 	naameigenaar = eigenaarnaam;
 }
-string Container::getNaameigenaar(){
+string Containers::getNaameigenaar(){
 	return naameigenaar;
 }
-void Container::setContainernr(string nrcontainer){
+void Containers::setContainernr(string nrcontainer){
 	containernr = nrcontainer;
 }
-string Container::getContainernr(){
+string Containers::getContainernr(){
 	return containernr;
 }
-void Container::setVertrekdag(string dagvertrek){
+void Containers::setVertrekdag(string dagvertrek){
 	vertrekdag = dagvertrek;
 }
-string Container::getVertrekdag(){
+string Containers::getVertrekdag(){
 	return vertrekdag;
 }
-void Container::setVertrekmaand(string maandvertrek){
+void Containers::setVertrekmaand(string maandvertrek){
 	vertrekmaand = maandvertrek;
 }
-std::string Container::getVertrekmaand(){
+std::string Containers::getVertrekmaand(){
 	return vertrekmaand;
 }
-void Container::setVertrekjaar(string jaarvertrek){
+void Containers::setVertrekjaar(string jaarvertrek){
 	vertrekjaar = jaarvertrek;
 }
-string Container::getVertrekjaar(){
+string Containers::getVertrekjaar(){
 	return vertrekjaar;
 }
-void Container::setVertrekbegintijd(string begintijdvertrek){
+void Containers::setVertrekbegintijd(string begintijdvertrek){
 	vertrekbegintijd = begintijdvertrek;
 }
-string Container::getVertrekbegintijd(){
+string Containers::getVertrekbegintijd(){
 	return vertrekbegintijd;
 }
-void Container::setVertrekeindtijd(string eindtijdvertrek){
+void Containers::setVertrekeindtijd(string eindtijdvertrek){
 	vertrekeindtijd = eindtijdvertrek;
 }
-string Container::getVertrekeindtijd(){
+string Containers::getVertrekeindtijd(){
 	return vertrekeindtijd;
 }
-void Container::setVertrekvervoersmiddel(string vervoervertrek){
+void Containers::setVertrekvervoersmiddel(string vervoervertrek){
 	vertrekvervoersmiddel = vervoervertrek;
 }
-string Container::getVertrekvervoersmiddel(){
+string Containers::getVertrekvervoersmiddel(){
 	return vertrekvervoersmiddel;
 }
-void Container::setVertrekbedrijf(string bedrijfvertrek){
+void Containers::setVertrekbedrijf(string bedrijfvertrek){
 	vertrekbedrijf = bedrijfvertrek;
 }
-string Container::getVertrekbedrijf(){
+string Containers::getVertrekbedrijf(){
 	return vertrekbedrijf;
 }
-void Container::setLengtecontainer(string containerlengte){
+void Containers::setLengtecontainer(string containerlengte){
 	lengtecontainer = containerlengte;
 }
-string Container::getLengtecontainer(){
+string Containers::getLengtecontainer(){
 	return lengtecontainer;
 }
-void Container::setBreedtecontainer(string containerbreedte){
+void Containers::setBreedtecontainer(string containerbreedte){
 	breedtecontainer = containerbreedte;
 }
-string Container::getBreedtecontainer(){
+string Containers::getBreedtecontainer(){
 	return breedtecontainer;
 }
-void Container::setHoogtecontainer(string containerhoogte){
+void Containers::setHoogtecontainer(string containerhoogte){
 	hoogtecontainer = containerhoogte;
 }
-string Container::getHoogtecontainer(){
+string Containers::getHoogtecontainer(){
 	return hoogtecontainer;
 }
-void Container::setLeeggewicht(string gewichtleeg){
+void Containers::setLeeggewicht(string gewichtleeg){
 	leeggewicht = gewichtleeg;
 }
-string Container::getLeeggewicht(){
+string Containers::getLeeggewicht(){
 	return leeggewicht;
 }
-void Container::setVolgewicht(string gewichtvol){
+void Containers::setVolgewicht(string gewichtvol){
 	volgewicht = gewichtvol;
 }
-string Container::getVolgewicht(){
+string Containers::getVolgewicht(){
 	return volgewicht;
 }
-void Container::setNaaminhoud(string inhoudnaam){
+void Containers::setNaaminhoud(string inhoudnaam){
 	naaminhoud = inhoudnaam;
 }
-string Container::getNaamInhoud(){
+string Containers::getNaamInhoud(){
 	return naaminhoud;
 }
-void Container::setSoortinhoud(string inhoudsoort){
+void Containers::setSoortinhoud(string inhoudsoort){
 	soortinhoud = inhoudsoort;
 }
-string Container::getSoortinhoud(){
+string Containers::getSoortinhoud(){
 	return soortinhoud;
 }
-void Container::setISO(string osi){
+void Containers::setISO(string osi){
 	iso = osi;
 }
-string Container::getISO(){
+string Containers::getISO(){
 	return iso;
 }
-void Container::setGevaarinhoud(string inhoudgevaar){
+void Containers::setGevaarinhoud(string inhoudgevaar){
 	gevaarinhoud = inhoudgevaar;
 }
-string Container::getGevaarinhoud(){
+string Containers::getGevaarinhoud(){
 	return gevaarinhoud;
 }

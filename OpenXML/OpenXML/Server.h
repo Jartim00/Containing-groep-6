@@ -1,5 +1,8 @@
 //TCP SERVER header file
 
+#ifndef server_h
+#define server_h
+
 #pragma comment(lib, "Ws2_32.lib")
 
 //STD console header files
@@ -14,7 +17,7 @@
 #include <iostream>
 
 #define SCK_VERSION2 0x0202
-
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define bufsize 4096
 
 class Server
@@ -37,3 +40,5 @@ public:
 	Server();
 	void Communicate();
 };
+
+#endif

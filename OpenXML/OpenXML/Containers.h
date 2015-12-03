@@ -1,5 +1,8 @@
+#ifndef containers_h
+#define containers_h
+
 #include <iostream>
-class Container
+class Containers
 {
 private:
 	std::string aankomstdag;
@@ -87,5 +90,7 @@ public:
 	std::string getGevaarinhoud();
 	void setISO(std::string osi);
 	std::string getISO();
-	Container();
+	Containers();
 };
+
+#endif

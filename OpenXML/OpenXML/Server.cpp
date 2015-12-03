@@ -1,5 +1,9 @@
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "stdafx.h"
 #include "Server.h"
+#include <WS2tcpip.h>
+
+
 
 using std::cout;
 using std::string;
