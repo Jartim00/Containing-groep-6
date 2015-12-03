@@ -19,14 +19,21 @@ import com.jme3.scene.shape.Box;
 public class OpslagKraan extends Node 
 {
     private AssetManager assetManager;
+    
+    private final float kraanDikte = 0.25f;
+    private final float kraanHoogte = 2.5f;
+    private final float kraanBreedte = 2;
+    
+    
+    
 
     //maak opslagkraan
     public OpslagKraan(AssetManager assetManager) 
     {
         this.assetManager = assetManager;
-        Box poot = new Box(0.2f,2.5f,0.2f);
-        Box top = new Box(2,0.2f,0.2f);
-        Box haak = new Box(0.25f,0.1f,1.2f);
+        Box poot = new Box(kraanDikte,kraanHoogte,kraanDikte);
+        Box top = new Box(kraanBreedte,kraanDikte,kraanDikte);
+        Box haak = new Box(Container.containerBreedte,0.1f,Container.containerLengte);
         
         Geometry kraanPoot1 = new Geometry("Box", poot);
         Geometry kraanPoot2 = new Geometry("Box", poot);
@@ -44,10 +51,10 @@ public class OpslagKraan extends Node
         topKraan.setMaterial(matKraan);
         kraanHaak.setMaterial(matHaak);
         
-        kraanPoot1.setLocalTranslation(-2, 0, 0);
-        kraanPoot2.setLocalTranslation(2, 0, 0);
-        topKraan.setLocalTranslation(0, 2.3f, 0);
-        kraanHaak.setLocalTranslation(0, 2.1f, 0);
+        kraanPoot1.setLocalTranslation(-(kraanBreedte -kraanDikte), 0, 0);
+        kraanPoot2.setLocalTranslation(kraanBreedte - kraanDikte, 0, 0);
+        topKraan.setLocalTranslation(0, kraanHoogte - kraanDikte, 0);
+        kraanHaak.setLocalTranslation(0, kraanHoogte - 2* kraanDikte, 0);
         
         attachChild(kraanPoot1);
         attachChild(kraanPoot2);
@@ -55,7 +62,7 @@ public class OpslagKraan extends Node
         attachChild(kraanHaak);
         
         rotate(0,FastMath.HALF_PI,0);
-        setLocalTranslation(0,2.5f,0);
+        setLocalTranslation(0,kraanHoogte,0);
     }
 
 }

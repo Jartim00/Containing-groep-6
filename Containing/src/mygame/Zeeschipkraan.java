@@ -20,17 +20,21 @@ public class ZeeschipKraan extends Node
 {
     private AssetManager assetManager;
     
+    private final float kraanDikte = 0.25f;
+    private final float kraanHoogte = 2.5f;
+    private final float kraanBreedte = 1.7f;
+    
     public ZeeschipKraan(AssetManager assetManager) 
     {
     
         this.assetManager = assetManager;
         
-        Box poot = new Box(0.2f,2.5f,0.2f);
-        Box xBalk = new Box(1.2f,0.2f,0.2f);
-        Box zBalk = new Box(0.2f,0.2f,1.2f);
+        Box poot = new Box(kraanDikte,kraanHoogte,kraanDikte);
+        Box xBalk = new Box(kraanBreedte,kraanDikte,kraanDikte);
+        Box zBalk = new Box(kraanDikte,kraanDikte,kraanBreedte);
         Box ballast = new Box(1.5f,0.5f,1.5f);
-        Box arm = new Box(5,0.2f,0.2f);
-        Box haak = new Box(0.25f,0.1f,1.2f);
+        Box arm = new Box(16*Container.containerBreedte + kraanBreedte,kraanDikte,kraanDikte);
+        Box haak = new Box(Container.containerBreedte,0.1f,Container.containerLengte);
         
         Geometry zeeschipKraanPoot1 = new Geometry("Box", poot);
         Geometry zeeschipKraanPoot2 = new Geometry("Box", poot);
@@ -64,18 +68,18 @@ public class ZeeschipKraan extends Node
         zeeschipKraanBallast.setMaterial(matZeeschipKraan);
         zeeschipKraanHaak.setMaterial(matZeeschipHaak);
         
-        zeeschipKraanPoot1.setLocalTranslation(-1.4f, 0, -1.4f);
-        zeeschipKraanPoot2.setLocalTranslation(1.4f, 0, 1.4f);
-        zeeschipKraanPoot3.setLocalTranslation(-1.4f, 0, 1.4f);
-        zeeschipKraanPoot4.setLocalTranslation(1.4f, 0, -1.4f);
-        zeeschipKraanXBalk1.setLocalTranslation(0, 1, -1.4f);
-        zeeschipKraanXBalk2.setLocalTranslation(0, 1, 1.4f);
-        zeeschipKraanZBalk1.setLocalTranslation(1.4f, 1, 0);
-        zeeschipKraanZBalk2.setLocalTranslation(-1.4f, 1, 0);
-        zeeschipKraanArm1.setLocalTranslation(-3.4f, 2.5f, 1.4f);
-        zeeschipKraanArm2.setLocalTranslation(-3.4f, 2.5f, -1.4f);
-        zeeschipKraanBallast.setLocalTranslation(3, 2.5f, 0);
-        zeeschipKraanHaak.setLocalTranslation(0, 2.5f, 0); 
+        zeeschipKraanPoot1.setLocalTranslation(-(kraanBreedte - kraanDikte), 0, -(kraanBreedte - kraanDikte));
+        zeeschipKraanPoot2.setLocalTranslation(kraanBreedte - kraanDikte, 0, kraanBreedte - kraanDikte);
+        zeeschipKraanPoot3.setLocalTranslation(-(kraanBreedte - kraanDikte), 0, kraanBreedte - kraanDikte);
+        zeeschipKraanPoot4.setLocalTranslation(kraanBreedte - kraanDikte, 0, -(kraanBreedte - kraanDikte));
+        zeeschipKraanXBalk1.setLocalTranslation(0, 1, -(kraanBreedte - kraanDikte));
+        zeeschipKraanXBalk2.setLocalTranslation(0, 1, kraanBreedte - kraanDikte);
+        zeeschipKraanZBalk1.setLocalTranslation(kraanBreedte - kraanDikte, 1, 0);
+        zeeschipKraanZBalk2.setLocalTranslation(-(kraanBreedte - kraanDikte), 1, 0);
+        zeeschipKraanArm1.setLocalTranslation(-(8*Container.containerBreedte + kraanBreedte/2), kraanHoogte, kraanBreedte - kraanDikte);
+        zeeschipKraanArm2.setLocalTranslation(-(8*Container.containerBreedte + kraanBreedte/2), kraanHoogte, -(kraanBreedte - kraanDikte));
+        zeeschipKraanBallast.setLocalTranslation(3, kraanHoogte, 0);
+        zeeschipKraanHaak.setLocalTranslation(0, kraanHoogte, 0); 
         
         attachChild(zeeschipKraanPoot1);
         attachChild(zeeschipKraanPoot2);
@@ -89,7 +93,6 @@ public class ZeeschipKraan extends Node
         attachChild(zeeschipKraanArm2);
         attachChild(zeeschipKraanBallast);
         attachChild(zeeschipKraanHaak);
-        
     
     }
 }
