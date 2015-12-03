@@ -20,17 +20,21 @@ public class BinnenvaartKraan extends Node
 {
     private AssetManager assetManager;
     
+    private final float kraanDikte = 0.25f;
+    private final float kraanHoogte = 2.5f;
+    private final float kraanBreedte = 1.7f;
+    
     public BinnenvaartKraan(AssetManager assetManager) 
     {
     
         this.assetManager = assetManager;
         
-        Box poot = new Box(0.2f,2.5f,0.2f);
-        Box xBalk = new Box(1.2f,0.2f,0.2f);
-        Box zBalk = new Box(0.2f,0.2f,1.2f);
+        Box poot = new Box(kraanDikte,kraanHoogte,kraanDikte);
+        Box xBalk = new Box(kraanBreedte,kraanDikte,kraanDikte);
+        Box zBalk = new Box(kraanDikte,kraanDikte,kraanBreedte);
         Box ballast = new Box(1.5f,0.5f,1.5f);
-        Box arm = new Box(0.2f,0.2f,5);
-        Box haak = new Box(1.2f,0.1f,0.25f);
+        Box arm = new Box(kraanDikte,kraanDikte,5);
+        Box haak = new Box(Container.containerLengte,0.1f,Container.containerBreedte);
         
         Geometry binnenvaartKraanPoot1 = new Geometry("Box", poot);
         Geometry binnenvaartKraanPoot2 = new Geometry("Box", poot);
@@ -64,18 +68,18 @@ public class BinnenvaartKraan extends Node
         binnenvaartKraanBallast.setMaterial(matBinnenvaartKraan);
         binnenvaartKraanHaak.setMaterial(matBinnenvaartHaak);
         
-        binnenvaartKraanPoot1.setLocalTranslation(-1.4f, 0, -1.4f);
-        binnenvaartKraanPoot2.setLocalTranslation(1.4f, 0, 1.4f);
-        binnenvaartKraanPoot3.setLocalTranslation(-1.4f, 0, 1.4f);
-        binnenvaartKraanPoot4.setLocalTranslation(1.4f, 0, -1.4f);
-        binnenvaartKraanXBalk1.setLocalTranslation(0, 1, -1.4f);
-        binnenvaartKraanXBalk2.setLocalTranslation(0, 1, 1.4f);
-        binnenvaartKraanZBalk1.setLocalTranslation(1.4f, 1, 0);
-        binnenvaartKraanZBalk2.setLocalTranslation(-1.4f, 1, 0);
-        binnenvaartKraanArm1.setLocalTranslation(1.4f, 2.5f, 3.4f);
-        binnenvaartKraanArm2.setLocalTranslation(-1.4f, 2.5f, 3.4f);
-        binnenvaartKraanBallast.setLocalTranslation(0, 2.5f, -3);
-        binnenvaartKraanHaak.setLocalTranslation(0, 2.5f, 0); 
+        binnenvaartKraanPoot1.setLocalTranslation(-(kraanBreedte - kraanDikte), 0, -(kraanBreedte - kraanDikte));
+        binnenvaartKraanPoot2.setLocalTranslation(kraanBreedte - kraanDikte, 0, kraanBreedte - kraanDikte);
+        binnenvaartKraanPoot3.setLocalTranslation(-(kraanBreedte - kraanDikte), 0, kraanBreedte - kraanDikte);
+        binnenvaartKraanPoot4.setLocalTranslation(kraanBreedte - kraanDikte, 0, -(kraanBreedte - kraanDikte));
+        binnenvaartKraanXBalk1.setLocalTranslation(0, 1, -(kraanBreedte - kraanDikte));
+        binnenvaartKraanXBalk2.setLocalTranslation(0, 1, kraanBreedte - kraanDikte);
+        binnenvaartKraanZBalk1.setLocalTranslation(kraanBreedte - kraanDikte, 1, 0);
+        binnenvaartKraanZBalk2.setLocalTranslation(-(kraanBreedte - kraanDikte), 1, 0);
+        binnenvaartKraanArm1.setLocalTranslation(kraanBreedte - kraanDikte, kraanHoogte, 8*Container.containerBreedte + kraanBreedte/2);
+        binnenvaartKraanArm2.setLocalTranslation(-(kraanBreedte - kraanDikte), kraanHoogte, 8*Container.containerBreedte + kraanBreedte/2);
+        binnenvaartKraanBallast.setLocalTranslation(0, kraanHoogte, -3);
+        binnenvaartKraanHaak.setLocalTranslation(0, kraanHoogte, 0); 
         
         attachChild(binnenvaartKraanPoot1);
         attachChild(binnenvaartKraanPoot2);

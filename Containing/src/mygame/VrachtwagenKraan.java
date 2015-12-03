@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -18,6 +19,10 @@ import com.jme3.scene.shape.Box;
 public class VrachtwagenKraan extends Node {
     
     private AssetManager assetManager;
+    
+    private final float kraanHoogte = 1;
+    private final float kraanDikte = 0.2f;
+    private final float kraanBreedte = 0.7f;
     
     public VrachtwagenKraan(AssetManager assetManager)
     {
@@ -52,5 +57,7 @@ public class VrachtwagenKraan extends Node {
         attachChild(vrachtwagenKraanPoot2);
         attachChild(vrachtwagenKraanTop);
         attachChild(vrachtwagenKraanHaak);
+        rotate(0,FastMath.HALF_PI, 0);
+        setLocalTranslation(0,kraanHoogte,0);
     }
 }

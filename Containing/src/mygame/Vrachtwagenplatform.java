@@ -3,15 +3,16 @@ package mygame;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
 public class Vrachtwagenplatform extends Node {
     private AssetManager assetManager;
-    private float platformBreedte = 10f;
+    private float platformBreedte = 4f;
     private float platformHoogte = 0.001f;
-    private float platformLengte = 80f;
+    private float platformLengte = Main.opslagLengte/2;
     
     
 //    private float parkeerLengte;
@@ -43,18 +44,18 @@ public class Vrachtwagenplatform extends Node {
         
         for(int i = 0; i < geomArr.length;i++){
             kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(1f,0.01f,3f*i);
+            kraan[i].setLocalTranslation(1f,0.01f,(platformLengte/20) * i);
             park.attachChild(kraan[i]);
             Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             matP.setColor("Color", ColorRGBA.Pink);
             matQ.setColor("Color", ColorRGBA.Cyan);
-            geomArr[i] = new Geometry("Box number " + Integer.toString(i), new Box(1.5f,0,1));
-            geomArr2[i] = new Geometry("Box number " + Integer.toString(i), new Box(1.5f,0,1));
+            geomArr[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
+            geomArr2[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             geomArr[i].setMaterial(matP);
             geomArr2[i].setMaterial(matQ);
-            geomArr[i].setLocalTranslation(1f, 0.01f,3f * i);
-            geomArr2[i].setLocalTranslation(5f, 0.01f,3f * i);
+            geomArr[i].setLocalTranslation(0f, 0.01f,(platformLengte/40) * i);
+            geomArr2[i].setLocalTranslation(3f, 0.01f,(platformLengte/40) * i);
             park.attachChild(geomArr[i]);
             park.attachChild(geomArr2[i]);
             
@@ -62,7 +63,6 @@ public class Vrachtwagenplatform extends Node {
         
         platform.attachChild(geom);
         attachChild(park);
-        park.move(3, 0,-60);
         attachChild(platform);
     }
 }

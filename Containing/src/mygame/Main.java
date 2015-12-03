@@ -230,12 +230,12 @@ rootNode.attachChild(binnenvaartplatform);
         sceneNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sceneNode);        
 
-        Box b = new Box(62.4f, 0.0f, 156.4f);
+        Box b = new Box(opslagBreedte + 2*wegBreedte, 0.0f, opslagLengte + 2*wegBreedte);
         Geometry floor = new Geometry("floor", b);
         Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floor.setMaterial(floorMat);
-        floor.setLocalTranslation(0.0f,0.0f,1.8f);
+        floor.setLocalTranslation(0.0f,0.0f,2*wegBreedte);
         sceneNode.attachChild(floor);       
  
         Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
@@ -253,7 +253,7 @@ rootNode.attachChild(binnenvaartplatform);
         treinPlatformNode = new Node("treinplatform");
         TreinPlatform treinPlatform = new TreinPlatform(assetManager);
         treinPlatformNode.attachChild(treinPlatform);
-        treinPlatform.setLocalTranslation(-60, 0, 0);
+        treinPlatform.setLocalTranslation(-66.4f, 0, 0);
         sceneNode.attachChild(treinPlatformNode);
         treinPlatform.treinKomtAan();
         Container c2 = new Container(assetManager);
@@ -265,20 +265,21 @@ rootNode.attachChild(binnenvaartplatform);
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         ZeeschipPlatform zeeschipPlatform = new ZeeschipPlatform(assetManager);
         zeeschipPlatformNode.attachChild(zeeschipPlatform);
-        zeeschipPlatform.setLocalTranslation(0, 0, 157.2f);
+        zeeschipPlatform.setLocalTranslation(0, 0, opslagLengte); //opslagPlatform + zeeschipPlatform/2 + wegBreedte
         sceneNode.attachChild(zeeschipPlatformNode);
     }
 	
-	public void initVrachtwagenplatform(){
+	public void initVrachtwagenplatform()
+        {
         VrachtwagenplatformNode = new Node();
         Vrachtwagenplatform vrachtwagenplatform = new Vrachtwagenplatform(assetManager);
         VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
-        vrachtwagenplatform.setLocalTranslation(70, 0, -70);
+        vrachtwagenplatform.setLocalTranslation(opslagBreedte, 0, -opslagLengte/2);
         sceneNode.attachChild(VrachtwagenplatformNode);
         //treinPlatform.treinKomtAan();
         //Container c2 = new Container(assetManager);
         //treinPlatform.storeContainer(c2, 49);
-    }
+        }
     
 
         
@@ -289,7 +290,7 @@ rootNode.attachChild(binnenvaartplatform);
         for (int i = 0; i < opslagstroken.length; i++) {
             opslagstroken[i] = new Opslagstrook(assetManager);
             opslagNode.attachChild(opslagstroken[i]);  
-            opslagstroken[i].setLocalTranslation(0, 0, (155.0f + i * -4f));
+            opslagstroken[i].setLocalTranslation(0, 0, (opslagLengte + i * -4f));
         }
         
         sceneNode.attachChild(opslagNode);
