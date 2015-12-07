@@ -10,9 +10,9 @@ import com.jme3.scene.shape.Box;
 
 public class Vrachtwagenplatform extends Node {
     private AssetManager assetManager;
-    private float platformBreedte = 4f;
+    private float platformBreedte = 8f;
     private float platformHoogte = 0.001f;
-    private float platformLengte = Main.opslagLengte/2;
+    private float platformLengte = Main.opslagLengte/2 + Main.wegBreedte;
     
     
 //    private float parkeerLengte;
@@ -23,9 +23,7 @@ public class Vrachtwagenplatform extends Node {
     Node kranenNode;
     
     public Vrachtwagenplatform(AssetManager assetManager) {
-        Geometry[] geomArr = new Geometry[20];
-        Geometry[] geomArr2 = new Geometry[20];
-        Geometry[] geomArr3 = new Geometry[20];
+        
         this.assetManager = assetManager;
         Box b = new Box(platformBreedte,platformHoogte,platformLengte);
         Geometry geom = new Geometry("Box", b);
@@ -36,33 +34,39 @@ public class Vrachtwagenplatform extends Node {
         park = new Node();
         
         VrachtwagenKraan[] kraan = new VrachtwagenKraan[20];
+        Geometry[] parkeerplaatsAGV = new Geometry[20];
+        Geometry[] parkeerplaatsVrachtwagen = new Geometry[20];
+        
+        
+        Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            matP.setColor("Color", ColorRGBA.Pink);
+            matQ.setColor("Color", ColorRGBA.Cyan);
         
         
 //            treinKranen[i] = new TreinKraan(assetManager);
 //            attachChild(treinKranen[i]);  
 //            treinKranen[i].setLocalTranslation((i * 4f), 1, 0);
         
-        for(int i = 0; i < geomArr.length;i++){
+        for(int i = 0; i < parkeerplaatsAGV.length;i++){
             kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(1f,0.01f,(platformLengte/20) * i);
+            kraan[i].setLocalTranslation(1f,0.01f,(platformLengte/40) * i);     // kraanpositie
             park.attachChild(kraan[i]);
-            Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            matP.setColor("Color", ColorRGBA.Pink);
-            matQ.setColor("Color", ColorRGBA.Cyan);
-            geomArr[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
-            geomArr2[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
-            geomArr[i].setMaterial(matP);
-            geomArr2[i].setMaterial(matQ);
-            geomArr[i].setLocalTranslation(0f, 0.01f,(platformLengte/40) * i);
-            geomArr2[i].setLocalTranslation(3f, 0.01f,(platformLengte/40) * i);
-            park.attachChild(geomArr[i]);
-            park.attachChild(geomArr2[i]);
+            parkeerplaatsAGV[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
+            parkeerplaatsVrachtwagen[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
+            parkeerplaatsAGV[i].setMaterial(matP);
+            parkeerplaatsVrachtwagen[i].setMaterial(matQ);
+            parkeerplaatsAGV[i].setLocalTranslation(0f, 0.01f,(platformLengte/40) * i);  // AGV Parkeerplaats
+            parkeerplaatsVrachtwagen[i].setLocalTranslation(3f, 0.01f,(platformLengte/40) * i); // Vrachtwagen Parkeerplaats
+            park.attachChild(parkeerplaatsAGV[i]);
+            park.attachChild(parkeerplaatsVrachtwagen[i]);
             
         }
         
         platform.attachChild(geom);
-        attachChild(park);
+        platform.attachChild(park);
+        platform.setLocalTranslation(platformBreedte,0,0);
         attachChild(platform);
+        
     }
 }

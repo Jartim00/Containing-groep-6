@@ -18,13 +18,19 @@ import com.jme3.scene.Node;
  * @author Robin
  */
 public class BinnenVaartPlatform extends Node {
+    
+    private float containerOpslagBreedte = 4*Container.containerBreedte; // A = opslag voor containers
+    private float containerOpslagLengte = 6*Container.containerLengte;    
+    private float platformBreedte = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
+    private float platformLengte = Main.opslagLengte/2 + Main.wegBreedte; 
+    
     private AssetManager assetManager;
+    
     public BinnenVaartPlatform(AssetManager assetManager) 
 {
         this.assetManager = assetManager;
-        float platformLengte = 80f;
-        Box platform = new Box(platformLengte, 0.001f, 6f);
-        Box containers = new Box(7.2f,0.001f, 1f);
+        Box platform = new Box(platformLengte, 0.001f, platformBreedte);
+        Box containers = new Box(containerOpslagLengte,0.001f, containerOpslagBreedte);
         Geometry platformAlles = new Geometry("Box", platform);
         Geometry containerPlaats1 = new Geometry("Box", containers);
         Geometry containerPlaats2 = new Geometry("Box", containers);
@@ -37,15 +43,18 @@ public class BinnenVaartPlatform extends Node {
         platformAlles.setMaterial(mat);
         containerPlaats1.setMaterial(mat2);
         containerPlaats2.setMaterial(mat2);
-        containerPlaats1.setLocalTranslation(platformLengte/2 ,0.001f,0.4f);
-        containerPlaats2.setLocalTranslation(-(platformLengte/2) ,0.001f,0.4f);
+        containerPlaats1.setLocalTranslation(Main.opslagLengte/4 ,0.001f,0.4f);
+        containerPlaats2.setLocalTranslation(-Main.opslagLengte/4 ,0.001f,0.4f);
         attachChild(containerPlaats1);
         attachChild(containerPlaats2);
         attachChild(platformAlles);
         rotate(0,FastMath.HALF_PI, 0);
         
         //72 meter lang, 6.8 meter hoog en 10 meter breed
-        
+        //for(int i = 0; )
+        {
+            
+        }
         BinnenvaartKraan kraan1 = new BinnenvaartKraan(assetManager);
         BinnenvaartKraan kraan2 = new BinnenvaartKraan(assetManager);
         BinnenvaartKraan kraan3 = new BinnenvaartKraan(assetManager);
@@ -55,6 +64,8 @@ public class BinnenVaartPlatform extends Node {
         BinnenvaartKraan kraan7 = new BinnenvaartKraan(assetManager);
         BinnenvaartKraan kraan8 = new BinnenvaartKraan(assetManager);
         // 3
+        
+        
         kraan1.setLocalTranslation(-70,2.5f,-2.5f);
         kraan2.setLocalTranslation(-50,2.5f,-2.5f);
         kraan3.setLocalTranslation(-0,2.5f,-2.5f);

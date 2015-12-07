@@ -19,15 +19,12 @@ public class TreinPlatform extends Node
 {
     private AssetManager assetManager;
     
-    Node treinRailsNode;
-    private float breedteA = 0.25f; // A = opslag voor containers
-    private float lengteA = 125.3f;    
-    private float breedteB = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
-    private float lengteB = 157.4f;
-    
-    private final float containerLengte = 2.5f;
-    private final float containerBreedte = 0.25f;
-    private final float containerHoogte = 0.26f;  
+    Node treinNode;
+    Node treinPlatformNode;
+    private float containerOpslagBreedte = 0.25f; // A = opslag voor containers
+    private float containerOpslagLengte = 125.3f;    
+    private float TreinPlatformBreedte = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
+    private float treinPlatformLengte = Main.opslagLengte + 2*Main.wegBreedte; 
     
     Container[][][] containerTrein = new Container[50][1][1];
 
@@ -35,12 +32,13 @@ public class TreinPlatform extends Node
     public TreinPlatform(AssetManager assetManager) 
 {
             this.assetManager = assetManager;
-            treinRailsNode = new Node("trein");
+            treinNode = new Node("trein");
+            treinPlatformNode = new Node("treinplatform");
             
             // A voor treinrails
-        Box A = new Box(lengteB,0.01f,breedteA);
+        Box A = new Box(treinPlatformLengte,0.01f,containerOpslagBreedte);
             // B complete treinplatform 
-        Box B = new Box(lengteB,0.001f,breedteB);
+        Box B = new Box(treinPlatformLengte,0.001f,TreinPlatformBreedte);
         Geometry treinRails = new Geometry("trein", A); 
         Geometry treinPlatform = new Geometry("treinPlatform", B);
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -50,8 +48,8 @@ public class TreinPlatform extends Node
         treinRails.setMaterial(matA);
         treinPlatform.setMaterial(matB);
         
-        attachChild(treinPlatform);
-        treinRailsNode.attachChild(treinRails);
+        treinPlatformNode.attachChild(treinPlatform);
+        treinNode.attachChild(treinRails);
         
         
         TreinKraan[] treinKranen = new TreinKraan[4];
@@ -60,20 +58,21 @@ public class TreinPlatform extends Node
         
         for (int i = 0; i < treinKranen.length; i++){
             treinKranen[i] = new TreinKraan(assetManager);
-            attachChild(treinKranen[i]);  
+            treinPlatformNode.attachChild(treinKranen[i]);  
             treinKranen[i].setLocalTranslation((i * 4f), 1, 0);
         }
         
-        treinRailsNode.setLocalTranslation(0, 0, -1);
-        attachChild(treinRailsNode);
+        treinNode.setLocalTranslation(0, 0, -1);
+        treinPlatformNode.attachChild(treinNode);
                 
-        
+        treinPlatformNode.setLocalTranslation(0,0,-TreinPlatformBreedte);
         rotate(0,FastMath.HALF_PI, 0);
+        attachChild(treinPlatformNode);
 }            
     public void treinKomtAan()
     {
         Trein containerTrein = new Trein(assetManager);
-        treinRailsNode.attachChild(containerTrein);
+        treinNode.attachChild(containerTrein);
         
     }
     public void storeContainer(Container container, int x)
@@ -82,10 +81,11 @@ public class TreinPlatform extends Node
         if(containerTrein[x] == null)
             containerTrein[x][0][0] = container;        
         
-        treinRailsNode.attachChild(container);
-        container.setLocalTranslation( (-lengteA + x*containerLengte), 
+        treinNode.attachChild(container);
+        container.setLocalTranslation( (-containerOpslagLengte + x*Container.containerLengte), 
                                        (0.5f), 
                                        (0));
     }
+    
 }
 

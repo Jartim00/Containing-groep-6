@@ -70,6 +70,7 @@ public class Main extends SimpleApplication{
         initTreinPlatform();
 	initVrachtwagenplatform();
         initZeeschipPlatform();
+        initBinnenvaartPlatform();
         try {
             initClientSocket();
         } catch (Exception ex) {
@@ -99,9 +100,6 @@ public class Main extends SimpleApplication{
 
         
 
-BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
-binnenvaartplatform.setLocalTranslation(74,0.13f,80f);
-rootNode.attachChild(binnenvaartplatform);
 
 
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
@@ -206,16 +204,7 @@ rootNode.attachChild(binnenvaartplatform);
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-        
-        for (int x = 0; x < 46; x++) {
-            for (int y = 0; y < 6; y++) {
-                for (int z = 0; z < 6; z++) {
-                    Container container = new Container(assetManager);
-                    opslagstroken[1].storeContainer(container, x, y, z);
-                }     
-            }
-            
-        }        
+          
         
     }
     
@@ -235,25 +224,33 @@ rootNode.attachChild(binnenvaartplatform);
         Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floor.setMaterial(floorMat);
-        floor.setLocalTranslation(0.0f,0.0f,2*wegBreedte);
+        floor.setLocalTranslation(0.0f,0.0f,0.0f);
         sceneNode.attachChild(floor);       
  
         Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
         S.scale(0.05f);
         S.rotate(0.0f, -3.0f, 0.0f);
-        S.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        S.setLocalTranslation(0.0f, 0.0f, opslagLengte + 2*wegBreedte);
         rootNode.attachChild(S);
 
            
         
 
     }
+    
+    public void initBinnenvaartPlatform()
+    {
+        BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
+        binnenvaartplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte,0,opslagLengte/2 + wegBreedte);
+        rootNode.attachChild(binnenvaartplatform);
+    }
+    
     public void initTreinPlatform()
     {
         treinPlatformNode = new Node("treinplatform");
         TreinPlatform treinPlatform = new TreinPlatform(assetManager);
         treinPlatformNode.attachChild(treinPlatform);
-        treinPlatform.setLocalTranslation(-66.4f, 0, 0);
+        treinPlatform.setLocalTranslation(-(opslagBreedte + 2*wegBreedte), 0, 0);
         sceneNode.attachChild(treinPlatformNode);
         treinPlatform.treinKomtAan();
         Container c2 = new Container(assetManager);
@@ -265,7 +262,10 @@ rootNode.attachChild(binnenvaartplatform);
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         ZeeschipPlatform zeeschipPlatform = new ZeeschipPlatform(assetManager);
         zeeschipPlatformNode.attachChild(zeeschipPlatform);
-        zeeschipPlatform.setLocalTranslation(0, 0, opslagLengte); //opslagPlatform + zeeschipPlatform/2 + wegBreedte
+        
+        zeeschipPlatform.setLocalTranslation(0, 0, opslagLengte + 2*wegBreedte); //opslagPlatform + zeeschipPlatform/2 + wegBreedte
+        System.out.println(zeeschipPlatform.getLocalTranslation().toString());
+        
         sceneNode.attachChild(zeeschipPlatformNode);
     }
 	
@@ -274,7 +274,7 @@ rootNode.attachChild(binnenvaartplatform);
         VrachtwagenplatformNode = new Node();
         Vrachtwagenplatform vrachtwagenplatform = new Vrachtwagenplatform(assetManager);
         VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
-        vrachtwagenplatform.setLocalTranslation(opslagBreedte, 0, -opslagLengte/2);
+        vrachtwagenplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte, 0, -opslagLengte/2 - wegBreedte);
         sceneNode.attachChild(VrachtwagenplatformNode);
         //treinPlatform.treinKomtAan();
         //Container c2 = new Container(assetManager);
@@ -290,7 +290,7 @@ rootNode.attachChild(binnenvaartplatform);
         for (int i = 0; i < opslagstroken.length; i++) {
             opslagstroken[i] = new Opslagstrook(assetManager);
             opslagNode.attachChild(opslagstroken[i]);  
-            opslagstroken[i].setLocalTranslation(0, 0, (opslagLengte + i * -4f));
+            opslagstroken[i].setLocalTranslation(0, 0, ((opslagLengte-2) + (i+0) * -4f));
         }
         
         sceneNode.attachChild(opslagNode);

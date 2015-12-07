@@ -38,7 +38,7 @@ public class ZeeschipPlatform extends Node {
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         zeeschipPlatformNode.attachChild(zeeschipNode);
         zeeschipNode.setLocalTranslation(-(breedteContainerPlaatsen + breedteZeeschipPlatform), 0, 0);
-        zeeschipPlatformNode.setLocalTranslation(-2*(breedteZeeschipPlatform + Main.wegBreedte), 0, 0);
+        zeeschipPlatformNode.setLocalTranslation(-breedteZeeschipPlatform, 0, 0);
         // A zeeschip containeropslag
         Box A = new Box(breedteContainerPlaatsen,0,lengteContainerPlaatsen);
         // B complete strook 
