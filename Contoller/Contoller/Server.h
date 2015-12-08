@@ -9,6 +9,7 @@
 #include <sdkddkver.h>
 #include <conio.h>
 #include <stdio.h>
+#include "Containers.h"
 
 //SOCKET header files
 
@@ -20,11 +21,15 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define bufsize 4096
 
+class OpenXMLs;
+
 class Server
 {
 private:
 	int SUCCESSFUL;
 	int SUCCESSFUL2;
+
+	OpenXMLs* XMLdata;
 	WSAData WinSockData;
 	WORD DLLVERSION;
 
@@ -35,9 +40,9 @@ private:
 	//Socket Creation
 	SOCKET sockLISTEN;
 	SOCKET sockCONNECTION;
-
 public:
-	Server();
+	std::string getOpdracht();
+	Server(OpenXMLs* open);
 	void Communicate();
 };
 

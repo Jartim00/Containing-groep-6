@@ -11,7 +11,7 @@ OpenXMLs::OpenXMLs(){
 	//"aankomstbedrijf", "naameigenaar", "vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
 	//"naaminhoud", "soortinhoud", "gevaarinhoud", "iso"
 	index = 0;
-	fname = { "xml1.xml",  "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml"};
+	fname = { "xml1.xml", "xml2.xml" };// , "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml"};
 	errorstr = "";
 }
 
@@ -118,6 +118,12 @@ bool OpenXMLs::checkData(string a, string b, string c, string d, string e, strin
 			}
 		}
 	}
+}
+
+vector<Containers> OpenXMLs::getContainers(){
+	int arraygrootte = containers.size();
+	cout << arraygrootte << endl;
+	return containers;
 }
 
 //Kijken of alle tekens getallen zijn.
@@ -438,9 +444,9 @@ void OpenXMLs::Openen(){
 							containers[index].setVertrekjaar(container["vertrekjaar"]);
 							containers[index].setVertrekmaand(container["vertrekmaand"]);
 							//containers[index].setVolgewicht(container["volgewicht"]);
-							if (index % 100 == 0){
+							//if (index % 100 == 0){
 								cout << "good container" << index << endl;
-							}
+							//}
 
 							//index verhogen om de volgende container op de goede positie toe te voegen. 
 							index++;
