@@ -19,10 +19,9 @@ import com.jme3.scene.shape.Box;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.ArrayList;
-import java.net.*;
-import java.io.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,6 +75,22 @@ public class Main extends SimpleApplication{
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        List<Vector3f> waypoints = new ArrayList<Vector3f>();
+        waypoints = initWaypointsMaken(waypoints);
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        a.add(43);
+        a.add(620);
+        a.add(628);
+        a.add(338);
+        ArrayList<Integer> aa = new ArrayList<Integer>();
+        aa.add(632);
+        aa.add(633);
+        aa.add(634);
+        aa.add(635);
+        aa.add(636);
+        aa.add(637);
+        initAgvAansturen(a, waypoints);
+        initAgvAansturen(aa, waypoints);
 
 //        int a = 0;
 //float b = 0;
@@ -207,8 +222,93 @@ public class Main extends SimpleApplication{
           
         
     }
-    
-
+public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
+{     
+        // vierbaans linkerkant.
+        // vierde rij               
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 152f - (i*4)));
+        }        
+        // derde rij               
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 152f - (i*4)));  
+        }        
+        // tweede rij              
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 152f - (i*4))); 
+        }       
+        // eerste rij          
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(-62.15f, 0.13f, 152f - (4*i)));
+        }        
+        // vierbaans rechterkant
+        //vierde rij
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(60.25f, 0.13f, 152f - (4*i)));    
+        }        
+        //derde rij       
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(60.89f, 0.13f, 152f - (4*i)));   
+        }       
+        //tweede rij              
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(61.52f, 0.13f, 152f - (4*i)));   
+        }        
+        //eerste rij       
+        for (int i = 0; i < 77; i++) {
+        waypoints.add(new Vector3f(62.15f, 0.13f, 152f - (4*i)));   
+        }
+        //links beneden hoekpunten
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 154.25f)); // hoek beneden binnenste
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 154.89f)); // hoek beneden 1 naar links
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 155.52f)); // hoek beneden 1 naar links
+        waypoints.add(new Vector3f(-62.15f, 0.13f, 156.15f)); // hoek beneden buitenste links
+        //links boven hoekpunten
+        waypoints.add(new Vector3f(-60.25f, 0.13f, -154.25f)); // hoek boven binnenste
+        waypoints.add(new Vector3f(-60.89f, 0.13f, -154.89f)); //hoek boven 1 naar links
+        waypoints.add(new Vector3f(-61.52f, 0.13f, -155.52f)); // hoek boven 1 naar links
+        waypoints.add(new Vector3f(-62.15f, 0.13f, -156.15f)); // hoek boven buitenste
+        // rechts beneden hoekpunten
+        waypoints.add(new Vector3f(60.25f, 0.13f, 154.25f)); // hoek beneden binnenste
+        waypoints.add(new Vector3f(60.89f, 0.13f, 154.89f)); // hoek beneden 1 naar rechts
+        waypoints.add(new Vector3f(61.52f, 0.13f, 155.52f)); // hoek beneden  1 naar rechts
+        waypoints.add(new Vector3f(62.15f, 0.13f, 156.15f)); // hoek beneden buitenste
+        // rechts boven hoekpunten
+        waypoints.add(new Vector3f(60.25f, 0.13f, -154.25f)); // hoek boven binnenste
+        waypoints.add(new Vector3f(60.89f, 0.13f, -154.89f)); // hoek boven 1 naar rechts
+        waypoints.add(new Vector3f(61.52f, 0.13f, -155.52f)); // hoek boven 1 naar rechts
+        waypoints.add(new Vector3f(62.15f, 0.13f, -156.15f)); // hoek boven buitenste
+        //treinplatform beneden.
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 153f)); // binnenbaan
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 153f));
+        waypoints.add(new Vector3f(-66f, 0.13f, 153f)); 
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 154f));//buitenbaan
+        waypoints.add(new Vector3f(-62.15f, 0.13f, 154f));
+        waypoints.add(new Vector3f(-66.7f, 0.13f, 154f));
+        //treinplatform boven
+        waypoints.add(new Vector3f(-60.25f, 0.13f, -153f));//binnenbaan
+        waypoints.add(new Vector3f(-60.89f, 0.13f, -153f));
+        waypoints.add(new Vector3f(-66f, 0.13f, -153f));
+        waypoints.add(new Vector3f(-61.52f, 0.13f, -154f));//buitenbaan
+        waypoints.add(new Vector3f(-62.15f, 0.13f, -154f));
+        waypoints.add(new Vector3f(-66.7f, 0.13f, -154f));  
+        return waypoints;
+}
+public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
+    {
+        MotionPath pad = new MotionPath();
+        for(Integer x : a){
+            pad.addWayPoint(waypoints.get(x));
+        }
+        AGV agv = new AGV(assetManager);
+        rootNode.attachChild(agv);
+        pad.enableDebugShape(assetManager, rootNode);
+        motionControl = new MotionEvent(agv,pad);
+        motionControl.play();
+        pad.enableDebugShape(assetManager, rootNode);
+        pad.setCurveTension(0);
+        motionControl.setSpeed(.2f);  
+    }
     public void initScene(){
 
         flyCam.setMoveSpeed(100.0f);
