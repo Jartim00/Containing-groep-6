@@ -305,17 +305,39 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
         waypoints.add(new Vector3f(-66.7f, 0.13f, -154f)); // uitgang bocht
         //treinrails rechterkant
         for (int i = 0; i < 30; i++) {
-        waypoints.add(new Vector3f(-66f, 0.13f, 2.8f + (i*2.495f)));
+            waypoints.add(new Vector3f(-66f, 0.13f, 2.8f + (i*2.495f)));
     }
         //treinrails linkerkant
         for (int i = 0; i < 30; i++) {
-        waypoints.add(new Vector3f(-66.7f, 0.13f, 2.8f + (i*2.495f)));
+            waypoints.add(new Vector3f(-66.7f, 0.13f, 2.8f + (i*2.495f)));
     }
         
         //zeeschip platform hoekpunten rechts
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 162f));//ingang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.7f));//uitgang
-        
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 162.2f));//ingang
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.9f));//uitgang
+        waypoints.add(new Vector3f(60.25f, 0.13f, 162.2f));//ingang
+        waypoints.add(new Vector3f(60.89f, 0.13f, 162.9f));//uitgang
+        for (int i = 0; i < 20; i++) {
+            waypoints.add(new Vector3f(-58.2f + (i*2.4f), 0.13f, 162.2f)); // linkerzeeschip van links naar rechts, onderste baan            
+        }
+        for (int i = 0; i < 20; i++) {
+        waypoints.add(new Vector3f(12.5f + (i*2.4f), 0.13f, 162.2f)); // rechter zeeschip van links naar rechts, onderste baan
+        }
+        for (int i = 0; i < 20; i++) {
+            waypoints.add(new Vector3f(-58.2f + (i*2.4f), 0.13f, 162.9f)); // linkerzeeschip van links naar rechts, bovenste baan            
+        }
+        for (int i = 0; i < 20; i++) {
+        waypoints.add(new Vector3f(12.5f + (i*2.4f), 0.13f, 162.9f)); // rechter zeeschip van links naar rechts, bovenste baan
+        }
+        //binnenvaarplatform, beneden
+        waypoints.add(new Vector3f(60.25f, 0.13f, 153f)); // binnenbocht
+        waypoints.add(new Vector3f(60.89f, 0.13f, 153f));
+        waypoints.add(new Vector3f(61.52f, 0.13f, 153f));
+        waypoints.add(new Vector3f(62.15f, 0.13f, 153f));
+        waypoints.add(new Vector3f(60.25f, 0.13f, 154f)); // buitenbocht
+        waypoints.add(new Vector3f(60.89f, 0.13f, 154f));
+        waypoints.add(new Vector3f(61.52f, 0.13f, 154f));
+        waypoints.add(new Vector3f(62.15f, 0.13f, 154f));
         return waypoints;
 }
 public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
