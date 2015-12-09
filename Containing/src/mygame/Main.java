@@ -2,7 +2,6 @@ package mygame;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.SimpleApplication;
-//import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.cinematic.MotionPath;
@@ -91,7 +90,11 @@ public class Main extends SimpleApplication{
         aa.add(637);
         initAgvAansturen(a, waypoints);
         initAgvAansturen(aa, waypoints);
-
+        ArrayList<Integer> alles = new ArrayList<Integer>();
+        for (int i = 0; i < waypoints.size(); i++) {
+            alles.add(i);
+        }
+initAgvAansturen(alles, waypoints);
 //        int a = 0;
 //float b = 0;
 //for(int j=1;j<9;j++){
@@ -279,19 +282,40 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
         waypoints.add(new Vector3f(61.52f, 0.13f, -155.52f)); // hoek boven 1 naar rechts
         waypoints.add(new Vector3f(62.15f, 0.13f, -156.15f)); // hoek boven buitenste
         //treinplatform beneden.
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 153f)); // binnenbaan
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 153f)); // uitgang
         waypoints.add(new Vector3f(-60.89f, 0.13f, 153f));
-        waypoints.add(new Vector3f(-66f, 0.13f, 153f)); 
-        waypoints.add(new Vector3f(-61.52f, 0.13f, 154f));//buitenbaan
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 153f));
+        waypoints.add(new Vector3f(-62.15f, 0.13f, 153f));
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 154f)); // ingang
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 154f));
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 154f));
         waypoints.add(new Vector3f(-62.15f, 0.13f, 154f));
-        waypoints.add(new Vector3f(-66.7f, 0.13f, 154f));
+        waypoints.add(new Vector3f(-66f, 0.13f, 153f)); // ingang bocht
+        waypoints.add(new Vector3f(-66.7f, 0.13f, 154f));// uitgang bocht
         //treinplatform boven
-        waypoints.add(new Vector3f(-60.25f, 0.13f, -153f));//binnenbaan
+        waypoints.add(new Vector3f(-60.25f, 0.13f, -153f));//ingang
         waypoints.add(new Vector3f(-60.89f, 0.13f, -153f));
-        waypoints.add(new Vector3f(-66f, 0.13f, -153f));
-        waypoints.add(new Vector3f(-61.52f, 0.13f, -154f));//buitenbaan
+        waypoints.add(new Vector3f(-61.52f, 0.13f, -153f));
+        waypoints.add(new Vector3f(-62.15f, 0.13f, -153f));
+        waypoints.add(new Vector3f(-60.25f, 0.13f, -154f));//uitgang
+        waypoints.add(new Vector3f(-60.89f, 0.13f, -154f));
+        waypoints.add(new Vector3f(-61.52f, 0.13f, -154f));
         waypoints.add(new Vector3f(-62.15f, 0.13f, -154f));
-        waypoints.add(new Vector3f(-66.7f, 0.13f, -154f));  
+        waypoints.add(new Vector3f(-66f, 0.13f, -153f)); // ingang bocht
+        waypoints.add(new Vector3f(-66.7f, 0.13f, -154f)); // uitgang bocht
+        //treinrails rechterkant
+        for (int i = 0; i < 30; i++) {
+        waypoints.add(new Vector3f(-66f, 0.13f, 2.8f + (i*2.495f)));
+    }
+        //treinrails linkerkant
+        for (int i = 0; i < 30; i++) {
+        waypoints.add(new Vector3f(-66.7f, 0.13f, 2.8f + (i*2.495f)));
+    }
+        
+        //zeeschip platform hoekpunten rechts
+        waypoints.add(new Vector3f(-60.25f, 0.13f, 162f));//ingang
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.7f));//uitgang
+        
         return waypoints;
 }
 public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
