@@ -39,9 +39,9 @@ public class Vrachtwagenplatform extends Node {
         
         
         Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            matP.setColor("Color", ColorRGBA.Pink);
-            matQ.setColor("Color", ColorRGBA.Cyan);
+        Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        matP.setColor("Color", ColorRGBA.Pink);
+        matQ.setColor("Color", ColorRGBA.Cyan);
         
         
 //            treinKranen[i] = new TreinKraan(assetManager);
@@ -50,14 +50,14 @@ public class Vrachtwagenplatform extends Node {
         
         for(int i = 0; i < parkeerplaatsAGV.length;i++){
             kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(1f,0.01f,(platformLengte/40) * i);     // kraanpositie
+            kraan[i].setLocalTranslation(0,1,(platformLengte/40) * i);     // kraanpositie
             park.attachChild(kraan[i]);
             parkeerplaatsAGV[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsVrachtwagen[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsAGV[i].setMaterial(matP);
             parkeerplaatsVrachtwagen[i].setMaterial(matQ);
-            parkeerplaatsAGV[i].setLocalTranslation(0f, 0.01f,(platformLengte/40) * i);  // AGV Parkeerplaats
-            parkeerplaatsVrachtwagen[i].setLocalTranslation(3f, 0.01f,(platformLengte/40) * i); // Vrachtwagen Parkeerplaats
+            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, 0.01f,(platformLengte/40) * i);  // AGV Parkeerplaats
+            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, 0.01f,(platformLengte/40) * i); // Vrachtwagen Parkeerplaats
             park.attachChild(parkeerplaatsAGV[i]);
             park.attachChild(parkeerplaatsVrachtwagen[i]);
             

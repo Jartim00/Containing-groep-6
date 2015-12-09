@@ -17,8 +17,11 @@ import com.jme3.scene.Node;
  *
  * @author Robin
  */
-public class BinnenVaartPlatform extends Node {
+public class BinnenVaartPlatform extends Node 
+{
     
+    Node platformNode;
+    Node schepenNode;
     private float containerOpslagBreedte = 4*Container.containerBreedte; // A = opslag voor containers
     private float containerOpslagLengte = 6*Container.containerLengte;    
     private float platformBreedte = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
@@ -27,11 +30,13 @@ public class BinnenVaartPlatform extends Node {
     private AssetManager assetManager;
     
     public BinnenVaartPlatform(AssetManager assetManager) 
-{
+    {
+        Node platformNode = new Node("binnenvaartPlatform");
+        Node schepenNode = new Node("schepen");
         this.assetManager = assetManager;
         Box platform = new Box(platformLengte, 0.001f, platformBreedte);
         Box containers = new Box(containerOpslagLengte,0.001f, containerOpslagBreedte);
-        Geometry platformAlles = new Geometry("Box", platform);
+        Geometry binnenvaartPlatform = new Geometry("Box", platform);
         Geometry containerPlaats1 = new Geometry("Box", containers);
         Geometry containerPlaats2 = new Geometry("Box", containers);
         
@@ -40,49 +45,32 @@ public class BinnenVaartPlatform extends Node {
         Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat2.setColor("Color", ColorRGBA.Orange);
         
-        platformAlles.setMaterial(mat);
+        binnenvaartPlatform.setMaterial(mat);
         containerPlaats1.setMaterial(mat2);
         containerPlaats2.setMaterial(mat2);
-        containerPlaats1.setLocalTranslation(Main.opslagLengte/4 ,0.001f,0.4f);
-        containerPlaats2.setLocalTranslation(-Main.opslagLengte/4 ,0.001f,0.4f);
-        attachChild(containerPlaats1);
-        attachChild(containerPlaats2);
-        attachChild(platformAlles);
-        rotate(0,FastMath.HALF_PI, 0);
+        containerPlaats1.setLocalTranslation(platformLengte/2 ,0.001f,0);
+        containerPlaats2.setLocalTranslation(-platformLengte/2 ,0.001f,0);
+        schepenNode.attachChild(containerPlaats1);
+        schepenNode.attachChild(containerPlaats2);
+        
         
         //72 meter lang, 6.8 meter hoog en 10 meter breed
-        //for(int i = 0; )
+        BinnenvaartKraan[] kranen = new BinnenvaartKraan[8];
+        
+        for(int i = 0; i<kranen.length; i++)
         {
-            
+            kranen[i] = new BinnenvaartKraan(assetManager);
+            platformNode.attachChild(kranen[i]);
+            kranen[i].setLocalTranslation(-platformLengte + platformLengte/8 + platformLengte/4 *i, 2.5f,platformBreedte - 1.7f);
         }
-        BinnenvaartKraan kraan1 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan2 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan3 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan4 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan5 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan6 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan7 = new BinnenvaartKraan(assetManager);
-        BinnenvaartKraan kraan8 = new BinnenvaartKraan(assetManager);
-        // 3
         
+        platformNode.attachChild(schepenNode);
+        schepenNode.setLocalTranslation(0, 0, containerOpslagBreedte + platformBreedte);
+        platformNode.attachChild(binnenvaartPlatform);
+        platformNode.setLocalTranslation(0, 0, platformBreedte);
+        attachChild(platformNode);
+        rotate(0,FastMath.HALF_PI, 0);
         
-        kraan1.setLocalTranslation(-70,2.5f,-2.5f);
-        kraan2.setLocalTranslation(-50,2.5f,-2.5f);
-        kraan3.setLocalTranslation(-0,2.5f,-2.5f);
-        kraan4.setLocalTranslation(-10,2.5f,-2.5f);
-        kraan5.setLocalTranslation(10,2.5f,-2.5f);
-        kraan6.setLocalTranslation(30,2.5f,-2.5f);
-        kraan7.setLocalTranslation(50,2.5f,-2.5f);
-        kraan8.setLocalTranslation(70,2.5f,-2.5f);
-        
-        attachChild(kraan1);
-        attachChild(kraan2);
-        attachChild(kraan3);
-        attachChild(kraan4);
-        attachChild(kraan5);
-        attachChild(kraan6);
-        attachChild(kraan7);
-        attachChild(kraan8);
         
 }
 }

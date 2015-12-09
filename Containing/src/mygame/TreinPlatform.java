@@ -59,7 +59,7 @@ public class TreinPlatform extends Node
         for (int i = 0; i < treinKranen.length; i++){
             treinKranen[i] = new TreinKraan(assetManager);
             treinPlatformNode.attachChild(treinKranen[i]);  
-            treinKranen[i].setLocalTranslation((i * 4f), 1, 0);
+            treinKranen[i].setLocalTranslation(i * 20f, 1, 0);
         }
         
         treinNode.setLocalTranslation(0, 0, -1);
@@ -69,8 +69,9 @@ public class TreinPlatform extends Node
         rotate(0,FastMath.HALF_PI, 0);
         attachChild(treinPlatformNode);
 }            
-    public void treinKomtAan()
+    public void treinKomtAan(int y)
     {
+        Trein.x = y;
         Trein containerTrein = new Trein(assetManager);
         treinNode.attachChild(containerTrein);
         
@@ -82,8 +83,8 @@ public class TreinPlatform extends Node
             containerTrein[x][0][0] = container;        
         
         treinNode.attachChild(container);
-        container.setLocalTranslation( (-containerOpslagLengte + x*Container.containerLengte), 
-                                       (0.5f), 
+        container.setLocalTranslation( (-containerOpslagLengte + 2*Container.containerLengte + x*2*Container.containerLengte), 
+                                       (0.62f), 
                                        (0));
     }
     

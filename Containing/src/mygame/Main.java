@@ -252,7 +252,7 @@ public class Main extends SimpleApplication{
         treinPlatformNode.attachChild(treinPlatform);
         treinPlatform.setLocalTranslation(-(opslagBreedte + 2*wegBreedte), 0, 0);
         sceneNode.attachChild(treinPlatformNode);
-        treinPlatform.treinKomtAan();
+        treinPlatform.treinKomtAan(20);
         Container c2 = new Container(assetManager);
         treinPlatform.storeContainer(c2, 49);
         
@@ -290,7 +290,7 @@ public class Main extends SimpleApplication{
         for (int i = 0; i < opslagstroken.length; i++) {
             opslagstroken[i] = new Opslagstrook(assetManager);
             opslagNode.attachChild(opslagstroken[i]);  
-            opslagstroken[i].setLocalTranslation(0, 0, ((opslagLengte-2) + (i+0) * -4f));
+            opslagstroken[i].setLocalTranslation(0, 0, ((opslagLengte-2) + i * -4f));
         }
         
         sceneNode.attachChild(opslagNode);
