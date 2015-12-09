@@ -34,6 +34,7 @@ private:
 	string errorstr;
 public:
 	OpenXMLs();
+	vector<Containers> getContainers();
 	string split(string a);
 	bool checkVervoersoort(string a);
 	bool checkTime(string time);
