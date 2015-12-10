@@ -2,28 +2,29 @@
 #define agv_h
 
 #include <string>
+#include <vector>
 
+using std::vector;
 using std::string;
+
 
 class AGV
 {
 private:
-	string positie;
+	double positieX;
+	double positieY;
 	bool beschikbaar;
+	vector<AGV> agvs;
 public:
 	AGV();
-	void setPositie(string pos){
-		positie = pos;
-	}
-	string getPositie(){
-		return positie;
-	}
-	void setBeschikbaar(bool beschik){
-		beschikbaar = beschik;
-	}
-	bool getBeschikbaar(){
-		return beschikbaar;
-	}
+	void voegAGVtoe();
+	void zoekVrijeAGV();
+	void setPositieX(double positieX);
+	double getPositieX();
+	void setPositieY(double positieY);
+	double getPositieY();
+	void setBeschikbaar(bool beschik);
+	bool getBeschikbaar();
 };
 
 #endif

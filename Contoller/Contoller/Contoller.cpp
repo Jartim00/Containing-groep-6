@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Containers.h"
 #include "OpenXML.h"
+#include "AGV.h"
 #include "Server.h"
 #include <iostream>
 #include <algorithm>
@@ -18,7 +19,8 @@ int main()
 {
 	OpenXMLs xml = OpenXMLs();
 	xml.Openen();
-	Server s1 = Server(&xml);
-	s1.Communicate();
+	//Server s1 = Server();
+	//s1.Communicate();
+	for (;;){}
 }
 
