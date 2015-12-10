@@ -28,7 +28,7 @@ public class Vrachtwagenplatform extends Node {
         Box b = new Box(platformBreedte,platformHoogte,platformLengte);
         Geometry geom = new Geometry("Box", b);
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matA.setColor("Color", ColorRGBA.Red);
+        matA.setColor("Color", ColorRGBA.Black);
         geom.setMaterial(matA);
         platform = new Node();
         park = new Node();
@@ -50,19 +50,19 @@ public class Vrachtwagenplatform extends Node {
         
         for(int i = 0; i < parkeerplaatsAGV.length;i++){
             kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(0,1,(platformLengte/40) * i);     // kraanpositie
+            kraan[i].setLocalTranslation(0,1,4*i);     // kraanpositie
             park.attachChild(kraan[i]);
             parkeerplaatsAGV[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsVrachtwagen[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsAGV[i].setMaterial(matP);
             parkeerplaatsVrachtwagen[i].setMaterial(matQ);
-            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, 0.01f,(platformLengte/40) * i);  // AGV Parkeerplaats
-            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, 0.01f,(platformLengte/40) * i); // Vrachtwagen Parkeerplaats
+            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, 0.01f,4*i);  // AGV Parkeerplaats
+            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, 0.01f,4*i); // Vrachtwagen Parkeerplaats
             park.attachChild(parkeerplaatsAGV[i]);
             park.attachChild(parkeerplaatsVrachtwagen[i]);
             
         }
-        
+        park.setLocalTranslation(0,0,-5.8f);
         platform.attachChild(geom);
         platform.attachChild(park);
         platform.setLocalTranslation(platformBreedte,0,0);
