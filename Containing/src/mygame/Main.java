@@ -43,6 +43,8 @@ public class Main extends SimpleApplication{
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
     public MotionEvent motionControl;
+    public float snelheidBeladen = 1f;
+    public float snelheidOnBeladen = 0.5f;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
@@ -396,6 +398,7 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         Cinematic cinematic = new Cinematic(agv, 9^99);
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
+        event.setInitialDuration(pad.getLength() / 2f / snelheidBeladen);
         event.setSpeed(0.2f);
         cinematic.play();
     }
