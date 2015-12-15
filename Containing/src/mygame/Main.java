@@ -14,6 +14,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Spline.SplineType;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -319,7 +320,7 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
         //zeeschip platform hoekpuntenlinks
         waypoints.add(new Vector3f(-60.89f, 0.13f, 162.2f));//ingang
         waypoints.add(new Vector3f(-61.52f, 0.13f, 162.9f));//uitgang
-        //zeeschi platform hoekpunten rechts
+        //zeeschip platform hoekpunten rechts
         waypoints.add(new Vector3f(60.89f, 0.13f, 162.2f));//ingang
         waypoints.add(new Vector3f(61.52f, 0.13f, 162.9f));//uitgang
         for (int i = 0; i < 20; i++) {
@@ -333,7 +334,7 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
         }
         for (int i = 0; i < 20; i++) {
             waypoints.add(new Vector3f(12.5f + (i*2.4f), 0.13f, 162.9f)); // rechter zeeschip van links naar rechts, bovenste baan
-        }
+        } waypoints.add(new Vector3f(0,0,0)); // lege waypoints want ricardo.
         //binnenvaarplatform, beneden
         waypoints.add(new Vector3f(60.25f, 0.13f, 153f)); // binnenbocht, ingang
         waypoints.add(new Vector3f(60.89f, 0.13f, 153f));
@@ -391,10 +392,11 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         pad.enableDebugShape(assetManager, rootNode);
         MotionEvent event = new MotionEvent (agv, pad);
         event.setDirectionType(MotionEvent.Direction.Path);
-        pad.setCurveTension(0);
-        Cinematic cinematic = new Cinematic(agv, 10);
+        pad.setPathSplineType(SplineType.Linear);
+        Cinematic cinematic = new Cinematic(agv, 9^99);
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
+        event.setSpeed(0.2f);
         cinematic.play();
     }
     public void initScene(){
