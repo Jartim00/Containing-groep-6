@@ -19,8 +19,8 @@ int main()
 {
 	OpenXMLs xml = OpenXMLs();
 	xml.Openen();
-	//Server s1 = Server();
-	//s1.Communicate();
-	for (;;){}
+	Server s1 = Server(&xml);
+	s1.Communicate();
+	//for (;;){}
 }
 

@@ -11,7 +11,7 @@ OpenXMLs::OpenXMLs(){
 	//"aankomstbedrijf", "naameigenaar", "vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
 	//"naaminhoud", "soortinhoud", "gevaarinhoud", "iso"
 	index = 0;
-	fname = { "xml1.xml",  "xml2.xml", "xml3.xml", "xml4.xml",  "xml5.xml", "xml6.xml", "xml7.xml"};
+	fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml" };//, "xml6.xml", "xml7.xml"};
 	errorstr = "";
 }
 
@@ -146,6 +146,11 @@ map<pair<string, string>, string> OpenXMLs::checkNieuweAankomst(map<pair<string,
 			return map;
 		}
 	}
+}
+
+vector<Containers> OpenXMLs::getContainers()
+{
+	return containers;
 }
 
 void OpenXMLs::Openen(){
