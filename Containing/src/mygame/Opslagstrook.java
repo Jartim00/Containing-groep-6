@@ -16,6 +16,8 @@ import com.jme3.scene.shape.Box;
  * @author Sjoerd
  */
 public class Opslagstrook extends Node {
+    Node parkerenRechts;
+    Node parkerenLinks;
     
     private final AssetManager assetManager;
     
@@ -35,16 +37,42 @@ public class Opslagstrook extends Node {
         Box A = new Box(lengteA,0.01f,breedteA);
         // B complete strook 
         Box B = new Box(lengteB,0.001f,breedteB);
+        // parkeerplaatsen
+        
         Geometry opslag = new Geometry("opslag", A); 
         Geometry opslagTerrein = new Geometry("opslagTerrein", B);
+        
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matA.setColor("Color", ColorRGBA.Gray);
         Material matB = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matB.setColor("Color", ColorRGBA.Black);
+        Material matC = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         opslag.setMaterial(matA);
         opslagTerrein.setMaterial(matB);
+        Geometry[] parkArrRechts = new Geometry[6];
+        Geometry[] parkArrLinks = new Geometry[6];
+        parkerenRechts = new Node();
+        parkerenLinks = new Node();
+        for(int i =0; i < 6; i++){
+            parkArrRechts[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte, 0.02f,Container.containerBreedte));
+            parkArrLinks[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte, 0.02f,Container.containerBreedte));
+            parkArrRechts[i].setMaterial(matC);
+            parkArrLinks[i].setMaterial(matC);
+            parkArrRechts[i].setLocalTranslation(0,0,breedteA - Container.containerBreedte - i*2*Container.containerBreedte);
+            parkArrLinks[i].setLocalTranslation(0,0,breedteA - Container.containerBreedte - i*2*Container.containerBreedte);
+            matC.setColor("Color", ColorRGBA.Blue);
+            //matC.getAdditionalRenderState().setWireframe(true);
+            parkerenRechts.attachChild(parkArrRechts[i]);
+            parkerenLinks.attachChild(parkArrLinks[i]);
+        }
+        attachChild(parkerenRechts);
+        attachChild(parkerenLinks);
+        
+        parkerenLinks.setLocalTranslation(-lengteA + Container.containerLengte,0,0);
+        parkerenRechts.setLocalTranslation(lengteA + Container.containerLengte,0,0);
         attachChild(opslagTerrein);
         attachChild(opslag);
+        
         
         OpslagKraan opslagKraan = new OpslagKraan(assetManager);
         attachChild(opslagKraan);
