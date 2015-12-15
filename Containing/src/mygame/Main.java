@@ -4,11 +4,16 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.cinematic.Cinematic;
 import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.cinematic.events.MotionTrack;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -36,8 +41,7 @@ public class Main extends SimpleApplication{
     Node treinPlatformNode;
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
-    private MotionPath path;
-    private MotionEvent motionControl;
+    public MotionEvent motionControl;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
@@ -311,12 +315,13 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
         for (int i = 0; i < 30; i++) {
             waypoints.add(new Vector3f(-66.7f, 0.13f, 2.8f + (i*2.495f)));
         }
-        
-        //zeeschip platform hoekpunten rechts
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 162.2f));//ingang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.9f));//uitgang
-        waypoints.add(new Vector3f(60.25f, 0.13f, 162.2f));//ingang
-        waypoints.add(new Vector3f(60.89f, 0.13f, 162.9f));//uitgang
+        waypoints.add(new Vector3f(0,0,0));waypoints.add(new Vector3f(0,0,0)); // lege waypoints want ricardo.
+        //zeeschip platform hoekpuntenlinks
+        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.2f));//ingang
+        waypoints.add(new Vector3f(-61.52f, 0.13f, 162.9f));//uitgang
+        //zeeschi platform hoekpunten rechts
+        waypoints.add(new Vector3f(60.89f, 0.13f, 162.2f));//ingang
+        waypoints.add(new Vector3f(61.52f, 0.13f, 162.9f));//uitgang
         for (int i = 0; i < 20; i++) {
             waypoints.add(new Vector3f(-58.2f + (i*2.4f), 0.13f, 162.2f)); // linkerzeeschip van links naar rechts, onderste baan            
         }
@@ -374,7 +379,7 @@ public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
             waypoints.add(new Vector3f(69.1f, 0.13f, -8-(4*i)));
         }
         return waypoints;
-}
+    }
 public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
     {
         MotionPath pad = new MotionPath();
@@ -384,15 +389,17 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         AGV agv = new AGV(assetManager);
         rootNode.attachChild(agv);
         pad.enableDebugShape(assetManager, rootNode);
-        motionControl = new MotionEvent(agv,pad);
-        motionControl.play();
-        pad.enableDebugShape(assetManager, rootNode);
+        MotionEvent event = new MotionEvent (agv, pad);
+        event.setDirectionType(MotionEvent.Direction.Path);
         pad.setCurveTension(0);
-        motionControl.setSpeed(.2f);  
+        Cinematic cinematic = new Cinematic(agv, 10);
+        cinematic.addCinematicEvent(0, event);
+        stateManager.attach(cinematic);
+        cinematic.play();
     }
     public void initScene(){
 
-        flyCam.setMoveSpeed(100.0f);
+        flyCam.setMoveSpeed(50.0f);
         
         sceneNode = new Node("Scene");
         
