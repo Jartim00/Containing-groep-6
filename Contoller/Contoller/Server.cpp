@@ -47,7 +47,7 @@ string Server::getOpdracht(int index) // deze moet een index krijgen om de gewen
 	if (index < conta.size() - 1)
 	{
 		cout << "index: " << index << " conta.size: " << conta.size() << endl;
-		string opdracht = "";
+		string opdracht = "c/";
 		string containerID = conta[index].getContainernr();
 		opdracht.append(containerID + "/");
 		string x = conta[index].getAankomstpositiex();
@@ -71,6 +71,8 @@ string Server::getOpdracht(int index) // deze moet een index krijgen om de gewen
 //als er een boodschap goed binnen is gekomen wordt er op waarde succes een NULL geplaatst om aan te geven dat de boodschap daar ophoudt.
 void Server::Communicate()
 {
+	int count = 0;
+	string AGVtest = "799/803/624/616/636/632"; //799,883,624,616,636,632
 	//opdrachtcount houdt bij hoeveel containers er verstuurd zijn, onder meer voor het geval de verbinding uitvalt
 	int opdrachtcount = 0;
 	char buffer1[bufsize];
@@ -95,12 +97,21 @@ void Server::Communicate()
 					cout << buffer1 << endl;
 				}
 
-
-				string opdracht = getOpdracht(opdrachtcount);
-				int count = opdracht.size();
-				if (count > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
 				char buffer[bufsize];
-				strcpy_s(buffer, opdracht.c_str());
+				if (opdrachtcount % 100 == 0)
+				{
+					count = AGVtest.size();
+					strcpy_s(buffer, AGVtest.c_str());
+				}
+				else
+				{
+					string opdracht = getOpdracht(opdrachtcount);
+					count = opdracht.size();
+					strcpy_s(buffer, opdracht.c_str());
+				}
+				if (count > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
+
+
 				buffer[count++] = '\n';
 				send(sockConnection, buffer, count, 0);
 				cout << "\n\tMessage received:\n\t" << endl;
