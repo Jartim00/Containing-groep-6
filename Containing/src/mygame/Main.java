@@ -56,10 +56,12 @@ public class Main extends SimpleApplication{
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     
     //socketdeclaratie
-//    private static ClientSocket s1;
+    private static ClientSocket s1;
     private static int port = 49876;
     
     private boolean testrun;
+    
+    private List<Vector3f> waypoints;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -78,45 +80,6 @@ public class Main extends SimpleApplication{
         initZeeschipPlatform();
         initBinnenvaartPlatform();
         Waypoint.WaypointMaken();
-        ArrayList<Integer> a = new ArrayList<Integer>();
-        a.add(43);
-        a.add(620);
-        a.add(628);
-        a.add(338);
-        ArrayList<Integer> alles = new ArrayList<Integer>();
-        for (int i = 0; i < Waypoint.waypoints.size(); i++) {
-            alles.add(i);
-        }
-        System.out.println(Waypoint.waypoints.size());
-        MotionPath pad = new MotionPath();
-        for(Integer x : a){
-            pad.addWayPoint(Waypoint.waypoints.get(x));
-        }
-        initAgvAansturen(pad);
-//        int a = 0;
-//float b = 0;
-//for(int j=1;j<9;j++){
-//        AGV agv = new AGV(assetManager);
-//        agv.setLocalTranslation(-65 - a,0.13f,2.5f);
-//        rootNode.attachChild(agv);
-//        path = new MotionPath();
-//        for (int i=1;i< 20;i++){
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-//        }
-//        path.setCycle(false);
-//        motionControl = new MotionEvent(agv,path);
-//        motionControl.setSpeed(0.012f + b);
-//        motionControl.play();
-//        a = a+2;
-//        b = b+0.008f;
-//}
-
-        
-
-
 
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
@@ -220,20 +183,20 @@ public class Main extends SimpleApplication{
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-//                while (true) {
-//            try {
-//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
-//                break;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("Server not responding");
-//                continue;
-//            }
-//        }
-////        Thread thread1 = new Thread(s1);
-////        thread1.start();
-////        this.enqueue(s1.run());
-//        s1.threadConnectie();
+                while (true) {
+            try {
+                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Server not responding");
+                continue;
+            }
+        }
+//        Thread thread1 = new Thread(s1);
+//        thread1.start();
+//        this.enqueue(s1.run());
+        s1.threadConnectie();
         
     }
 
@@ -250,6 +213,7 @@ public void initAgvAansturen(MotionPath pad)
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
         event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
+
         cinematic.play();
     }
     public void initScene(){
@@ -376,20 +340,34 @@ public void initAgvAansturen(MotionPath pad)
     @Override 
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-//                String[] splitInput;
-//            //if (s1.getOpdrachten().size() > 0) {
-//            for (String opdracht : s1.getOpdrachten()) {
-//                System.out.println(opdracht);
-//                System.out.println("test");
-//                splitInput = opdracht.split("/", 4);
+                String[] splitInput;
+                List<Integer> inputToInt = new ArrayList<Integer>();
+            //if (s1.getOpdrachten().size() > 0) {
+            for (String opdracht : s1.getOpdrachten()) {
+                System.out.println(opdracht);
+                System.out.println("test");
+                splitInput = opdracht.split("/");
+                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
+                    for (int i = 0; i < splitInput.length; i++) {
+                        System.out.println("splitinput lengte = " + splitInput.length);
+                        inputToInt.add(Integer.parseInt(splitInput[i]));
+                        System.out.println(splitInput[i]);
+                    }
+                    MotionPath pad = new MotionPath();
+                    for(Integer x : inputToInt){
+                        pad.addWayPoint(Waypoint.waypoints.get(x));
+                    }
+                    initAgvAansturen(pad);
+                    inputToInt.clear();;
+                }
 //                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
 //                //System.out.println("x = " + x + " y = " + y + " z = " + z);
 //                int[] xyzarray = {x,y,z};
 //                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
-//                testrun = false;
-//            }
+                testrun = false;
+            }
         //treinPlatform.storeContainer(c2, 5);
     }
 
