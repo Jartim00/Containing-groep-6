@@ -33,7 +33,7 @@ public class AGV extends Node {
         Geometry geom5 = new Geometry("Cylinder", a);
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
+        mat.setColor("Color",new ColorRGBA(1,1,1,1));
         Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat2.setColor("Color", ColorRGBA.Black);
         geom.setMaterial(mat);

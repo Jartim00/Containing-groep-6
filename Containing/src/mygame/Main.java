@@ -43,8 +43,7 @@ public class Main extends SimpleApplication{
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
     public MotionEvent motionControl;
-    public float snelheidBeladen = 1f;
-    public float snelheidOnBeladen = 0.5f;
+    public float snelheid = 1f;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
@@ -57,8 +56,10 @@ public class Main extends SimpleApplication{
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     
     //socketdeclaratie
-    private static ClientSocket s1;
+//    private static ClientSocket s1;
     private static int port = 49876;
+    
+    private boolean testrun;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -76,11 +77,6 @@ public class Main extends SimpleApplication{
 	initVrachtwagenplatform();
         initZeeschipPlatform();
         initBinnenvaartPlatform();
-        try {
-            initClientSocket();
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
         List<Vector3f> waypoints = new ArrayList<Vector3f>();
         waypoints = initWaypointsMaken(waypoints);
         ArrayList<Integer> a = new ArrayList<Integer>();
@@ -101,7 +97,7 @@ public class Main extends SimpleApplication{
         for (int i = 0; i < waypoints.size(); i++) {
             alles.add(i);
         }
-initAgvAansturen(alles, waypoints);
+        initAgvAansturen(alles, waypoints);
 //        int a = 0;
 //float b = 0;
 //for(int j=1;j<9;j++){
@@ -229,7 +225,20 @@ initAgvAansturen(alles, waypoints);
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-          
+//                while (true) {
+//            try {
+//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+//                break;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                System.out.println("Server not responding");
+//                continue;
+//            }
+//        }
+////        Thread thread1 = new Thread(s1);
+////        thread1.start();
+////        this.enqueue(s1.run());
+//        s1.threadConnectie();
         
     }
 public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
@@ -395,10 +404,10 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         MotionEvent event = new MotionEvent (agv, pad);
         event.setDirectionType(MotionEvent.Direction.Path);
         pad.setPathSplineType(SplineType.Linear);
-        Cinematic cinematic = new Cinematic(agv, 9^99);
+        Cinematic cinematic = new Cinematic(agv, 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
-        event.setInitialDuration(pad.getLength() / 2f / snelheidBeladen);
+        event.setInitialDuration(pad.getLength() / 11f / snelheid);
         event.setSpeed(0.2f);
         cinematic.play();
     }
@@ -424,10 +433,7 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         S.scale(0.05f);
         S.rotate(0.0f, -3.0f, 0.0f);
         S.setLocalTranslation(0.0f, 0.0f, opslagLengte + 2*wegBreedte);
-        rootNode.attachChild(S);
-
-           
-        
+        rootNode.attachChild(S);    
 
     }
     
@@ -515,21 +521,34 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         rootNode.addLight(sun);  
     }
     
-    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
-        try {
-            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
-        }
-        catch (IOException e) {e.printStackTrace();}
-        if (s1.isConnected()) { //geen write acties tot connected, test, bug, etc.
-        s1.write("start?");   
-        }
-        System.out.print("\n" + s1.read());
-    }
-    
+//    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
+//        try {
+//            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
+//        }
+//        catch (IOException e) {e.printStackTrace();}
+//        if (s1.isConnected()) { //geen write acties tot connected, test, bug, etc.
+//        s1.write("start?");   
+//        }
+//        System.out.print("\n" + s1.read());
+//    }
+//    
     @Override 
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-        
+//                String[] splitInput;
+//            //if (s1.getOpdrachten().size() > 0) {
+//            for (String opdracht : s1.getOpdrachten()) {
+//                System.out.println(opdracht);
+//                System.out.println("test");
+//                splitInput = opdracht.split("/", 4);
+//                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
+//                int y = Integer.parseInt(splitInput[2]);
+//                int z = Integer.parseInt(splitInput[3]);
+//                //System.out.println("x = " + x + " y = " + y + " z = " + z);
+//                int[] xyzarray = {x,y,z};
+//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
+//                testrun = false;
+//            }
         //treinPlatform.storeContainer(c2, 5);
     }
 
