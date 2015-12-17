@@ -28,7 +28,7 @@ public class Vrachtwagenplatform extends Node {
         Box b = new Box(platformBreedte,platformHoogte,platformLengte);
         Geometry geom = new Geometry("Box", b);
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matA.setColor("Color", ColorRGBA.Red);
+        matA.setColor("Color", ColorRGBA.Black);
         geom.setMaterial(matA);
         platform = new Node();
         park = new Node();
@@ -42,7 +42,7 @@ public class Vrachtwagenplatform extends Node {
         Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matP.setColor("Color", ColorRGBA.Pink);
         matQ.setColor("Color", ColorRGBA.Cyan);
-        
+       
         
 //            treinKranen[i] = new TreinKraan(assetManager);
 //            attachChild(treinKranen[i]);  
@@ -69,4 +69,6 @@ public class Vrachtwagenplatform extends Node {
         attachChild(platform);
         
     }
-}
+        
+        
+    }

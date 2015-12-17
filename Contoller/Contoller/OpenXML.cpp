@@ -11,17 +11,17 @@ OpenXMLs::OpenXMLs(){
 	//"aankomstbedrijf", "naameigenaar", "vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
 	//"naaminhoud", "soortinhoud", "gevaarinhoud", "iso"
 	index = 0;
-	fname = { "xml1.xml", "xml2.xml" };// , "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml"};
+	fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml" };//, "xml6.xml", "xml7.xml"};
 	errorstr = "";
 }
 
 string OpenXMLs::split(const string a){
-	int countsluitingen = 0;
+	int countSluitingen = 0;
 	//checken of een string splitbaar is.
 	for (auto n : a)
 		if (n == '>')
-			countsluitingen++;
-	if (countsluitingen == 2)
+			countSluitingen++;
+	if (countSluitingen == 2)
 	{
 		stringstream xx(a);
 		string item;
@@ -60,9 +60,8 @@ bool OpenXMLs::checkTime(string time){
 	//als de gevonden positie 
 	if (found != string::npos)
 		return false;
-	if (atoi(time.substr(0, temp).c_str()) < 12 && (atoi(time.substr(temp + 1).c_str()) < 60)) return true;
-	if (atoi(time.substr(0, temp).c_str()) == 12 && atoi(time.substr(temp + 1).c_str()) == 0) return true;
-
+	if (atoi(time.substr(0, temp).c_str()) < 24 && (atoi(time.substr(temp + 1).c_str()) < 60)) 
+		return true;
 	return false;
 }
 
@@ -74,12 +73,13 @@ bool OpenXMLs::checkTimes(string starttime, string endtime)
 	int starttemp = starttime.find('.');
 	int endtemp = endtime.find('.');
 	//bij de 0,starttemp pakt hij stukje voor de punt, bij starttemp + 1, stukje na de punt.
-	if (atoi(starttime.substr(0, starttemp).c_str()) > atoi(endtime.substr(0, endtemp).c_str())) return false;
-	if (atoi(starttime.substr(0, starttemp).c_str()) < atoi(endtime.substr(0, endtemp).c_str())) return true;
+	if (atoi(starttime.substr(0, starttemp).c_str()) > atoi(endtime.substr(0, endtemp).c_str())) 
+		return false;
+	if (atoi(starttime.substr(0, starttemp).c_str()) < atoi(endtime.substr(0, endtemp).c_str())) 
+		return true;
 	if (atoi(starttime.substr(0, starttemp).c_str()) == atoi(endtime.substr(0, endtemp).c_str()))
-	{
-		if (atoi(starttime.substr(starttemp + 1).c_str()) >= atoi(endtime.substr(endtemp + 1).c_str())) return false;
-	}
+		if (atoi(starttime.substr(starttemp + 1).c_str()) >= atoi(endtime.substr(endtemp + 1).c_str())) 
+			return false;
 	return true;
 }
 
@@ -94,7 +94,7 @@ bool OpenXMLs::checkDatum(string a, string b, string c){
 	if (maand == 0 || maand > 12) return false;
 	if (jaar > 99) return false;
 	if (dag == 0 || dag > 31) return false;
-	else return true;
+	return true;
 }
 
 bool OpenXMLs::checkData(string a, string b, string c, string d, string e, string f, string g, string h)
@@ -112,18 +112,9 @@ bool OpenXMLs::checkData(string a, string b, string c, string d, string e, strin
 		{
 			if (aankomstdag > vertrekdag) return false;
 			if (aankomstdag < aankomstdag) return true;
-			if (aankomstdag == vertrekdag)
-			{
-				return checkTimes(g, h);
-			}
+			if (aankomstdag == vertrekdag) return false;
 		}
 	}
-}
-
-vector<Containers> OpenXMLs::getContainers(){
-	int arraygrootte = containers.size();
-	cout << arraygrootte << endl;
-	return containers;
 }
 
 //Kijken of alle tekens getallen zijn.
@@ -157,6 +148,11 @@ map<pair<string, string>, string> OpenXMLs::checkNieuweAankomst(map<pair<string,
 	}
 }
 
+vector<Containers> OpenXMLs::getContainers()
+{
+	return containers;
+}
+
 void OpenXMLs::Openen(){
 	for (auto x : containergegevens)
 		container[x] = "";
@@ -186,23 +182,18 @@ void OpenXMLs::Openen(){
 				//elke regel wordt één voor één behandeld.
 				if (iss >> sub)
 				{
-					if (sub.find("<aankomst") != string::npos)
+					if (sub.find("<aankomst>") != string::npos)
 						aankomst = true;
-					if (sub.find("<vertrek") != string::npos)
+					if (sub.find("<vertrek>") != string::npos)
 						aankomst = false;
 					if (sub.find("<containernr>") != string::npos)
 						//check of containernr alleen getallen bevat.
 						if (!checkStringOnlyDigits(sub)){
-						error = true;
-						errorstr = "only digits";
+							error = true;
+							errorstr = "only digits";
 						}
 						else
 							container["containernr"] = sub;
-					/*if (sub.find("<bedrijf") != string::npos)
-					if (aankomst)
-					container["aankomstbedrijf"] = sub;
-					else
-					container["vertrekbedrijf"] = sub;*/
 					if (sub.find("<d>") != string::npos)
 						tempdag = sub;
 					if (sub.find("<m>") != string::npos)
@@ -244,7 +235,7 @@ void OpenXMLs::Openen(){
 						//Check de tijdsnotering
 						if (!checkTime(sub)){
 							error = true;
-							errorstr = "foute tot tijdsnotering";
+							errorstr = "foute tot tijdsnotering" + sub;
 						}
 						else
 						{
@@ -370,33 +361,7 @@ void OpenXMLs::Openen(){
 							tempx = "";
 							tempy = "";
 						}
-					/*if (sub.find("<eigenaar>") != string::npos)
-					eigenaar = true;
-					if (sub.find("<naam>") != string::npos)
-					if (eigenaar)
-					{
-					container["naameigenaar"] = sub;
-					eigenaar = false;
-					}
-					else
-					container["naaminhoud"] = sub;
-					if (sub.find("<l>") != string::npos)
-					container["lengtecontainer"] = sub;
-					if (sub.find("<b>") != string::npos)
-					container["breedtecontainer"] = sub;
-					if (sub.find("<h>") != string::npos)
-					container["hoogtecontainer"] = sub;
-					if (sub.find("<leeg>") != string::npos)
-					container["leeggewicht"] = sub;
-					//if regel bevat <inhoud>, maar de hele regel bevat meer dan <inhoud>
-					if (sub.find("<inhoud>") != string::npos && sub != ("<inhoud>"))
-					container["volgewicht"] = sub;
-					if (sub.find("<soort>") != string::npos)
-					container["soortinhoud"] = sub;
-					if (sub.find("<gevaar>") != string::npos)
-					container["gevaarinhoud"] = sub;
-					if (sub.find("<ISO>") != string::npos)
-					container["iso"] = sub;*/
+					
 					//bij </record> is alle informatie van de container binnengehaald.
 					if (sub.find("</record>") != string::npos)
 					{
@@ -425,29 +390,16 @@ void OpenXMLs::Openen(){
 							containers[index].setAankomstpositiey(container["aankomstpositiey"]);
 							containers[index].setAankomstpositiez(container["aankomstpositiez"]);
 							containers[index].setAankomstvervoersmiddel(container["aankomstvervoersmiddel"]);
-							//containers[index].setAankomstbedrijf(container["aankomstbedrijf"]);
-							//containers[index].setBreedtecontainer(container["breedtecontainer"]);
 							containers[index].setContainernr(container["containernr"]);
-							//containers[index].setHoogtecontainer(container["hoogtecontainer"]);
-							//containers[index].setISO(container["iso"]);
-							//containers[index].setLeeggewicht(container["leeggewicht"]);
-							//containers[index].setLengtecontainer(container["lengtecontainer"]);
-							//containers[index].setNaameigenaar(container["naameigenaar"]);
-							//containers[index].setSoortinhoud(container["soortinhoud"]);
-							//containers[index].setNaaminhoud(container["naaminhoud"]);
-							//containers[index].setGevaarinhoud(container["gevaarinhoud"]);
 							containers[index].setVertrekvervoersmiddel(container["vertrekvervoersmiddel"]);
-							//containers[index].setVertrekbedrijf(container["vertrekbedrijf"]);
 							containers[index].setVertrekbegintijd(container["vertrekbegintijd"]);
 							containers[index].setVertrekdag(container["vertrekdag"]);
 							containers[index].setVertrekeindtijd(container["vertrekeindtijd"]);
 							containers[index].setVertrekjaar(container["vertrekjaar"]);
 							containers[index].setVertrekmaand(container["vertrekmaand"]);
-							//containers[index].setVolgewicht(container["volgewicht"]);
-							//if (index % 100 == 0){
+							if (index % 100 == 0){
 								cout << "good container" << index << endl;
-							//}
-
+							}
 							//index verhogen om de volgende container op de goede positie toe te voegen. 
 							index++;
 						}

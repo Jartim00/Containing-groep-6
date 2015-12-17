@@ -34,7 +34,6 @@ private:
 	string errorstr;
 public:
 	OpenXMLs();
-	vector<Containers> getContainers();
 	string split(string a);
 	bool checkVervoersoort(string a);
 	bool checkTime(string time);
@@ -44,6 +43,7 @@ public:
 	bool checkStringOnlyDigits(string a);
 	bool checkPositie(string x, string y, string z, map<pair<string, string>, string> map);
 	map<pair<string, string>, string> checkNieuweAankomst(map<pair<string, string>, string> map, string aankomst, string aankomsttijd, string vertrektijd);
+	vector<Containers> getContainers();
 	void Openen();
 };
 

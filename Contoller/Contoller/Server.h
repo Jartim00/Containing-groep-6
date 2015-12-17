@@ -10,6 +10,10 @@
 #include <conio.h>
 #include <stdio.h>
 #include "Containers.h"
+#include <vector>
+#include <WS2tcpip.h>
+#include "OpenXML.h"
+
 
 //SOCKET header files
 
@@ -21,28 +25,31 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define bufsize 4096
 
-class OpenXMLs;
-
 class Server
 {
 private:
-	int SUCCESSFUL;
-	int SUCCESSFUL2;
+
+	int successful;
 
 	OpenXMLs* XMLdata;
+
+	int SUCCESSFUL;
+	int SUCCESSFUL2;
 	WSAData WinSockData;
-	WORD DLLVERSION;
+	WORD DLLVersion;
 
 	//Socket structure
-	SOCKADDR_IN ADDRESS;
-	int AddressSize;
+	SOCKADDR_IN address;
+	int addressSize;
 
 	//Socket Creation
+	SOCKET sockListen;
+	SOCKET sockConnection;
+public:
+	std::string getOpdracht(int index);
+	Server(OpenXMLs* open);
 	SOCKET sockLISTEN;
 	SOCKET sockCONNECTION;
-public:
-	std::string getOpdracht();
-	Server(OpenXMLs* open);
 	void Communicate();
 };
 

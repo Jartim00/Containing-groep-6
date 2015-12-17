@@ -4,11 +4,20 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.cinematic.Cinematic;
 import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.cinematic.events.MotionTrack;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Spline.SplineType;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -37,24 +46,32 @@ public class Main extends SimpleApplication{
     Node treinPlatformNode;
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
-    private MotionPath path;
-    private MotionEvent motionControl;
+    
+    public float snelheid = 1f;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
     public static float wegBreedte = 1.2f;
+    
+    private final float terreinLengte = 154 + 2.4f + 8;
+    private final float terreinBreedte = 60 + 2.4f + 8;
     
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
     
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
+    ArrayList<AGV> agvs;
     Schip zeeschip1;
     Schip zeeschip2;
     
     //socketdeclaratie
-    private static ClientSocket s1;
+//    private static ClientSocket s1;
     private static int port = 49876;
+    
+    private boolean testrun;
+    
+    private List<Vector3f> waypoints;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -72,57 +89,12 @@ public class Main extends SimpleApplication{
 	initVrachtwagenplatform();
         initZeeschipPlatform();
         initBinnenvaartPlatform();
-        try {
-            initClientSocket();
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        List<Vector3f> waypoints = new ArrayList<Vector3f>();
-        waypoints = initWaypointsMaken(waypoints);
-        ArrayList<Integer> a = new ArrayList<Integer>();
-        a.add(43);
-        a.add(620);
-        a.add(628);
-        a.add(338);
-        ArrayList<Integer> aa = new ArrayList<Integer>();
-        aa.add(632);
-        aa.add(633);
-        aa.add(634);
-        aa.add(635);
-        aa.add(636);
-        aa.add(637);
-        initAgvAansturen(a, waypoints);
-        initAgvAansturen(aa, waypoints);
-        ArrayList<Integer> alles = new ArrayList<Integer>();
-        for (int i = 0; i < waypoints.size(); i++) {
-            alles.add(i);
-        }
-initAgvAansturen(alles, waypoints);
-//        int a = 0;
-//float b = 0;
-//for(int j=1;j<9;j++){
-//        AGV agv = new AGV(assetManager);
-//        agv.setLocalTranslation(-65 - a,0.13f,2.5f);
-//        rootNode.attachChild(agv);
-//        path = new MotionPath();
-//        for (int i=1;i< 20;i++){
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, 170));
-//        path.addWayPoint(new Vector3f(-65 - a, 0.13f, -150));
-//        }
-//        path.setCycle(false);
-//        motionControl = new MotionEvent(agv,path);
-//        motionControl.setSpeed(0.012f + b);
-//        motionControl.play();
-//        a = a+2;
-//        b = b+0.008f;
-//}
-
+        Waypoint.WaypointMaken();
+        initInputs();
         
-
-
-
+        //Init AGVs
+        agvs = new ArrayList<AGV>();
+        initAGVs();
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
@@ -228,121 +200,44 @@ initAgvAansturen(alles, waypoints);
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-          
+//                while (true) {
+//            try {
+//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+//                break;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                System.out.println("Server not responding");
+//                continue;
+//            }
+//        }
+////        Thread thread1 = new Thread(s1);
+////        thread1.start();
+////        this.enqueue(s1.run());
+//        s1.threadConnectie();
         
     }
-public List<Vector3f> initWaypointsMaken(List<Vector3f> waypoints)
-{     
-        // vierbaans linkerkant.
-        // vierde rij               
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 152f - (i*4)));
-        }        
-        // derde rij               
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 152f - (i*4)));  
-        }        
-        // tweede rij              
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(-61.52f, 0.13f, 152f - (i*4))); 
-        }       
-        // eerste rij          
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(-62.15f, 0.13f, 152f - (4*i)));
-        }        
-        // vierbaans rechterkant
-        //vierde rij
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(60.25f, 0.13f, 152f - (4*i)));    
-        }        
-        //derde rij       
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(60.89f, 0.13f, 152f - (4*i)));   
-        }       
-        //tweede rij              
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(61.52f, 0.13f, 152f - (4*i)));   
-        }        
-        //eerste rij       
-        for (int i = 0; i < 77; i++) {
-        waypoints.add(new Vector3f(62.15f, 0.13f, 152f - (4*i)));   
-        }
-        //links beneden hoekpunten
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 154.25f)); // hoek beneden binnenste
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 154.89f)); // hoek beneden 1 naar links
-        waypoints.add(new Vector3f(-61.52f, 0.13f, 155.52f)); // hoek beneden 1 naar links
-        waypoints.add(new Vector3f(-62.15f, 0.13f, 156.15f)); // hoek beneden buitenste links
-        //links boven hoekpunten
-        waypoints.add(new Vector3f(-60.25f, 0.13f, -154.25f)); // hoek boven binnenste
-        waypoints.add(new Vector3f(-60.89f, 0.13f, -154.89f)); //hoek boven 1 naar links
-        waypoints.add(new Vector3f(-61.52f, 0.13f, -155.52f)); // hoek boven 1 naar links
-        waypoints.add(new Vector3f(-62.15f, 0.13f, -156.15f)); // hoek boven buitenste
-        // rechts beneden hoekpunten
-        waypoints.add(new Vector3f(60.25f, 0.13f, 154.25f)); // hoek beneden binnenste
-        waypoints.add(new Vector3f(60.89f, 0.13f, 154.89f)); // hoek beneden 1 naar rechts
-        waypoints.add(new Vector3f(61.52f, 0.13f, 155.52f)); // hoek beneden  1 naar rechts
-        waypoints.add(new Vector3f(62.15f, 0.13f, 156.15f)); // hoek beneden buitenste
-        // rechts boven hoekpunten
-        waypoints.add(new Vector3f(60.25f, 0.13f, -154.25f)); // hoek boven binnenste
-        waypoints.add(new Vector3f(60.89f, 0.13f, -154.89f)); // hoek boven 1 naar rechts
-        waypoints.add(new Vector3f(61.52f, 0.13f, -155.52f)); // hoek boven 1 naar rechts
-        waypoints.add(new Vector3f(62.15f, 0.13f, -156.15f)); // hoek boven buitenste
-        //treinplatform beneden.
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 153f)); // uitgang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 153f));
-        waypoints.add(new Vector3f(-61.52f, 0.13f, 153f));
-        waypoints.add(new Vector3f(-62.15f, 0.13f, 153f));
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 154f)); // ingang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 154f));
-        waypoints.add(new Vector3f(-61.52f, 0.13f, 154f));
-        waypoints.add(new Vector3f(-62.15f, 0.13f, 154f));
-        waypoints.add(new Vector3f(-66f, 0.13f, 153f)); // ingang bocht
-        waypoints.add(new Vector3f(-66.7f, 0.13f, 154f));// uitgang bocht
-        //treinplatform boven
-        waypoints.add(new Vector3f(-60.25f, 0.13f, -153f));//ingang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, -153f));
-        waypoints.add(new Vector3f(-61.52f, 0.13f, -153f));
-        waypoints.add(new Vector3f(-62.15f, 0.13f, -153f));
-        waypoints.add(new Vector3f(-60.25f, 0.13f, -154f));//uitgang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, -154f));
-        waypoints.add(new Vector3f(-61.52f, 0.13f, -154f));
-        waypoints.add(new Vector3f(-62.15f, 0.13f, -154f));
-        waypoints.add(new Vector3f(-66f, 0.13f, -153f)); // ingang bocht
-        waypoints.add(new Vector3f(-66.7f, 0.13f, -154f)); // uitgang bocht
-        //treinrails rechterkant
-        for (int i = 0; i < 30; i++) {
-        waypoints.add(new Vector3f(-66f, 0.13f, 2.8f + (i*2.495f)));
-    }
-        //treinrails linkerkant
-        for (int i = 0; i < 30; i++) {
-        waypoints.add(new Vector3f(-66.7f, 0.13f, 2.8f + (i*2.495f)));
-    }
-        
-        //zeeschip platform hoekpunten rechts
-        waypoints.add(new Vector3f(-60.25f, 0.13f, 162f));//ingang
-        waypoints.add(new Vector3f(-60.89f, 0.13f, 162.7f));//uitgang
-        
-        return waypoints;
-}
-public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
+
+public void initAgvAansturen(MotionPath pad)
     {
-        MotionPath pad = new MotionPath();
-        for(Integer x : a){
-            pad.addWayPoint(waypoints.get(x));
-        }
+        
         AGV agv = new AGV(assetManager);
         rootNode.attachChild(agv);
         pad.enableDebugShape(assetManager, rootNode);
-        motionControl = new MotionEvent(agv,pad);
-        motionControl.play();
-        pad.enableDebugShape(assetManager, rootNode);
-        pad.setCurveTension(0);
-        motionControl.setSpeed(.2f);  
+        MotionEvent event = new MotionEvent (agv, pad);
+        event.setDirectionType(MotionEvent.Direction.Path);
+        pad.setPathSplineType(SplineType.Linear);
+        Cinematic cinematic = new Cinematic(agv, 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
+        cinematic.addCinematicEvent(0, event);
+        stateManager.attach(cinematic);
+        event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
+
+        cinematic.play();
     }
     public void initScene(){
 
-        flyCam.setMoveSpeed(100.0f);
-        
+        flyCam.setMoveSpeed(50.0f);
+        cam.setLocation(new Vector3f(-5f, 59f, 234f));
+        cam.setRotation(new Quaternion (0f, 1f, -0.2f, 0f));
         sceneNode = new Node("Scene");
         
         // load sky
@@ -350,21 +245,26 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         rootNode.attachChild(sceneNode);        
 
         Box b = new Box(opslagBreedte + 2*wegBreedte, 0.0f, opslagLengte + 2*wegBreedte);
-        Geometry floor = new Geometry("floor", b);
+        Geometry weg = new Geometry("floor", b);
+        Material wegMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        wegMat.setColor("Color", ColorRGBA.DarkGray);
+        weg.setMaterial(wegMat);
+        weg.setLocalTranslation(0.0f,0.0f,0.0f);
+        sceneNode.attachChild(weg);   
+        
+        Box b1 = new Box(terreinBreedte, 20.0f, terreinLengte);
+        Geometry floor = new Geometry("floor", b1);
         Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floor.setMaterial(floorMat);
-        floor.setLocalTranslation(0.0f,0.0f,0.0f);
-        sceneNode.attachChild(floor);       
+        floor.setLocalTranslation(0.0f,-20.0f,0.0f);
+        sceneNode.attachChild(floor);     
  
         Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
         S.scale(0.05f);
         S.rotate(0.0f, -3.0f, 0.0f);
         S.setLocalTranslation(0.0f, 0.0f, opslagLengte + 2*wegBreedte);
-        rootNode.attachChild(S);
-
-           
-        
+        rootNode.attachChild(S);    
 
     }
     
@@ -421,10 +321,38 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
             opslagstroken[i] = new Opslagstrook(assetManager);
             opslagNode.attachChild(opslagstroken[i]);  
             opslagstroken[i].setLocalTranslation(0, 0, ((opslagLengte-2) + i * -4f));
+            opslagstroken[i].maakParkeerPlaatsen(opslagstroken[i].getLocalTranslation().clone());
         }
         
         sceneNode.attachChild(opslagNode);
        
+    }
+    
+    public void initAGVs(){
+        for (int i = 0; i < opslagstroken.length * 4; i++) {
+            
+            AGV agv = new AGV(assetManager);
+            agvs.add(agv);
+            rootNode.attachChild(agv);        
+            
+        }
+        
+        int j = 0;
+        for (int i = 0; i < opslagstroken.length * 4; i += 4) {
+            if (j < 5) {
+                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[3]);
+                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[2]);
+                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
+                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
+            } else {
+                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
+                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
+                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[6]);
+                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[7]);
+            }
+            j++;
+        }
+        
     }
     
     public void initWater(){
@@ -450,17 +378,6 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
         sun.setColor(ColorRGBA.White);
         rootNode.addLight(sun);  
-    }
-    
-    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
-        try {
-            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
-        }
-        catch (IOException e) {e.printStackTrace();}
-        if (s1.isConnected()) { //geen write acties tot connected, test, bug, etc.
-        s1.write("start?");   
-        }
-        System.out.print("\n" + s1.read());
     }
     
     void zeeschip1KomtAan()
@@ -491,7 +408,90 @@ public void initAgvAansturen(ArrayList<Integer> a, List<Vector3f> waypoints)
         //TODO: add update code
         //Container container = new Container(assetManager);
         //zeeschip2.storeContainer(container, 5, 2, 9);
+        
+//    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
+//        try {
+//            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
+//        }
+//        catch (IOException e) {e.printStackTrace();}
+//        if (s1.isConnected()) { //geen write acties tot connected, test, bug, etc.
+//        s1.write("start?");   
+//        }
+//        System.out.print("\n" + s1.read());
+//    }
+//    
+        //TODO: add update code
+//                String[] splitInput;
+//                List<Integer> inputToInt = new ArrayList<Integer>();
+//            //if (s1.getOpdrachten().size() > 0) {
+//            for (String opdracht : s1.getOpdrachten()) {
+//                System.out.println(opdracht);
+//                System.out.println("test");
+//                splitInput = opdracht.split("/");
+//                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
+//                    for (int i = 0; i < splitInput.length; i++) {
+//                        System.out.println("splitinput lengte = " + splitInput.length);
+//                        inputToInt.add(Integer.parseInt(splitInput[i]));
+//                        System.out.println(splitInput[i]);
+//                    }
+//                    MotionPath pad = new MotionPath();
+//                    for(Integer x : inputToInt){
+//                        pad.addWayPoint(Waypoint.waypoints.get(x));
+//                    }
+//                    initAgvAansturen(pad);
+//                    inputToInt.clear();;
+//                }
+//                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
+//                int y = Integer.parseInt(splitInput[2]);
+//                int z = Integer.parseInt(splitInput[3]);
+//                //System.out.println("x = " + x + " y = " + y + " z = " + z);
+//                int[] xyzarray = {x,y,z};
+//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
+                testrun = false;
+   //         }
         //treinPlatform.storeContainer(c2, 5);
+    }
+    
+    private boolean playing = false;
+    //public MotionEvent motionControl;    
+    
+    private void initInputs(){
+        inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
+        ActionListener acl = new ActionListener() {
+            
+            public void onAction(String name, boolean keyPressed, float tpf) {
+          
+                if (name.equals("play_stop") && keyPressed) {
+                    if (playing) {
+                        playing = false;
+                        opslagstroken[1].motionControl.stop();
+//                        for (int i = 0; i < opslagstroken.length; i=i+2) {
+//                            opslagstroken[i].motionControl.stop();
+//                        }
+                    } else {
+                        playing = true;
+                        opslagstroken[1].motionControl.play();
+//                        for (int i = 0; i < opslagstroken.length; i++) {
+//                            opslagstroken[1].motionControl.play();
+//                        }
+                        
+                    }
+                } 
+            }
+        };
+        inputManager.addListener(acl, "play_stop");
+    }
+    
+    public void logCameraPosition(){
+        System.out.println("X Position: " + cam.getLocation().x);
+        System.out.println("Y Position: " + cam.getLocation().y);
+        System.out.println("Z Position: " + cam.getLocation().z);
+    }
+    
+    public void logCameraRotation(){
+        System.out.println("X Rotation: " + cam.getRotation().getX());
+        System.out.println("Y Rotation: " + cam.getRotation().getY());
+        System.out.println("Z Rotation: " + cam.getRotation().getZ());
     }
 
     @Override
