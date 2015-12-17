@@ -60,7 +60,7 @@ public class Main extends SimpleApplication{
     
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
-    ArrayList<AGV> agvs;
+    ArrayList<AGV> agvs = new ArrayList<AGV>();
     
     //socketdeclaratie
 //    private static ClientSocket s1;
@@ -322,30 +322,22 @@ public void initAgvAansturen(MotionPath pad)
     }
     
     public void initAGVs(){
-        for (int i = 0; i < opslagstroken.length * 4; i++) {
+        for (int i = 0; i < 100; i++) {
             
             AGV agv = new AGV(assetManager);
             agvs.add(agv);
-            rootNode.attachChild(agv);        
-            
+            rootNode.attachChild(agv);            
         }
         
         int j = 0;
-        for (int i = 0; i < opslagstroken.length * 4; i += 4) {
-            if (j < 5) {
-                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[3]);
-                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[2]);
-                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
-                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
-            } else {
-                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
-                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
-                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[6]);
-                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[7]);
-            }
+        for (int i = 0; i < 100; i+=4) {
+                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaatsL[1]);
+                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaatsL[2]);
+                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaatsR[1]);
+                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaatsR[2]);               
             j++;
         }
-        
+        System.out.println(agvs.size());
     }
     
     public void initWater(){

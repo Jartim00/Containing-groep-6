@@ -34,7 +34,8 @@ public class Opslagstrook extends Node {
     private Spatial kraan;
     // 3d array om de container objecten in op te slaan
     Container[][][] containerOpslag = new Container[47][6][6];
-    ParkeerPlaats[] parkeerPlaats = new ParkeerPlaats[12];
+    ParkeerPlaats[] parkeerPlaatsL = new ParkeerPlaats[6];
+    ParkeerPlaats[] parkeerPlaatsR = new ParkeerPlaats[6];
     
     public static MotionEvent motionControl;
     public MotionPath path;
@@ -101,18 +102,18 @@ public class Opslagstrook extends Node {
     }
     
     public void maakParkeerPlaatsen(Vector3f locatie){
-        parkeerPlaats = new ParkeerPlaats[12];
+        parkeerPlaatsL = new ParkeerPlaats[6];
+        parkeerPlaatsR = new ParkeerPlaats[6];
         locatie.z = locatie.z + breedteA + Container.containerBreedte;
-        for(int i = 0; i < parkeerPlaats.length; i++){
-            if(i < 6){  //links                
-                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x - lengteA - 1.5f*Container.containerLengte, 0, locatie.z - (i * 3*Container.containerBreedte)));
-                
-            } else{     //rechts
-                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x + lengteA + 1.5f*Container.containerLengte, 0, locatie.z + (i * 3*Container.containerBreedte)));
-            }
-        }
-        
+        for(int i = 0; i < parkeerPlaatsL.length; i++)
+        {            
+                parkeerPlaatsL[i] = new ParkeerPlaats(new Vector3f(locatie.x - lengteA - 1.5f*Container.containerLengte, 0.13f, locatie.z - (i * 2.2f*Container.containerBreedte)));
     }
+        for (int i = 0; i < parkeerPlaatsR.length; i++) 
+        {           
+                parkeerPlaatsR[i] = new ParkeerPlaats(new Vector3f(locatie.x + lengteA + 1.5f*Container.containerLengte, 0.13f, locatie.z + (i *-2.2f*Container.containerBreedte)));
+    }
+}       
     
     public void storeContainer(Container container, int x, int y, int z){
         if (x < 45 && y < 6 && z < 6){ //deze if is tijdelijke om de methode te testen
