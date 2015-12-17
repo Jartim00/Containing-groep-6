@@ -10,7 +10,7 @@ import com.jme3.scene.shape.Box;
 
 public class Vrachtwagenplatform extends Node {
     private AssetManager assetManager;
-    private float platformBreedte = 8f;
+    private float platformBreedte = 4f;
     private float platformHoogte = 0.001f;
     private float platformLengte = Main.opslagLengte/2 + Main.wegBreedte;
     
@@ -42,7 +42,7 @@ public class Vrachtwagenplatform extends Node {
         Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matP.setColor("Color", ColorRGBA.Pink);
         matQ.setColor("Color", ColorRGBA.Cyan);
-        
+       
         
 //            treinKranen[i] = new TreinKraan(assetManager);
 //            attachChild(treinKranen[i]);  
@@ -50,23 +50,25 @@ public class Vrachtwagenplatform extends Node {
         
         for(int i = 0; i < parkeerplaatsAGV.length;i++){
             kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(0,1,4*i);     // kraanpositie
+            kraan[i].setLocalTranslation(0,1, 4 * i);     // kraanpositie
             park.attachChild(kraan[i]);
             parkeerplaatsAGV[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsVrachtwagen[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
             parkeerplaatsAGV[i].setMaterial(matP);
             parkeerplaatsVrachtwagen[i].setMaterial(matQ);
-            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, 0.01f,4*i);  // AGV Parkeerplaats
-            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, 0.01f,4*i); // Vrachtwagen Parkeerplaats
-            park.attachChild(parkeerplaatsAGV[i]);
-            park.attachChild(parkeerplaatsVrachtwagen[i]);
+            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, -0.99f,0);  // AGV Parkeerplaats
+            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, -0.99f,0); // Vrachtwagen Parkeerplaats
+            kraan[i].attachChild(parkeerplaatsAGV[i]);
+            kraan[i].attachChild(parkeerplaatsVrachtwagen[i]);
             
         }
-        park.setLocalTranslation(0,0,-5.8f);
+        park.setLocalTranslation(-platformBreedte + 2*Container.containerLengte, 0, -1.8f);
         platform.attachChild(geom);
         platform.attachChild(park);
         platform.setLocalTranslation(platformBreedte,0,0);
         attachChild(platform);
         
     }
-}
+        
+        
+    }

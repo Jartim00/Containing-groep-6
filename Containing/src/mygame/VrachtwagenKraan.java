@@ -29,8 +29,8 @@ public class VrachtwagenKraan extends Node {
         this.assetManager = assetManager;
         
         Box poot = new Box(0.2f,1,0.2f);
-        Box top = new Box(0.7f,0.2f,0.2f);
-        Box haak = new Box(0.25f,0.1f,1.2f);
+        Box top = new Box(0.2f,0.2f,0.7f);
+        Box haak = new Box(1.2f,0.1f,0.25f);
         
         Geometry vrachtwagenKraanPoot1 = new Geometry("Box", poot);
         Geometry vrachtwagenKraanPoot2 = new Geometry("Box", poot);
@@ -48,8 +48,8 @@ public class VrachtwagenKraan extends Node {
         vrachtwagenKraanTop.setMaterial(matKraan);
         vrachtwagenKraanHaak.setMaterial(matHaak);
         
-        vrachtwagenKraanPoot1.setLocalTranslation(0.5f, 0, 0);
-        vrachtwagenKraanPoot2.setLocalTranslation(-0.5f, 0, 0);
+        vrachtwagenKraanPoot1.setLocalTranslation(0, 0, 0.5f);
+        vrachtwagenKraanPoot2.setLocalTranslation(0, 0, -0.5f);
         vrachtwagenKraanTop.setLocalTranslation(0, 1, 0);
         vrachtwagenKraanHaak.setLocalTranslation(0, 0.8f, 0);
         
@@ -57,7 +57,7 @@ public class VrachtwagenKraan extends Node {
         attachChild(vrachtwagenKraanPoot2);
         attachChild(vrachtwagenKraanTop);
         attachChild(vrachtwagenKraanHaak);
-        rotate(0,FastMath.HALF_PI, 0);
+        //rotate(0,FastMath.HALF_PI, 0);
         setLocalTranslation(0,kraanHoogte,0);
     }
 }

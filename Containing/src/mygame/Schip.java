@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -16,23 +17,20 @@ import com.jme3.scene.shape.Box;
  */
 public class Schip extends Node {
     
-    private final AssetManager assetManager;
+    private static AssetManager assetManager;
     
     public static int xContainers; 
     public static int yContainers;    
-    public static int zContainers; 
-    
-    private float xContainerPosities = xContainers*Container.containerLengte;
-    private float yContainerPosities = yContainers*Container.containerHoogte;
-    private float zContainerPosities = zContainers*Container.containerBreedte;
+    public static int zContainers;
     
     private Container[][][] containerOpslag = new Container[xContainers][yContainers][zContainers];
     
     public Schip(AssetManager manager){
         
+        
         this.assetManager = manager;
         
-        Box containerBox = new Box(xContainerPosities,0,zContainerPosities);
+        Box containerBox = new Box(zContainers*Container.containerBreedte,0,xContainers*Container.containerLengte);
         Geometry containerPlaats = new Geometry("containerplaats", containerBox); 
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matA.setColor("Color", ColorRGBA.Orange);
@@ -40,9 +38,9 @@ public class Schip extends Node {
         attachChild(containerPlaats);
         
         
-        for (int x = 0; x < xContainerPosities; x++) {
-            for (int y = 0; yContainerPosities < 6; y++) {
-                for (int z = 0; z < zContainerPosities; z++) {
+        for (int x = 0; x < xContainers; x++) {
+            for (int y = 0; y < yContainers; y++) {
+                for (int z = 0; z < zContainers; z++) {
                     containerOpslag[x][y][z] = null;                       
                 } 
             }
@@ -56,9 +54,10 @@ public class Schip extends Node {
             containerOpslag[x][y][z] = container;        
         
         attachChild(container);
-        container.setLocalTranslation( (-xContainerPosities + Container.containerLengte + x*2*Container.containerLengte), 
+        container.rotate(0,FastMath.HALF_PI, 0);
+        container.setLocalTranslation( (zContainers*Container.containerBreedte - Container.containerBreedte - z*2*Container.containerBreedte), 
                                        (Container.containerHoogte + y*2*Container.containerHoogte), 
-                                       (zContainerPosities - Container.containerBreedte - z*2*Container.containerBreedte));
+                                       (-xContainers*Container.containerLengte + Container.containerLengte + x*2*Container.containerLengte));
     }
         
 }

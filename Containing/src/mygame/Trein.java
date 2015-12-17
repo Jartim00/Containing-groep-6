@@ -131,10 +131,8 @@ public class Trein extends Node
             float a = 2.5f;
             float b = 2.4f;
             
-
             for(int i=1; i<x; i++){
 
-            
             Geometry wielw5 = new Geometry("Cylinder", wiel);
             Geometry wielw6 = new Geometry("Cylinder", wiel);
             Geometry wielw7 = new Geometry("Cylinder", wiel);

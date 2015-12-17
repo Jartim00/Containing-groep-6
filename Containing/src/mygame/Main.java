@@ -32,6 +32,7 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static mygame.ZeeschipPlatform.zeeschipNode;
 
 
 public class Main extends SimpleApplication{    
@@ -61,6 +62,9 @@ public class Main extends SimpleApplication{
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     ArrayList<AGV> agvs = new ArrayList<AGV>();
+
+    Schip zeeschip1;
+    Schip zeeschip2;
     
     //socketdeclaratie
 //    private static ClientSocket s1;
@@ -88,6 +92,7 @@ public class Main extends SimpleApplication{
         initBinnenvaartPlatform();
         Waypoint.WaypointMaken();
         initInputs();
+        
         //Init AGVs
         agvs = new ArrayList<AGV>();
         initAGVs();
@@ -184,6 +189,9 @@ public class Main extends SimpleApplication{
         
         Container c1 = new Container(assetManager);
         opslagstroken[2].storeContainer(c1, 0, 0, 0);
+        
+        Container c1000 = new Container(assetManager);
+        zeeschip1.storeContainer(c1000, 19, 0, 15);
         
         
         
@@ -285,10 +293,10 @@ public void initAgvAansturen(MotionPath pad)
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         ZeeschipPlatform zeeschipPlatform = new ZeeschipPlatform(assetManager);
         zeeschipPlatformNode.attachChild(zeeschipPlatform);
-        
+        zeeschip1KomtAan();
+        zeeschip2KomtAan();
         zeeschipPlatform.setLocalTranslation(0, 0, opslagLengte + 2*wegBreedte); //opslagPlatform + zeeschipPlatform/2 + wegBreedte
         System.out.println(zeeschipPlatform.getLocalTranslation().toString());
-        
         sceneNode.attachChild(zeeschipPlatformNode);
     }
 	
@@ -365,6 +373,35 @@ public void initAgvAansturen(MotionPath pad)
         rootNode.addLight(sun);  
     }
     
+    void zeeschip1KomtAan()
+    {
+        Schip.xContainers = ZeeschipPlatform.lengteContainerPlaatsen;
+        Schip.yContainers = ZeeschipPlatform.hoogteContainerPlaatsen;
+        Schip.zContainers = ZeeschipPlatform.breedteContainerPlaatsen;
+        zeeschip1 = new Schip(assetManager);
+        zeeschip1.setLocalTranslation(0, 0, ZeeschipPlatform.platformLengte/2);
+        zeeschipNode.attachChild(zeeschip1);
+        
+    }
+    
+    void zeeschip2KomtAan()
+    {
+        Schip.xContainers = ZeeschipPlatform.lengteContainerPlaatsen;
+        Schip.yContainers = ZeeschipPlatform.hoogteContainerPlaatsen;
+        Schip.zContainers = ZeeschipPlatform.breedteContainerPlaatsen;
+        zeeschip2 = new Schip(assetManager);
+        zeeschip2.setLocalTranslation(0,0,-ZeeschipPlatform.platformLengte/2);
+        zeeschipNode.attachChild(zeeschip2);
+    }
+        
+    
+    
+    @Override 
+    public void simpleUpdate(float tpf) {
+        //TODO: add update code
+        //Container container = new Container(assetManager);
+        //zeeschip2.storeContainer(container, 5, 2, 9);
+        
 //    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
 //        try {
 //            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
@@ -376,8 +413,6 @@ public void initAgvAansturen(MotionPath pad)
 //        System.out.print("\n" + s1.read());
 //    }
 //    
-    @Override 
-    public void simpleUpdate(float tpf) {
         //TODO: add update code
 //                String[] splitInput;
 //                List<Integer> inputToInt = new ArrayList<Integer>();
