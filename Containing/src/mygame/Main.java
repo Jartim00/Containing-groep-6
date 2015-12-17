@@ -9,6 +9,9 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.cinematic.events.MotionTrack;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -42,21 +45,25 @@ public class Main extends SimpleApplication{
     Node treinPlatformNode;
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
-    public MotionEvent motionControl;
+    
     public float snelheid = 1f;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
     public static float wegBreedte = 1.2f;
     
+    private final float terreinLengte = 154 + 2.4f + 8;
+    private final float terreinBreedte = 60 + 2.4f + 8;
+    
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
     
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
+    ArrayList<AGV> agvs;
     
     //socketdeclaratie
-    private static ClientSocket s1;
+//    private static ClientSocket s1;
     private static int port = 49876;
     
     private boolean testrun;
@@ -80,7 +87,10 @@ public class Main extends SimpleApplication{
         initZeeschipPlatform();
         initBinnenvaartPlatform();
         Waypoint.WaypointMaken();
-
+        initInputs();
+        //Init AGVs
+        agvs = new ArrayList<AGV>();
+        initAGVs();
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
@@ -183,20 +193,20 @@ public class Main extends SimpleApplication{
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-                while (true) {
-            try {
-                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
-                break;
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Server not responding");
-                continue;
-            }
-        }
-//        Thread thread1 = new Thread(s1);
-//        thread1.start();
-//        this.enqueue(s1.run());
-        s1.threadConnectie();
+//                while (true) {
+//            try {
+//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+//                break;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                System.out.println("Server not responding");
+//                continue;
+//            }
+//        }
+////        Thread thread1 = new Thread(s1);
+////        thread1.start();
+////        this.enqueue(s1.run());
+//        s1.threadConnectie();
         
     }
 
@@ -219,7 +229,8 @@ public void initAgvAansturen(MotionPath pad)
     public void initScene(){
 
         flyCam.setMoveSpeed(50.0f);
-        
+        cam.setLocation(new Vector3f(-5f, 59f, 234f));
+        cam.setRotation(new Quaternion (0f, 1f, -0.2f, 0f));
         sceneNode = new Node("Scene");
         
         // load sky
@@ -227,12 +238,20 @@ public void initAgvAansturen(MotionPath pad)
         rootNode.attachChild(sceneNode);        
 
         Box b = new Box(opslagBreedte + 2*wegBreedte, 0.0f, opslagLengte + 2*wegBreedte);
-        Geometry floor = new Geometry("floor", b);
+        Geometry weg = new Geometry("floor", b);
+        Material wegMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        wegMat.setColor("Color", ColorRGBA.DarkGray);
+        weg.setMaterial(wegMat);
+        weg.setLocalTranslation(0.0f,0.0f,0.0f);
+        sceneNode.attachChild(weg);   
+        
+        Box b1 = new Box(terreinBreedte, 20.0f, terreinLengte);
+        Geometry floor = new Geometry("floor", b1);
         Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floor.setMaterial(floorMat);
-        floor.setLocalTranslation(0.0f,0.0f,0.0f);
-        sceneNode.attachChild(floor);       
+        floor.setLocalTranslation(0.0f,-20.0f,0.0f);
+        sceneNode.attachChild(floor);     
  
         Spatial S = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
         S.scale(0.05f);
@@ -295,10 +314,38 @@ public void initAgvAansturen(MotionPath pad)
             opslagstroken[i] = new Opslagstrook(assetManager);
             opslagNode.attachChild(opslagstroken[i]);  
             opslagstroken[i].setLocalTranslation(0, 0, ((opslagLengte-2) + i * -4f));
+            opslagstroken[i].maakParkeerPlaatsen(opslagstroken[i].getLocalTranslation().clone());
         }
         
         sceneNode.attachChild(opslagNode);
        
+    }
+    
+    public void initAGVs(){
+        for (int i = 0; i < opslagstroken.length * 4; i++) {
+            
+            AGV agv = new AGV(assetManager);
+            agvs.add(agv);
+            rootNode.attachChild(agv);        
+            
+        }
+        
+        int j = 0;
+        for (int i = 0; i < opslagstroken.length * 4; i += 4) {
+            if (j < 5) {
+                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[3]);
+                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[2]);
+                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
+                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
+            } else {
+                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
+                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
+                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[6]);
+                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[7]);
+            }
+            j++;
+        }
+        
     }
     
     public void initWater(){
@@ -340,26 +387,26 @@ public void initAgvAansturen(MotionPath pad)
     @Override 
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-                String[] splitInput;
-                List<Integer> inputToInt = new ArrayList<Integer>();
-            //if (s1.getOpdrachten().size() > 0) {
-            for (String opdracht : s1.getOpdrachten()) {
-                System.out.println(opdracht);
-                System.out.println("test");
-                splitInput = opdracht.split("/");
-                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
-                    for (int i = 0; i < splitInput.length; i++) {
-                        System.out.println("splitinput lengte = " + splitInput.length);
-                        inputToInt.add(Integer.parseInt(splitInput[i]));
-                        System.out.println(splitInput[i]);
-                    }
-                    MotionPath pad = new MotionPath();
-                    for(Integer x : inputToInt){
-                        pad.addWayPoint(Waypoint.waypoints.get(x));
-                    }
-                    initAgvAansturen(pad);
-                    inputToInt.clear();;
-                }
+//                String[] splitInput;
+//                List<Integer> inputToInt = new ArrayList<Integer>();
+//            //if (s1.getOpdrachten().size() > 0) {
+//            for (String opdracht : s1.getOpdrachten()) {
+//                System.out.println(opdracht);
+//                System.out.println("test");
+//                splitInput = opdracht.split("/");
+//                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
+//                    for (int i = 0; i < splitInput.length; i++) {
+//                        System.out.println("splitinput lengte = " + splitInput.length);
+//                        inputToInt.add(Integer.parseInt(splitInput[i]));
+//                        System.out.println(splitInput[i]);
+//                    }
+//                    MotionPath pad = new MotionPath();
+//                    for(Integer x : inputToInt){
+//                        pad.addWayPoint(Waypoint.waypoints.get(x));
+//                    }
+//                    initAgvAansturen(pad);
+//                    inputToInt.clear();;
+//                }
 //                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
@@ -367,8 +414,50 @@ public void initAgvAansturen(MotionPath pad)
 //                int[] xyzarray = {x,y,z};
 //                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
                 testrun = false;
-            }
+   //         }
         //treinPlatform.storeContainer(c2, 5);
+    }
+    
+    private boolean playing = false;
+    //public MotionEvent motionControl;    
+    
+    private void initInputs(){
+        inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
+        ActionListener acl = new ActionListener() {
+            
+            public void onAction(String name, boolean keyPressed, float tpf) {
+          
+                if (name.equals("play_stop") && keyPressed) {
+                    if (playing) {
+                        playing = false;
+                        opslagstroken[1].motionControl.stop();
+//                        for (int i = 0; i < opslagstroken.length; i=i+2) {
+//                            opslagstroken[i].motionControl.stop();
+//                        }
+                    } else {
+                        playing = true;
+                        opslagstroken[1].motionControl.play();
+//                        for (int i = 0; i < opslagstroken.length; i++) {
+//                            opslagstroken[1].motionControl.play();
+//                        }
+                        
+                    }
+                } 
+            }
+        };
+        inputManager.addListener(acl, "play_stop");
+    }
+    
+    public void logCameraPosition(){
+        System.out.println("X Position: " + cam.getLocation().x);
+        System.out.println("Y Position: " + cam.getLocation().y);
+        System.out.println("Z Position: " + cam.getLocation().z);
+    }
+    
+    public void logCameraRotation(){
+        System.out.println("X Rotation: " + cam.getRotation().getX());
+        System.out.println("Y Rotation: " + cam.getRotation().getY());
+        System.out.println("Z Rotation: " + cam.getRotation().getZ());
     }
 
     @Override

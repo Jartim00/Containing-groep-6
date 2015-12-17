@@ -19,9 +19,11 @@ import com.jme3.scene.shape.Cylinder;
  */
 public class AGV extends Node {
     private AssetManager assetManager;
+    public ParkeerPlaats plaats;
+    
     public AGV(AssetManager assetManager) 
-{
-    this.assetManager = assetManager;
+    {
+        this.assetManager = assetManager;
     
         Cylinder a = new Cylinder(20, 50, 0.1f, 0.05f, true);
 
@@ -56,6 +58,13 @@ public class AGV extends Node {
         attachChild(geom3);
         attachChild(geom4);
         attachChild(geom5);
-}
+        rotate(0,FastMath.HALF_PI, 0);
+    }
+    
+        public void parkeerAGV(ParkeerPlaats plaats) {
+        this.setLocalTranslation(plaats.translation);        
+        this.plaats = plaats;
+        plaats.bezet = true;
+    }
     
 }
