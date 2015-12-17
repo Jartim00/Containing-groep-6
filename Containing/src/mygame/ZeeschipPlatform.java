@@ -17,14 +17,17 @@ import com.jme3.scene.shape.Box;
  */
 public class ZeeschipPlatform extends Node {
     
-    private final AssetManager assetManager;
+    private static AssetManager assetManager;
+    private Main app;
     
-    Node zeeschipNode;
+    static Node zeeschipNode;
+    
     Node zeeschipPlatformNode;
-    private float breedteContainerPlaatsen = 16*Container.containerBreedte; // schip = opslag voor containers op het zeeschip
-    private float lengteContainerPlaatsen = 20*Container.containerLengte;    
-    private float platformBreedte = 4f; // platform = complete platform zonder schip
-    private float platformLengte = 70.4f;
+    public static int breedteContainerPlaatsen = 16; // schip = opslag voor containers op het zeeschip
+    public static int lengteContainerPlaatsen = 20;
+    public static int hoogteContainerPlaatsen = 6;
+    private static float platformBreedte = 4f; // platform = complete platform zonder schip
+    public static float platformLengte = 70.4f;
        
     
     // 3d array om de container objecten in op te slaan
@@ -37,27 +40,20 @@ public class ZeeschipPlatform extends Node {
         zeeschipNode = new Node("zeeschip");
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         zeeschipPlatformNode.attachChild(zeeschipNode);
-        zeeschipNode.setLocalTranslation(-(breedteContainerPlaatsen + platformBreedte), 0, 0);
+        zeeschipNode.setLocalTranslation(-(breedteContainerPlaatsen*Container.containerBreedte + platformBreedte), 0, 0);
         zeeschipPlatformNode.setLocalTranslation(-platformBreedte, 0, 0);
         // schip zeeschip containeropslag
         Box schip = new Box(breedteContainerPlaatsen,0,lengteContainerPlaatsen);
         // platform complete strook 
         Box platform = new Box(platformBreedte,0,platformLengte);
-        Geometry zeeschip1 = new Geometry("Zeeschip1", schip); 
-        Geometry zeeschip2 = new Geometry("Zeeschip2", schip); 
         Geometry zeeschipPlatform = new Geometry("zeeschipPlatform", platform);
-        Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matA.setColor("Color", ColorRGBA.Orange);
+
         Material matB = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matB.setColor("Color", ColorRGBA.Brown);
-        zeeschip1.setMaterial(matA);
-        zeeschip2.setMaterial(matA);
         zeeschipPlatform.setMaterial(matB);
-        zeeschip1.setLocalTranslation(0, 0, platformLengte/2);
-        zeeschip2.setLocalTranslation(0,0,-platformLengte/2);
         zeeschipPlatformNode.attachChild(zeeschipPlatform);
-        zeeschipNode.attachChild(zeeschip1);
-        zeeschipNode.attachChild(zeeschip2);
+        
+        
         
         ZeeschipKraan[] zeeschipKranen = new ZeeschipKraan[10];     //zeeschipkranen aanmaken op het platform
         
@@ -74,8 +70,16 @@ public class ZeeschipPlatform extends Node {
                 } 
             }
         }
+        
+        
         rotate(0,FastMath.HALF_PI, 0);
         attachChild(zeeschipPlatformNode);
+        
+        
     }
     
+    
+    
+    
+        
 }
