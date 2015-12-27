@@ -32,6 +32,7 @@ private:
 	string tempx;
 	string tempy;
 	string errorstr;
+	void Openen();
 public:
 	OpenXMLs();
 	string split(string a);
@@ -44,7 +45,6 @@ public:
 	bool checkPositie(string x, string y, string z, map<pair<string, string>, string> map);
 	map<pair<string, string>, string> checkNieuweAankomst(map<pair<string, string>, string> map, string aankomst, string aankomsttijd, string vertrektijd);
 	vector<Containers> getContainers();
-	void Openen();
 };
 
 #endif

@@ -13,6 +13,8 @@ OpenXMLs::OpenXMLs(){
 	index = 0;
 	fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml" };//, "xml6.xml", "xml7.xml"};
 	errorstr = "";
+
+	Openen();
 }
 
 string OpenXMLs::split(const string a){

@@ -17,10 +17,10 @@ using namespace std;
 
 int main()
 {
-	OpenXMLs xml = OpenXMLs();
-	xml.Openen();
-	Server s1 = Server(&xml);
-	s1.Communicate();
+	OpenXMLs xml;
+
+	Server server(&xml);
+	server.Communicate();
 	//for (;;){}
 }
 
