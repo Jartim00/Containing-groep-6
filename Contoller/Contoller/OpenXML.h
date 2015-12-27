@@ -33,6 +33,7 @@ private:
 	string tempy;
 	string errorstr;
 	void Openen();
+	static bool vergelijkAankomstMoment(const Containers &a, const Containers &b);
 public:
 	OpenXMLs();
 	string split(string a);

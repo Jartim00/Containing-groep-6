@@ -15,6 +15,7 @@ OpenXMLs::OpenXMLs(){
 	errorstr = "";
 
 	Openen();
+	std::sort(containers.begin(), containers.end(), vergelijkAankomstMoment);
 }
 
 string OpenXMLs::split(const string a){
@@ -153,6 +154,19 @@ map<pair<string, string>, string> OpenXMLs::checkNieuweAankomst(map<pair<string,
 vector<Containers> OpenXMLs::getContainers()
 {
 	return containers;
+}
+
+bool OpenXMLs::vergelijkAankomstMoment(const Containers &a, const Containers &b)
+{
+	if (a.getAankomstjaar() != b.getAankomstjaar())
+		return a.getAankomstjaar() < b.getAankomstjaar();
+	if (a.getAankomstmaand() != b.getAankomstmaand())
+		return a.getAankomstmaand() < b.getAankomstmaand();
+	if (a.getAankomstdag() != b.getAankomstdag())
+		return a.getAankomstdag() < b.getAankomstdag();
+	if (a.getAankomstbegintijd() != b.getAankomstbegintijd())
+		return a.getAankomstbegintijd() < b.getAankomstbegintijd();
+	return a.getContainernr() < b.getContainernr();
 }
 
 void OpenXMLs::Openen(){
