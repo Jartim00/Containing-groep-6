@@ -73,7 +73,7 @@ void Server::Communicate()
 {
 	//opdrachtcount houdt bij hoeveel containers er verstuurd zijn, onder meer voor het geval de verbinding uitvalt
 	int opdrachtcount = 0;
-	char buffer1[bufsize];
+	char receiveBuffer[bufsize];
 	for (;;)
 	{
 		cout << "\n\tSERVER: Waiting for incoming connection...";
@@ -84,25 +84,25 @@ void Server::Communicate()
 			for (;;)
 			{
 				cout << "\n\twaiting for message" << endl;
-				successful = recv(sockConnection, buffer1, sizeof(buffer1), NULL);
+				successful = recv(sockConnection, receiveBuffer, sizeof(receiveBuffer), NULL);
 				if (successful == -1) {
 					cout << "error on recv" << endl;
 					//cout << WSAGetLastError() << endl;
 					break;
 				}
 				else {
-					successful[buffer1] = '\0';
-					cout << buffer1 << endl;
+					successful[receiveBuffer] = '\0';
+					cout << receiveBuffer << endl;
 				}
 
 
 				string opdracht = getOpdracht(opdrachtcount);
-				int count = opdracht.size();
-				if (count > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
-				char buffer[bufsize];
-				strcpy_s(buffer, opdracht.c_str());
-				buffer[count++] = '\n';
-				send(sockConnection, buffer, count, 0);
+				int opdrachtLen = opdracht.size();
+				if (opdrachtLen > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
+				char sendBuffer[bufsize];
+				strcpy_s(sendBuffer, opdracht.c_str());
+				sendBuffer[opdrachtLen++] = '\n';
+				send(sockConnection, sendBuffer, opdrachtLen, 0);
 				cout << "\n\tMessage received:\n\t" << endl;
 				opdrachtcount++;
 			}

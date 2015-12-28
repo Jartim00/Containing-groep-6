@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "OpenXML.h"
+#include <ctime>
 
 using namespace std;
 
@@ -11,11 +12,13 @@ OpenXMLs::OpenXMLs(){
 	//"aankomstbedrijf", "naameigenaar", "vertrekbedrijf", "lengtecontainer", "breedtecontainer", "hoogtecontainer", "leeggewicht", "volgewicht",
 	//"naaminhoud", "soortinhoud", "gevaarinhoud", "iso"
 	index = 0;
-	fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml" };//, "xml6.xml", "xml7.xml"};
+	fname = { "xml1.xml", "xml2.xml", "xml3.xml", "xml4.xml", "xml5.xml", "xml6.xml", "xml7.xml" };
 	errorstr = "";
-
 	Openen();
+	std::clock_t start;
+	start = std::clock();
 	std::sort(containers.begin(), containers.end(), vergelijkAankomstMoment);
+	std::cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
 }
 
 string OpenXMLs::split(const string a){
@@ -158,15 +161,15 @@ vector<Containers> OpenXMLs::getContainers()
 
 bool OpenXMLs::vergelijkAankomstMoment(const Containers &a, const Containers &b)
 {
-	if (a.getAankomstjaar() != b.getAankomstjaar())
-		return a.getAankomstjaar() < b.getAankomstjaar();
-	if (a.getAankomstmaand() != b.getAankomstmaand())
-		return a.getAankomstmaand() < b.getAankomstmaand();
-	if (a.getAankomstdag() != b.getAankomstdag())
-		return a.getAankomstdag() < b.getAankomstdag();
-	if (a.getAankomstbegintijd() != b.getAankomstbegintijd())
-		return a.getAankomstbegintijd() < b.getAankomstbegintijd();
-	return a.getContainernr() < b.getContainernr();
+	if (stoi(a.getAankomstjaar()) != stoi(b.getAankomstjaar()))
+		return stoi(a.getAankomstjaar()) < stoi(b.getAankomstjaar());
+	if (stoi(a.getAankomstmaand()) != stoi(b.getAankomstmaand()))
+		return stoi(a.getAankomstmaand()) < stoi(b.getAankomstmaand());
+	if (stoi(a.getAankomstdag()) != stoi(b.getAankomstdag()))
+		return stoi(a.getAankomstdag()) < stoi(b.getAankomstdag());
+	if (stoi(a.getAankomstbegintijd()) != stoi(b.getAankomstbegintijd()))
+		return stoi(a.getAankomstbegintijd()) < stoi(b.getAankomstbegintijd());
+	return stoi(a.getContainernr()) < stoi(b.getContainernr());
 }
 
 void OpenXMLs::Openen(){

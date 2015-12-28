@@ -18,7 +18,6 @@ using namespace std;
 int main()
 {
 	OpenXMLs xml;
-
 	Server server(&xml);
 	server.Communicate();
 	//for (;;){}
