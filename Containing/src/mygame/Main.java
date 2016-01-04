@@ -67,7 +67,7 @@ public class Main extends SimpleApplication{
     Schip zeeschip2;
     
     //socketdeclaratie
-//    private static ClientSocket s1;
+    private static ClientSocket s1;
     private static int port = 49876;
     
     private boolean testrun;
@@ -201,21 +201,16 @@ public class Main extends SimpleApplication{
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-//                while (true) {
-//            try {
-//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
-//                break;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("Server not responding");
-//                continue;
-//            }
-//        }
-////        Thread thread1 = new Thread(s1);
-////        thread1.start();
-////        this.enqueue(s1.run());
-//        s1.threadConnectie();
-        
+        while (true) {
+            try {
+                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Server not responding");
+                continue;
+            }
+        }
     }
 
 public void initAgvAansturen(MotionPath pad)
@@ -398,10 +393,33 @@ public void initAgvAansturen(MotionPath pad)
     
     @Override 
     public void simpleUpdate(float tpf) {
+        s1.threadConnectie();
+        List<String> opdrachten = s1.getOpdrachten();
+        if (opdrachten.size() > 0) {
+            System.out.println("size = " + s1.getOpdrachten().size());
+            for (int i = 0; i < opdrachten.size(); i++) {
+                System.out.println("opdracht interpretatie loopt");
+                String opdracht = opdrachten.get(i);
+                char eerste = opdracht.charAt(0);
+                String[] splitInput;
+                splitInput = opdracht.split("/");
+                switch (eerste) {
+                    case 'a':                    
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                    case 'f':
+                    case 'h':
+                    case 'z':
+                    System.out.println("case 'z' wordt aangesproken");
+                    Container zschipcontainer = new Container(assetManager);
+                    this.zeeschip1.storeContainer(zschipcontainer, Integer.parseInt(splitInput[2]), Integer.parseInt(splitInput[3]), Integer.parseInt(splitInput[4]));
+                }
+            }
         //TODO: add update code
         //Container container = new Container(assetManager);
         //zeeschip2.storeContainer(container, 5, 2, 9);
-        
 //    public void initClientSocket()throws Exception, IOException, ClassNotFoundException{
 //        try {
 //            s1 = new ClientSocket(InetAddress.getByName("localhost"), port);
@@ -440,8 +458,8 @@ public void initAgvAansturen(MotionPath pad)
 //                //System.out.println("x = " + x + " y = " + y + " z = " + z);
 //                int[] xyzarray = {x,y,z};
 //                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
-                testrun = false;
    //         }
+        }
         //treinPlatform.storeContainer(c2, 5);
     }
     
