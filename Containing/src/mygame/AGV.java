@@ -18,11 +18,13 @@ import com.jme3.scene.shape.Cylinder;
  * @author Robin
  */
 public class AGV extends Node {
+   
     private AssetManager assetManager;
     public ParkeerPlaats plaats;
-    
+    public static int[][] vrijeParkeerplaatsL = new int[77][6];
+    public static int[][] vrijeParkeerplaatsR = new int [77][6];
     public AGV(AssetManager assetManager) 
-    {
+    {        
         this.assetManager = assetManager;
     
         Cylinder a = new Cylinder(20, 50, 0.1f, 0.05f, true);
@@ -64,7 +66,25 @@ public class AGV extends Node {
         public void parkeerAGV(ParkeerPlaats plaats) {
         this.setLocalTranslation(plaats.translation);        
         this.plaats = plaats;
-        plaats.bezet = true;
+//        plaats.bezet = true;
     }
-    
+        public static int vrijeParkeerplek(int laannummer){
+        int laannr = -1;
+        if(laannummer > 307 && laannummer < 385){
+            laannr = laannummer-308;
+        }
+        for (int i = 0; i < 6; i++) {
+            if(laannummer > 307 && laannummer < 385){
+                if(vrijeParkeerplaatsR[laannr][i] == 0){
+                     return i;
+                 }
+             }
+             else{
+                 if(vrijeParkeerplaatsL[laannummer][i] == 0){
+                     return i;
+                 }
+             }
+         }
+        return -1;
+    }
 }

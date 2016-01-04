@@ -32,6 +32,8 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static mygame.AGV.vrijeParkeerplaatsL;
+import static mygame.AGV.vrijeParkeerplaatsR;
 import static mygame.ZeeschipPlatform.zeeschipNode;
 
 
@@ -336,15 +338,37 @@ public void initAgvAansturen(MotionPath pad)
             agvs.add(agv);
             rootNode.attachChild(agv);            
         }
-        
-        int j = 0;
-        for (int i = 0; i < 100; i+=4) {
-                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaatsL[1]);
-                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaatsL[2]);
-                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaatsR[1]);
-                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaatsR[2]);               
-            j++;
+        for (int i = 0; i < 77; i++) {
+            for (int j = 0; j < 6; j++) {
+                AGV.vrijeParkeerplaatsL[i][j] = 0;
+                AGV.vrijeParkeerplaatsR[i][j] = 0;
+            }
         }
+        int laannummer = 308;
+        int laannr = -1;
+        int id = 50;
+        int j = AGV.vrijeParkeerplek(laannummer);
+        if(laannummer > 307 && laannummer < 385){
+            laannr = laannummer-308;
+        }
+        else{
+            laannr = laannummer;
+        }
+        for (int i = 0; i < 6; i++) {
+            if(laannummer > 307 && laannummer < 385){
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[j]); 
+            }
+             else{
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[j]);  
+             }
+         }        
+//        for (int i = 0; i < 100; i+=4) {
+//                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaatsL[1]);
+//                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaatsL[2]);
+//                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaatsR[1]);
+//                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaatsR[2]);               
+//            j++;
+//        }
         System.out.println(agvs.size());
     }
     
