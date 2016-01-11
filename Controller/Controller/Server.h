@@ -46,10 +46,13 @@ private:
 	//Socket Creation
 	SOCKET sockListen;
 	SOCKET sockConnection;
+
+	vector<string> opdrachten;
 public:
 	std::string getOpdracht(int index);
 	std::string getZeeschipOpdracht();
 	std::string getTreinOpdracht();
+	std::string getAGVOpdracht(int index);
 	Server(OpenXMLs* open);
 	SOCKET sockLISTEN;
 	SOCKET sockCONNECTION;

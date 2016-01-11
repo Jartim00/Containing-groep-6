@@ -20,7 +20,8 @@ using std::stoi;
 //server constructor
 Server::Server(OpenXMLs* open)
 {
-	int opdrachtcount = 0;
+	opdrachten = { "c/1/2/3/4/5", "c/300/301/302/303" };
+	opdrachtcount = 0;
 	XMLdata = open;
 	//hier wordt bepaald dat het om de 2e versie van winsock gaat
 	DLLVersion = MAKEWORD(2, 1);
@@ -80,6 +81,10 @@ string Server::getTreinOpdracht()
 	return"";
 }
 
+string Server::getAGVOpdracht(int index){
+	return "";
+}
+
 //de methode om van de opgezette socket gebruik te maken.
 //characterarray MESSAGE dient als buffer.
 //de hierboven opgezette verbinding wordt opengezet om clientconnectie te ontvangen op het adres dat ook hier boven aangegeven is
@@ -89,6 +94,7 @@ void Server::Communicate()
 {
 	//opdrachtcount houdt bij hoeveel containers er verstuurd zijn, onder meer voor het geval de verbinding uitvalt
 	char receiveBuffer[bufsize];
+	string opdracht;
 	for (;;)
 	{
 		cout << "\n\tSERVER: Waiting for incoming connection...";
@@ -109,17 +115,18 @@ void Server::Communicate()
 					successful[receiveBuffer] = '\0';
 					cout << receiveBuffer << endl;
 				}
-
-
-				string opdracht = getOpdracht(opdrachtcount);
-				int opdrachtLen = opdracht.size();
-				if (opdrachtLen > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
-				char sendBuffer[bufsize];
-				strcpy_s(sendBuffer, opdracht.c_str());
-				sendBuffer[opdrachtLen++] = '\n';
-				send(sockConnection, sendBuffer, opdrachtLen, 0);
-				cout << "\n\tMessage received:\n\t" << endl;
-				opdrachtcount++;
+				if (opdrachten.size() > 0){
+					opdracht = opdrachten[opdrachten.size() - 1];
+					opdrachten.pop_back();
+					int opdrachtLen = opdracht.size();
+					if (opdrachtLen > bufsize - 1) throw runtime_error("ClientSocket::write - argument too large");
+					char sendBuffer[bufsize];
+					strcpy_s(sendBuffer, opdracht.c_str());
+					sendBuffer[opdrachtLen++] = '\n';
+					send(sockConnection, sendBuffer, opdrachtLen, 0);
+					cout << "\n\tMessage received:\n\t" << endl;
+					opdrachtcount++;
+				}
 			}
 		}
 	}
