@@ -69,7 +69,7 @@ public class Main extends SimpleApplication{
     Schip zeeschip2;
     
     //socketdeclaratie
-//    private static ClientSocket s1;
+    private static ClientSocket s1;
     private static int port = 49876;
     
     private boolean testrun;
@@ -96,8 +96,7 @@ public class Main extends SimpleApplication{
         initInputs();
         
         //Init AGVs
-        agvs = new ArrayList<AGV>();
-        initAGVs();
+          initAGVs();
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
@@ -203,20 +202,20 @@ public class Main extends SimpleApplication{
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-//                while (true) {
-//            try {
-//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
-//                break;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("Server not responding");
-//                continue;
-//            }
-//        }
-////        Thread thread1 = new Thread(s1);
-////        thread1.start();
-////        this.enqueue(s1.run());
-//        s1.threadConnectie();
+                while (true) {
+            try {
+                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Server not responding");
+                continue;
+            }
+        }
+//        Thread thread1 = new Thread(s1);
+//        thread1.start();
+//        this.enqueue(s1.run());
+        s1.threadConnectie();
         
     }
 
@@ -332,44 +331,44 @@ public void initAgvAansturen(MotionPath pad)
     }
     
     public void initAGVs(){
-        for (int i = 0; i < 100; i++) {
-            
-            AGV agv = new AGV(assetManager);
-            agvs.add(agv);
-            rootNode.attachChild(agv);            
-        }
+        int laannummer = 0;
+        int parkcount = 0;
         for (int i = 0; i < 77; i++) {
             for (int j = 0; j < 6; j++) {
                 AGV.vrijeParkeerplaatsL[i][j] = 0;
                 AGV.vrijeParkeerplaatsR[i][j] = 0;
             }
         }
-        int laannummer = 308;
-        int laannr = -1;
-        int id = 50;
-        int j = AGV.vrijeParkeerplek(laannummer);
-        if(laannummer > 307 && laannummer < 385){
-            laannr = laannummer-308;
-        }
-        else{
-            laannr = laannummer;
-        }
-        for (int i = 0; i < 6; i++) {
+        for (int f = 0; f < 100; f++) {
+            int id = f;
+            if(parkcount < 6){
+                parkcount++;
+            }
+            if (parkcount == 6){
+                laannummer++;
+                parkcount = 0;
+            }
+            
+            AGV agv = new AGV(assetManager);
+            agvs.add(agv);
+            rootNode.attachChild(agv);
+            int laannr = -1;
+            int vp = AGV.vrijeParkeerplek(laannummer);
             if(laannummer > 307 && laannummer < 385){
-               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[j]); 
+                laannr = laannummer-308;
+            }
+            else{
+                laannr = laannummer;
+            }
+            if(laannummer > 307 && laannummer < 385){
+              agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
+              AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
             }
              else{
-               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[j]);  
-             }
-         }        
-//        for (int i = 0; i < 100; i+=4) {
-//                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaatsL[1]);
-//                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaatsL[2]);
-//                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaatsR[1]);
-//                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaatsR[2]);               
-//            j++;
-//        }
-        System.out.println(agvs.size());
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
+               AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
+             }     
+        }
     }
     
     public void initWater(){
@@ -438,26 +437,28 @@ public void initAgvAansturen(MotionPath pad)
 //    }
 //    
         //TODO: add update code
-//                String[] splitInput;
-//                List<Integer> inputToInt = new ArrayList<Integer>();
-//            //if (s1.getOpdrachten().size() > 0) {
-//            for (String opdracht : s1.getOpdrachten()) {
-//                System.out.println(opdracht);
-//                System.out.println("test");
-//                splitInput = opdracht.split("/");
-//                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
-//                    for (int i = 0; i < splitInput.length; i++) {
-//                        System.out.println("splitinput lengte = " + splitInput.length);
-//                        inputToInt.add(Integer.parseInt(splitInput[i]));
-//                        System.out.println(splitInput[i]);
-//                    }
-//                    MotionPath pad = new MotionPath();
-//                    for(Integer x : inputToInt){
-//                        pad.addWayPoint(Waypoint.waypoints.get(x));
-//                    }
-//                    initAgvAansturen(pad);
-//                    inputToInt.clear();;
-//                }
+                String[] splitInput;
+                List<Integer> inputToInt = new ArrayList<Integer>();
+          //if (s1.getOpdrachten().size() > 0) {
+            for (String opdracht : s1.getOpdrachten()) {
+                System.out.println(opdracht);
+                System.out.println("test");
+                splitInput = opdracht.split("/");
+                if(!"".equals(opdracht)){
+                    if (opdracht.charAt(0) == 'c') {
+                        for (int i = 1; i < splitInput.length; i++) {
+                            System.out.println("splitinput lengte = " + splitInput.length);
+                            inputToInt.add(Integer.parseInt(splitInput[i])); 
+                            System.out.println(splitInput[i]);
+                        }
+                        MotionPath pad = new MotionPath();
+                        for(Integer x : inputToInt){
+                            pad.addWayPoint(Waypoint.waypoints.get(x));
+                        }
+                        initAgvAansturen(pad);
+                        inputToInt.clear();;
+                    }
+                }
 //                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
@@ -465,7 +466,8 @@ public void initAgvAansturen(MotionPath pad)
 //                int[] xyzarray = {x,y,z};
 //                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
                 testrun = false;
-   //         }
+           
+          }
         //treinPlatform.storeContainer(c2, 5);
     }
     
