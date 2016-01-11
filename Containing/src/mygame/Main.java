@@ -246,10 +246,12 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
             if(laannummer > 307 && laannummer < 385){
               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
               AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
+              agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
             }
              else{
                agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
                AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
+               agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
              }  
             }   
         }

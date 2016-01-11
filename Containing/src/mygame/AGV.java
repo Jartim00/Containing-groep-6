@@ -60,7 +60,7 @@ public class AGV extends Node {
         attachChild(geom3);
         attachChild(geom4);
         attachChild(geom5);
-        rotate(0,FastMath.HALF_PI, 0); // en hier wordt de hele agv nog 90 graden gedraaid zodat
+        rotate(0,r, 0); // en hier wordt de hele agv nog 90 graden gedraaid zodat
                                        // de agv goed het motionpath volgt, word deze niet gedraaid dan
                                        // rijd de agv niet rechtuit maar loopt hij als een krab.
     }

@@ -20,7 +20,7 @@ using std::stoi;
 //server constructor
 Server::Server(OpenXMLs* open)
 {
-	opdrachten = { "c/1/2/3/4/70", "c/2/301/302/303/20" };
+	opdrachten = { "c/1/2/3/4/20", "c/2/301/302/303/20" };
 	opdrachtcount = 0;
 	XMLdata = open;
 	//hier wordt bepaald dat het om de 2e versie van winsock gaat

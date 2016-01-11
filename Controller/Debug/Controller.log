@@ -1,21 +1,9 @@
-﻿Build started 10-1-2016 16:24:59.
-     1>Project "C:\Users\ricardo\Desktop\Controller\Controller.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt controller\Server.cpp
-         Server.cpp
-     1>controller\Server.cpp(49): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\ricardo\desktop\controller\controller\server.cpp(72): warning C4715: 'Server::getOpdracht' : not all control paths return a value
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ricardo\Desktop\Controller\Debug\Controller.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ricardo\Desktop\Controller\Debug\Controller.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ricardo\Desktop\Controller\Debug\Controller.lib" /MACHINE:X86 Debug\AGV.obj
-         Debug\Containers.obj
-         Debug\Controller.obj
-         Debug\KortstePad.obj
-         Debug\OpenXML.obj
-         Debug\Server.obj
-         Debug\stdafx.obj
-         Controller.vcxproj -> C:\Users\ricardo\Desktop\Controller\Debug\Controller.exe
-     1>Done Building Project "C:\Users\ricardo\Desktop\Controller\Controller.vcxproj" (Build target(s)).
+﻿Build started 11-1-2016 13:14:59.
+     1>Project "C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Controller.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         Controller.vcxproj -> C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Debug\Controller.exe
+     1>Done Building Project "C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Controller.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.11
+Time Elapsed 00:00:00.07
