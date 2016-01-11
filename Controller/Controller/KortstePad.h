@@ -14,15 +14,28 @@ using namespace std;
 class KortstePad
 {
 private:
-	map<pair<string, string>, int> afstanden;
+	map<pair<string, string>, double> afstanden;
 	map<pair<string, string>, string> routes;
-	int verweg;
-	string fname;
+	map <pair<double, double>, string>  coordinatenWaypoints;
+	vector<string> noChangeWaypoints;
+	vector<string> endRouteWaypoints;
+	vector<string> waypointsOpRoute;
 	vector<string> punten;
+	int verweg;
+	double xCor;
+	double yCor;
 public:
 	KortstePad();
-	void BerekenKortstePad();
+	void VoegAfstandenToe();
+	void VoegPuntenToe();
+	void VoegCoordinatenToe();
+	void AfstandenTussenAllePunten();
+	void Floyd();
+	void CoordinatenNieuweWaypoint(string huidigewaypointnr, int agvwaypoint, int laannr);
+	void BepalenWeg(int agvwaypoint, bool beladen, string huidigewaypointnr, string bestemmingwaypointnr);
+	void BerekenKortstePad(string huidigewaypointnr, string bestemmingwaypointnr, bool beladen);
 };
 
 #endif
+
 
