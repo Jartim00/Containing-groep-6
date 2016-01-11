@@ -219,21 +219,41 @@ public class Main extends SimpleApplication{
         
     }
 
-public void initAgvAansturen(MotionPath pad)
+public void initAgvAansturen(final MotionPath pad, final int id, final int laannummer)
     {
-        
-        AGV agv = new AGV(assetManager);
-        rootNode.attachChild(agv);
         pad.enableDebugShape(assetManager, rootNode);
-        MotionEvent event = new MotionEvent (agv, pad);
+        MotionEvent event = new MotionEvent (agvs.get(id), pad);
         event.setDirectionType(MotionEvent.Direction.Path);
         pad.setPathSplineType(SplineType.Linear);
-        Cinematic cinematic = new Cinematic(agv, 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
+        Cinematic cinematic = new Cinematic(agvs.get(id), 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
         event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
 
         cinematic.play();
+        
+        pad.addListener( new MotionPathListener() {
+           public void onWayPointReach(MotionEvent motionControl, int wayPointIndex){
+            if (pad.getNbWayPoints() == wayPointIndex + 1) {
+            int laannr = -1;
+            int vp = AGV.vrijeParkeerplek(laannummer);
+            if(laannummer > 307 && laannummer < 385){
+                laannr = laannummer-308;
+            }
+            else{
+                laannr = laannummer;
+            }
+            if(laannummer > 307 && laannummer < 385){
+              agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
+              AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
+            }
+             else{
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
+               AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
+             }  
+            }   
+        }
+      });
     }
     public void initScene(){
 
@@ -446,7 +466,7 @@ public void initAgvAansturen(MotionPath pad)
                 splitInput = opdracht.split("/");
                 if(!"".equals(opdracht)){
                     if (opdracht.charAt(0) == 'c') {
-                        for (int i = 1; i < splitInput.length; i++) {
+                        for (int i = 2; i < splitInput.length; i++) {
                             System.out.println("splitinput lengte = " + splitInput.length);
                             inputToInt.add(Integer.parseInt(splitInput[i])); 
                             System.out.println(splitInput[i]);
@@ -455,7 +475,7 @@ public void initAgvAansturen(MotionPath pad)
                         for(Integer x : inputToInt){
                             pad.addWayPoint(Waypoint.waypoints.get(x));
                         }
-                        initAgvAansturen(pad);
+                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 1));
                         inputToInt.clear();;
                     }
                 }
