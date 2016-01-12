@@ -32,6 +32,8 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static mygame.AGV.vrijeParkeerplaatsL;
+import static mygame.AGV.vrijeParkeerplaatsR;
 import static mygame.ZeeschipPlatform.zeeschipNode;
 import static mygame.BinnenVaartPlatform.schepenNode;
 import static mygame.TreinPlatform.treinNode;
@@ -63,7 +65,8 @@ public class Main extends SimpleApplication{
     
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
-    ArrayList<AGV> agvs;
+    ArrayList<AGV> agvs = new ArrayList<AGV>();
+
     Schip zeeschip1;
     Schip zeeschip2;
     BinnenvaartSchip binnenvaartschip1;
@@ -71,7 +74,7 @@ public class Main extends SimpleApplication{
     Trein containerTrein;
     
     //socketdeclaratie
-//    private static ClientSocket s1;
+    private static ClientSocket s1;
     private static int port = 49876;
     
     private boolean testrun;
@@ -98,8 +101,7 @@ public class Main extends SimpleApplication{
         initInputs();
         
         //Init AGVs
-        agvs = new ArrayList<AGV>();
-        initAGVs();
+          initAGVs();
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
@@ -218,38 +220,62 @@ public class Main extends SimpleApplication{
             Container container = new Container(assetManager);
             opslagstroken[0].storeContainer(container, x, 0, 0);
         }
-//                while (true) {
-//            try {
-//                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
-//                break;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("Server not responding");
-//                continue;
-//            }
-//        }
-////        Thread thread1 = new Thread(s1);
-////        thread1.start();
-////        this.enqueue(s1.run());
-//        s1.threadConnectie();
+                while (true) {
+            try {
+                s1 = new ClientSocket(this, InetAddress.getByName("localhost"), port);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Server not responding");
+                continue;
+            }
+        }
+//        Thread thread1 = new Thread(s1);
+//        thread1.start();
+//        this.enqueue(s1.run());
+        s1.threadConnectie();
         
     }
 
-public void initAgvAansturen(MotionPath pad)
+public void initAgvAansturen(final MotionPath pad, final int id, final int laannummer)
     {
-        
-        AGV agv = new AGV(assetManager);
-        rootNode.attachChild(agv);
         pad.enableDebugShape(assetManager, rootNode);
-        MotionEvent event = new MotionEvent (agv, pad);
+        MotionEvent event = new MotionEvent (agvs.get(id), pad);
         event.setDirectionType(MotionEvent.Direction.Path);
         pad.setPathSplineType(SplineType.Linear);
-        Cinematic cinematic = new Cinematic(agv, 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal. it's over 9000!
+
+        Cinematic cinematic = new Cinematic(agvs.get(id), 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
+
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
         event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
 
         cinematic.play();
+        
+        pad.addListener( new MotionPathListener() {
+           public void onWayPointReach(MotionEvent motionControl, int wayPointIndex){
+            if (pad.getNbWayPoints() == wayPointIndex + 1) {
+            int laannr = -1;
+            int vp = AGV.vrijeParkeerplek(laannummer);
+            if(laannummer > 307 && laannummer < 385){
+                laannr = laannummer-308;
+            }
+            else{
+                laannr = laannummer;
+            }
+            if(laannummer > 307 && laannummer < 385){
+              agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
+              AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
+              agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
+            }
+             else{
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
+               AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
+               agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
+             }  
+            }   
+        }
+      });
     }
     public void initScene(){
 
@@ -343,30 +369,44 @@ public void initAgvAansturen(MotionPath pad)
     }
     
     public void initAGVs(){
-        for (int i = 0; i < opslagstroken.length * 4; i++) {
+        int laannummer = 0;
+        int parkcount = 0;
+        for (int i = 0; i < 77; i++) {
+            for (int j = 0; j < 6; j++) {
+                AGV.vrijeParkeerplaatsL[i][j] = 0;
+                AGV.vrijeParkeerplaatsR[i][j] = 0;
+            }
+        }
+        for (int f = 0; f < 100; f++) {
+            int id = f;
+            if(parkcount < 6){
+                parkcount++;
+            }
+            if (parkcount == 6){
+                laannummer++;
+                parkcount = 0;
+            }
             
             AGV agv = new AGV(assetManager);
             agvs.add(agv);
-            rootNode.attachChild(agv);        
-            
-        }
-        
-        int j = 0;
-        for (int i = 0; i < opslagstroken.length * 4; i += 4) {
-            if (j < 5) {
-                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[3]);
-                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[2]);
-                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
-                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
-            } else {
-                agvs.get(i).parkeerAGV(opslagstroken[j].parkeerPlaats[1]);
-                agvs.get(i + 1).parkeerAGV(opslagstroken[j].parkeerPlaats[0]);
-                agvs.get(i + 2).parkeerAGV(opslagstroken[j].parkeerPlaats[6]);
-                agvs.get(i + 3).parkeerAGV(opslagstroken[j].parkeerPlaats[7]);
+            rootNode.attachChild(agv);
+            int laannr = -1;
+            int vp = AGV.vrijeParkeerplek(laannummer);
+            if(laannummer > 307 && laannummer < 385){
+                laannr = laannummer-308;
             }
-            j++;
+            else{
+                laannr = laannummer;
+            }
+            if(laannummer > 307 && laannummer < 385){
+              agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
+              AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
+            }
+             else{
+               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
+               AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
+             }     
         }
-        
     }
     
     public void initWater(){
@@ -463,34 +503,39 @@ public void initAgvAansturen(MotionPath pad)
 //    }
 //    
         //TODO: add update code
-//                String[] splitInput;
-//                List<Integer> inputToInt = new ArrayList<Integer>();
-//            //if (s1.getOpdrachten().size() > 0) {
-//            for (String opdracht : s1.getOpdrachten()) {
-//                System.out.println(opdracht);
-//                System.out.println("test");
-//                splitInput = opdracht.split("/");
-//                if (opdracht.charAt(0) != 'c' && opdracht.charAt(0) != 'e') {
-//                    for (int i = 0; i < splitInput.length; i++) {
-//                        System.out.println("splitinput lengte = " + splitInput.length);
-//                        inputToInt.add(Integer.parseInt(splitInput[i]));
-//                        System.out.println(splitInput[i]);
-//                    }
-//                    MotionPath pad = new MotionPath();
-//                    for(Integer containerPlaatsen : inputToInt){
-//                        pad.addWayPoint(Waypoint.waypoints.get(containerPlaatsen));
-//                    }
-//                    initAgvAansturen(pad);
-//                    inputToInt.clear();;
-//                }
-//                int containerPlaatsen = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
+
+                String[] splitInput;
+                List<Integer> inputToInt = new ArrayList<Integer>();
+          //if (s1.getOpdrachten().size() > 0) {
+            for (String opdracht : s1.getOpdrachten()) {
+                System.out.println(opdracht);
+                System.out.println("test");
+                splitInput = opdracht.split("/");
+                if(!"".equals(opdracht)){
+                    if (opdracht.charAt(0) == 'c') {
+                        for (int i = 2; i < splitInput.length; i++) {
+                            System.out.println("splitinput lengte = " + splitInput.length);
+                            inputToInt.add(Integer.parseInt(splitInput[i])); 
+                            System.out.println(splitInput[i]);
+                        }
+                        MotionPath pad = new MotionPath();
+                        for(Integer x : inputToInt){
+                            pad.addWayPoint(Waypoint.waypoints.get(x));
+                        }
+                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 1));
+                        inputToInt.clear();;
+                    }
+                }
+//                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
+
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
 //                //System.out.println("containerPlaatsen = " + containerPlaatsen + " y = " + y + " z = " + z);
 //                int[] xyzarray = {containerPlaatsen,y,z};
 //                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), containerPlaatsen, y, z);
                 testrun = false;
-   //         }
+           
+          }
         //treinPlatform.storeContainer(c2, 5);
     }
     

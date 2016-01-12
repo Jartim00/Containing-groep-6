@@ -60,7 +60,6 @@ public /*abstract*/ class Schip extends Node {
         container.setLocalTranslation( (zContainers*Container.containerBreedte - Container.containerBreedte - z*2*Container.containerBreedte), 
                                        (Container.containerHoogte + y*2*Container.containerHoogte), 
                                        (-xContainers*Container.containerLengte + Container.containerLengte + x*2*Container.containerLengte));
-    }
-        
+    }  
 }
 
