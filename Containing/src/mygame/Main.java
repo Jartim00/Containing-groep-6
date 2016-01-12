@@ -9,6 +9,7 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.cinematic.events.MotionTrack;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -49,7 +50,7 @@ public class Main extends SimpleApplication{
     Node VrachtwagenplatformNode;
     Node zeeschipPlatformNode;
     
-    public float snelheid = 1f;
+    public static float snelheid = 1f;
     
     public static float opslagLengte = 154;
     public static float opslagBreedte = 60;
@@ -71,11 +72,10 @@ public class Main extends SimpleApplication{
     //socketdeclaratie
     private static ClientSocket s1;
     private static int port = 49876;
-    
     private boolean testrun;
     
     private List<Vector3f> waypoints;
-    
+
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -94,9 +94,10 @@ public class Main extends SimpleApplication{
         initBinnenvaartPlatform();
         Waypoint.WaypointMaken();
         initInputs();
-        
+        snelheidUpdate();
         //Init AGVs
-          initAGVs();
+          initAGVs();           
+                 
 //        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
 //        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
 //        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
@@ -288,8 +289,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         S.scale(0.05f);
         S.rotate(0.0f, -3.0f, 0.0f);
         S.setLocalTranslation(0.0f, 0.0f, opslagLengte + 2*wegBreedte);
-        rootNode.attachChild(S);    
-
+        rootNode.attachChild(S);   
     }
     
     public void initBinnenvaartPlatform()
@@ -439,10 +439,18 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         zeeschipNode.attachChild(zeeschip2);
     }
         
-    
-    
+    BitmapText hudText;
+    public void snelheidUpdate(){
+        hudText  = new BitmapText(guiFont, false);       
+        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        hudText.setColor(ColorRGBA.White);                             // font color
+        hudText.setText("Snelheid = " + snelheid);             // the text        
+        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
+        guiNode.attachChild(hudText);      
+    }
     @Override 
     public void simpleUpdate(float tpf) {
+ //   hudText.setText("Snelheid = " + snelheid);             // the text
         //TODO: add update code
         //Container container = new Container(assetManager);
         //zeeschip2.storeContainer(container, 5, 2, 9);
@@ -498,29 +506,57 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
     
     private void initInputs(){
         inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("snelheid_omhoog1", new KeyTrigger(KeyInput.KEY_EQUALS));
+        inputManager.addMapping("snelheid_omlaag1", new KeyTrigger(KeyInput.KEY_MINUS));
+        inputManager.addMapping("snelheid_omhoog100", new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        inputManager.addMapping("snelheid_omlaag100", new KeyTrigger(KeyInput.KEY_NUMPAD2));
         ActionListener acl = new ActionListener() {
             
             public void onAction(String name, boolean keyPressed, float tpf) {
           
-                if (name.equals("play_stop") && keyPressed) {
-                    if (playing) {
-                        playing = false;
-                        opslagstroken[1].motionControl.stop();
-//                        for (int i = 0; i < opslagstroken.length; i=i+2) {
-//                            opslagstroken[i].motionControl.stop();
-//                        }
-                    } else {
-                        playing = true;
-                        opslagstroken[1].motionControl.play();
-//                        for (int i = 0; i < opslagstroken.length; i++) {
-//                            opslagstroken[1].motionControl.play();
-//                        }
-                        
-                    }
-                } 
+//                if (name.equals("play_stop") && keyPressed) {
+//                    if (playing) {
+//                        playing = false;
+//                        opslagstroken[1].motionControl.stop();
+////                        for (int i = 0; i < opslagstroken.length; i=i+2) {
+////                            opslagstroken[i].motionControl.stop();
+////                        }
+//                    } else {
+//                        playing = true;
+//                        opslagstroken[1].motionControl.play();
+////                        for (int i = 0; i < opslagstroken.length; i++) {
+////                            opslagstroken[1].motionControl.play();
+////                        }
+//                        
+//                    }
+//                }
+                if (name.equals("snelheid_omhoog1") && keyPressed){
+                snelheid++;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omlaag1") && keyPressed){
+                snelheid--;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omhoog100") && keyPressed){
+                snelheid = snelheid + 100;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omlaag100") && keyPressed){
+                snelheid = snelheid - 100;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
             }
         };
-        inputManager.addListener(acl, "play_stop");
+//        inputManager.addListener(acl, "play_stop");
+          inputManager.addListener(acl, "snelheid_omhoog1");
+          inputManager.addListener(acl, "snelheid_omlaag1");
+          inputManager.addListener(acl, "snelheid_omhoog100");
+          inputManager.addListener(acl, "snelheid_omlaag100");
     }
     
     public void logCameraPosition(){
