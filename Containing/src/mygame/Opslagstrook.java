@@ -105,10 +105,10 @@ public class Opslagstrook extends Node {
         locatie.z = locatie.z + breedteA + Container.containerBreedte;
         for(int i = 0; i < parkeerPlaats.length; i++){
             if(i < 6){  //links                
-                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x - lengteA - 1.5f*Container.containerLengte, 0, locatie.z - (i * 3*Container.containerBreedte)));
+                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x - lengteA - 1.5f*Container.containerLengte, 0, locatie.z - (i * (2*Container.containerBreedte+0.1f))));
                 
             } else{     //rechts
-                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x + lengteA + 1.5f*Container.containerLengte, 0, locatie.z + (i * 3*Container.containerBreedte)));
+                parkeerPlaats[i] = new ParkeerPlaats(new Vector3f(locatie.x + lengteA + 1.5f*Container.containerLengte, 0, locatie.z + (i * (2*Container.containerBreedte +0.1f))));
             }
         }
         

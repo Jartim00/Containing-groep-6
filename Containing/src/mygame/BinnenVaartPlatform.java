@@ -21,21 +21,22 @@ public class BinnenVaartPlatform extends Node
 {
     
     Node platformNode;
-    Node schepenNode;
-    private float containerOpslagBreedte = 4*Container.containerBreedte; // A = opslag voor containers
-    private float containerOpslagLengte = 6*Container.containerLengte;    
-    private float platformBreedte = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
-    private float platformLengte = Main.opslagLengte/2 + Main.wegBreedte; 
+    static Node schepenNode;
+    public static int opslagBreedte = 4; 
+    public static int opslagLengte = 6;
+    public static int opslagHoogte = 3; // aantal containers die op het schip moeten
+    public static float platformBreedte = 4f; 
+    public static float platformLengte = Main.opslagLengte/2 + Main.wegBreedte; //dimensies van het platform
     
     private AssetManager assetManager;
     
     public BinnenVaartPlatform(AssetManager assetManager) 
     {
-        Node platformNode = new Node("binnenvaartPlatform");
-        Node schepenNode = new Node("schepen");
+        platformNode = new Node("binnenvaartPlatform");
+        schepenNode = new Node("schepen");
         this.assetManager = assetManager;
         Box platform = new Box(platformLengte, 0.001f, platformBreedte);
-        Box containers = new Box(containerOpslagLengte,0.001f, containerOpslagBreedte);
+        Box containers = new Box(opslagLengte*Container.containerLengte,0.201f, opslagBreedte*Container.containerBreedte);
         Geometry binnenvaartPlatform = new Geometry("Box", platform);
         Geometry containerPlaats1 = new Geometry("Box", containers);
         Geometry containerPlaats2 = new Geometry("Box", containers);
@@ -50,8 +51,8 @@ public class BinnenVaartPlatform extends Node
         containerPlaats2.setMaterial(mat2);
         containerPlaats1.setLocalTranslation(platformLengte/2 ,0.001f,0);
         containerPlaats2.setLocalTranslation(-platformLengte/2 ,0.001f,0);
-        schepenNode.attachChild(containerPlaats1);
-        schepenNode.attachChild(containerPlaats2);
+        //schepenNode.attachChild(containerPlaats1);
+        //schepenNode.attachChild(containerPlaats2);
         
         
         //72 meter lang, 6.8 meter hoog en 10 meter breed
@@ -65,7 +66,7 @@ public class BinnenVaartPlatform extends Node
         }
         
         platformNode.attachChild(schepenNode);
-        schepenNode.setLocalTranslation(0, 0, containerOpslagBreedte + platformBreedte);
+        schepenNode.setLocalTranslation(0, 0, opslagBreedte*Container.containerBreedte + platformBreedte);
         platformNode.attachChild(binnenvaartPlatform);
         platformNode.setLocalTranslation(0, 0, platformBreedte);
         attachChild(platformNode);

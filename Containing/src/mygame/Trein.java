@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
+import static mygame.TreinPlatform.treinNode;
 /**
  *
  * @author Robin
@@ -19,9 +20,9 @@ public class Trein extends Node
 {
     private AssetManager assetManager;
     
-    public static int x;
+    static int containerPlaatsen;
     
-    Container[][][] containerTrein = new Container[50][1][1];
+    Container[][][] containerOpslag = new Container[containerPlaatsen][1][1];
 
     //maak opslagkraan
     public Trein(AssetManager assetManager) 
@@ -131,7 +132,7 @@ public class Trein extends Node
             float a = 2.5f;
             float b = 2.4f;
             
-            for(int i=1; i<x; i++){
+            for(int i=1; i<containerPlaatsen; i++){
 
             Geometry wielw5 = new Geometry("Cylinder", wiel);
             Geometry wielw6 = new Geometry("Cylinder", wiel);
@@ -154,7 +155,7 @@ public class Trein extends Node
             wielw6.setLocalTranslation(-3.5f - b, -0.33f, 0.31f);
             wielw7.setLocalTranslation(-2f - a, -0.33f, -0.31f);
             wielw8.setLocalTranslation(-3.5f - b, -0.33f, -0.31f);
-            a = a + 2.5f;
+            a = a + 2.5f; //grootte van de wagon + de koppeling
             b = b + 2.5f;
 
             attachChild(wagonModel2);
@@ -167,8 +168,23 @@ public class Trein extends Node
             
             
             }
+            for (int x = 0; x < containerPlaatsen; x++) {
+                containerOpslag[x][0][0] = null;
+            }
             
             setLocalTranslation(0,0.5f,0);
-}            
+} 
+    
+    public void storeContainer(Container container, int x)
+    {
 
+        if(containerOpslag[x][0][0] == null)
+            containerOpslag[x][0][0] = container;        
+        
+        attachChild(container);
+        container.setLocalTranslation( (-2.8f - x*(2*Container.containerLengte + 0.1f)),    // -trein lengte -containerpositie * (2* containerlengte + afstand tussen wagons)
+                                       (0.1f), 
+                                       (0));
+    }
+    
 }

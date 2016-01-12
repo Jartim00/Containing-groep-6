@@ -26,12 +26,11 @@ public class ZeeschipPlatform extends Node {
     public static int breedteContainerPlaatsen = 16; // schip = opslag voor containers op het zeeschip
     public static int lengteContainerPlaatsen = 20;
     public static int hoogteContainerPlaatsen = 6;
-    private static float platformBreedte = 4f; // platform = complete platform zonder schip
+    public static float platformBreedte = 4f; // platform = complete platform zonder schip
     public static float platformLengte = 70.4f;
        
     
     // 3d array om de container objecten in op te slaan
-    Container[][][] containerOpslag = new Container[20][6][16];
     
     public ZeeschipPlatform(AssetManager manager)
     {
@@ -62,14 +61,7 @@ public class ZeeschipPlatform extends Node {
             zeeschipPlatformNode.attachChild(zeeschipKranen[i]);  
             zeeschipKranen[i].setLocalTranslation(-platformBreedte + 1.7f, 2.5f,platformLengte - platformLengte/10 -platformLengte/5 * i);      //zeeschipkranen positioneren op het platform
         }
-        
-        for (int x = 0; x < 20; x++) {
-            for (int y = 0; y < 6; y++) {
-                for (int z = 0; z < 16; z++) {
-                    containerOpslag[x][y][z] = null;                       
-                } 
-            }
-        }
+
         
         
         rotate(0,FastMath.HALF_PI, 0);

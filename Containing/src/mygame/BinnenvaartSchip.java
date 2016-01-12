@@ -15,7 +15,7 @@ import com.jme3.scene.shape.Box;
  *
  * @author seventhflame
  */
-public /*abstract*/ class Schip extends Node {
+public /*abstract*/ class BinnenvaartSchip extends Node {
     
     private static AssetManager assetManager;
     
@@ -25,14 +25,14 @@ public /*abstract*/ class Schip extends Node {
     
     private Container[][][] containerOpslag = new Container[xContainers][yContainers][zContainers];
     
-    public Schip(AssetManager manager){
+    public BinnenvaartSchip(AssetManager manager){
         
         this.xContainers = xContainers;
         this.yContainers = yContainers;
         this.zContainers = zContainers;
         this.assetManager = manager;
         
-        Box containerBox = new Box(zContainers*Container.containerBreedte,0,xContainers*Container.containerLengte);
+        Box containerBox = new Box(xContainers*Container.containerBreedte,0,zContainers*Container.containerLengte);
         Geometry containerPlaats = new Geometry("containerplaats", containerBox); 
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matA.setColor("Color", ColorRGBA.Orange);
@@ -47,7 +47,7 @@ public /*abstract*/ class Schip extends Node {
                 } 
             }
         }
-        
+        rotate(0,FastMath.HALF_PI, 0);
     }
     
     public void storeContainer(Container container, int x, int y, int z){
@@ -57,10 +57,9 @@ public /*abstract*/ class Schip extends Node {
         
         attachChild(container);
         container.rotate(0,FastMath.HALF_PI, 0);
-        container.setLocalTranslation( (zContainers*Container.containerBreedte - Container.containerBreedte - z*2*Container.containerBreedte), 
+        container.setLocalTranslation( (xContainers*Container.containerBreedte - Container.containerBreedte - x*2*Container.containerBreedte), 
                                        (Container.containerHoogte + y*2*Container.containerHoogte), 
-                                       (-xContainers*Container.containerLengte + Container.containerLengte + x*2*Container.containerLengte));
+                                       (-zContainers*Container.containerLengte + Container.containerLengte + z*2*Container.containerLengte));
     }
         
 }
-
