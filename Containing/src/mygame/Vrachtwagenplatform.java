@@ -33,33 +33,18 @@ public class Vrachtwagenplatform extends Node {
         platform = new Node();
         park = new Node();
         
-        VrachtwagenKraan[] kraan = new VrachtwagenKraan[20];
-        Geometry[] parkeerplaatsAGV = new Geometry[20];
-        Geometry[] parkeerplaatsVrachtwagen = new Geometry[20];
-        
-        
-        Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material matQ = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matP.setColor("Color", ColorRGBA.Pink);
-        matQ.setColor("Color", ColorRGBA.Cyan);
+        Vrachtwagen[] vrachtwagenPlaatsen = new Vrachtwagen[20];
+
        
         
 //            treinKranen[i] = new TreinKraan(assetManager);
 //            attachChild(treinKranen[i]);  
 //            treinKranen[i].setLocalTranslation((i * 4f), 1, 0);
         
-        for(int i = 0; i < parkeerplaatsAGV.length;i++){
-            kraan[i] = new VrachtwagenKraan(assetManager);
-            kraan[i].setLocalTranslation(0,1, 4 * i);     // kraanpositie
-            park.attachChild(kraan[i]);
-            parkeerplaatsAGV[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
-            parkeerplaatsVrachtwagen[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte,0,Container.containerBreedte));
-            parkeerplaatsAGV[i].setMaterial(matP);
-            parkeerplaatsVrachtwagen[i].setMaterial(matQ);
-            parkeerplaatsAGV[i].setLocalTranslation(Container.containerLengte, -0.99f,0);  // AGV Parkeerplaats
-            parkeerplaatsVrachtwagen[i].setLocalTranslation(-Container.containerLengte, -0.99f,0); // Vrachtwagen Parkeerplaats
-            kraan[i].attachChild(parkeerplaatsAGV[i]);
-            kraan[i].attachChild(parkeerplaatsVrachtwagen[i]);
+        for(int i = 0; i < vrachtwagenPlaatsen.length;i++){
+            vrachtwagenPlaatsen[i] = new Vrachtwagen(assetManager);
+            vrachtwagenPlaatsen[i].setLocalTranslation(0, 0, 4*i);
+            park.attachChild(vrachtwagenPlaatsen[i]);
             
         }
         park.setLocalTranslation(-platformBreedte + 2*Container.containerLengte, 0, -1.8f);

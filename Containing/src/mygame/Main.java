@@ -36,6 +36,8 @@ import java.util.logging.Logger;
 import static mygame.AGV.vrijeParkeerplaatsL;
 import static mygame.AGV.vrijeParkeerplaatsR;
 import static mygame.ZeeschipPlatform.zeeschipNode;
+import static mygame.BinnenVaartPlatform.schepenNode;
+import static mygame.TreinPlatform.treinNode;
 
 
 public class Main extends SimpleApplication{    
@@ -68,6 +70,9 @@ public class Main extends SimpleApplication{
 
     Schip zeeschip1;
     Schip zeeschip2;
+    BinnenvaartSchip binnenvaartschip1;
+    BinnenvaartSchip binnenvaartschip2;
+    Trein containerTrein;
     
     //socketdeclaratie
     private static ClientSocket s1;
@@ -177,26 +182,39 @@ public class Main extends SimpleApplication{
         
 //        // Maximale opslag 0-2 fps!!
 //        for (int i = 0; i < opslagstroken.length; i++) {
-//            for (int x = 0; x < 46; x++) {
+//            for (int containerPlaatsen = 0; containerPlaatsen < 46; containerPlaatsen++) {
 //                for (int y = 0; y < 6; y++) {
 //                    for (int z = 0; z < 6; z++) {
 //                        Container container = new Container(assetManager);
-//                        opslagstroken[i].storeContainer(container, x, y, z);
+//                        opslagstroken[i].storeContainer(container, containerPlaatsen, y, z);
 //                    }     
 //                }
 //            
 //            }                   
 //        }
         
-        
-        Container c1 = new Container(assetManager);
-        opslagstroken[2].storeContainer(c1, 0, 0, 0);
+        // tests van de vervoersplatformen en de opslagplatformen
+        Container c1 = new Container(assetManager); // nieuwe container word aangemaakt.
+        opslagstroken[2].storeContainer(c1, 0, 0, 0);   // Container word op de opslag geplaatst.
+        // Kijk voor de uitleg van de storecontainer functie naar de klasse opslagstrook omdat deze voor de vervoersplatformen hetzelfde is.
         
         Container c1000 = new Container(assetManager);
-        zeeschip1.storeContainer(c1000, 19, 0, 15);
+        zeeschip1.storeContainer(c1000, 0, 0, 0);
         
+        Container c1001 = new Container(assetManager);
+        binnenvaartschip1.storeContainer(c1001, 0, 0, 0);
         
+        Container c22 = new Container(assetManager);
+        containerTrein.storeContainer(c22, 1);
         
+        Container c23 = new Container(assetManager);
+        containerTrein.storeContainer(c23, 2);
+        
+        Container c24 = new Container(assetManager);
+        containerTrein.storeContainer(c24, 3);
+        
+        Container c25 = new Container(assetManager);
+        containerTrein.storeContainer(c25, 49);
         
 
         for (int x = 0; x < 46; x++) {
@@ -226,7 +244,9 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         MotionEvent event = new MotionEvent (agvs.get(id), pad);
         event.setDirectionType(MotionEvent.Direction.Path);
         pad.setPathSplineType(SplineType.Linear);
+
         Cinematic cinematic = new Cinematic(agvs.get(id), 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
+
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
         event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
@@ -296,8 +316,10 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
     {
         BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
         binnenvaartplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte,0,opslagLengte/2 + wegBreedte);
+        binnenvaartschip1KomtAan();
+        binnenvaartschip2KomtAan();
         rootNode.attachChild(binnenvaartplatform);
-    }
+    }   // platform word aangemaakt, gepositioneerd en aan een node vastgemaakt.
     
     public void initTreinPlatform()
     {
@@ -306,10 +328,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         treinPlatformNode.attachChild(treinPlatform);
         treinPlatform.setLocalTranslation(-(opslagBreedte + 2*wegBreedte), 0, 0);
         sceneNode.attachChild(treinPlatformNode);
-        treinPlatform.treinKomtAan(20);
-        Container c2 = new Container(assetManager);
-        treinPlatform.storeContainer(c2, 49);
-        
+        treinKomtAan(50);        
     }
     public void initZeeschipPlatform()
     {
@@ -330,9 +349,6 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
         vrachtwagenplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte, 0, -opslagLengte/2 - wegBreedte);
         sceneNode.attachChild(VrachtwagenplatformNode);
-        //treinPlatform.treinKomtAan();
-        //Container c2 = new Container(assetManager);
-        //treinPlatform.storeContainer(c2, 49);
         }
     
 
@@ -438,6 +454,34 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         zeeschip2.setLocalTranslation(0,0,-ZeeschipPlatform.platformLengte/2);
         zeeschipNode.attachChild(zeeschip2);
     }
+    
+    void binnenvaartschip1KomtAan()
+    {
+        BinnenvaartSchip.xContainers = BinnenVaartPlatform.opslagBreedte;
+        BinnenvaartSchip.yContainers = BinnenVaartPlatform.opslagHoogte;
+        BinnenvaartSchip.zContainers = BinnenVaartPlatform.opslagLengte;
+        binnenvaartschip1 = new BinnenvaartSchip(assetManager);
+        binnenvaartschip1.setLocalTranslation(BinnenVaartPlatform.platformLengte/2,0,0);
+        schepenNode.attachChild(binnenvaartschip1);
+    }
+    
+    void binnenvaartschip2KomtAan()
+    {
+        BinnenvaartSchip.xContainers = BinnenVaartPlatform.opslagBreedte;
+        BinnenvaartSchip.yContainers = BinnenVaartPlatform.opslagHoogte;
+        BinnenvaartSchip.zContainers = BinnenVaartPlatform.opslagLengte;
+        binnenvaartschip2 = new BinnenvaartSchip(assetManager);
+        binnenvaartschip2.setLocalTranslation(-BinnenVaartPlatform.platformLengte/2,0,0);
+        schepenNode.attachChild(binnenvaartschip2);
+    }
+    
+    void treinKomtAan(int x)
+    {
+        Trein.containerPlaatsen = x;
+        containerTrein = new Trein(assetManager);
+        treinNode.attachChild(containerTrein);
+        
+    }
         
     BitmapText hudText;
     public void snelheidUpdate(){
@@ -467,6 +511,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
 //    }
 //    
         //TODO: add update code
+
                 String[] splitInput;
                 List<Integer> inputToInt = new ArrayList<Integer>();
           //if (s1.getOpdrachten().size() > 0) {
@@ -490,11 +535,12 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
                     }
                 }
 //                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
+
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
-//                //System.out.println("x = " + x + " y = " + y + " z = " + z);
-//                int[] xyzarray = {x,y,z};
-//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
+//                //System.out.println("containerPlaatsen = " + containerPlaatsen + " y = " + y + " z = " + z);
+//                int[] xyzarray = {containerPlaatsen,y,z};
+//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), containerPlaatsen, y, z);
                 testrun = false;
            
           }

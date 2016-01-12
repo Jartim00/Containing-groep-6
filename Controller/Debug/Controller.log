@@ -1,9 +1,8 @@
-﻿Build started 11-1-2016 13:14:59.
-     1>Project "C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Controller.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         Controller.vcxproj -> C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Debug\Controller.exe
-     1>Done Building Project "C:\Users\rnpra\Documents\GitHub\Containing-groep-6\Controller\Controller.vcxproj" (Build target(s)).
+﻿Build started 12-1-2016 11:56:59.
+     1>Project "C:\Users\seventhflame\Desktop\schoolwerk\project containing\Containing-groep-6\Controller\Controller.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.Cpp.Platform.targets(64,5): error MSB8020: The build tools for v140 (Platform Toolset = 'v140') cannot be found. To build using the v140 build tools, please install v140 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Upgrade Solution...".
+     1>Done Building Project "C:\Users\seventhflame\Desktop\schoolwerk\project containing\Containing-groep-6\Controller\Controller.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.07
+Time Elapsed 00:00:00.08
