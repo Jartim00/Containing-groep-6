@@ -11,6 +11,9 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import static mygame.Schip.xContainers;
+import static mygame.Schip.yContainers;
+import static mygame.Schip.zContainers;
 /**
  *
  * @author seventhflame
