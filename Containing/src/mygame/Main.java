@@ -390,7 +390,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         
         for (int i = 0; i < opslagstroken.length; i++) {
             positie = opslagstroken[i].getLocalTranslation();
-            opslagKranen[i] = new OpslagKraan(okBasis, okSlider, okHaak, positie, rootNode, assetManager);            
+            opslagKranen[i] = new Opslagkraan(okBasis, okSlider, okHaak, positie, rootNode, assetManager);            
             opslagstroken[i].attachChild(opslagKranen[i]);
         }
     }

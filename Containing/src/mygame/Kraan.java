@@ -9,6 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.math.FastMath;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -198,9 +199,10 @@ public abstract class Kraan extends Node implements MotionPathListener{
                 Vector3f xs = new Vector3f(hNode.getLocalTranslation().x,hNode.getLocalTranslation().y,hNode.getLocalTranslation().z);
                 System.out.println(xs);
                 //if(doel)
-                
                 hNode.attachChild(cont);
-                
+                cont.setLocalScale((1/0.12f), (1/0.16f), (1/0.2f));
+                cont.rotate(0,FastMath.DEG_TO_RAD * 90f,0);
+                cont.setLocalTranslation(0, 25, 0);
             }
         }
     }

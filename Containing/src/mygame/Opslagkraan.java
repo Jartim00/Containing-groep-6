@@ -14,13 +14,13 @@ import com.jme3.scene.Spatial;
  *
  * @author seventhflame
  */
-public class OpslagKraan extends Kraan {    
+public class Opslagkraan extends Kraan {    
     
     //private MotionPath path;
     //private MotionEvent MotionControl;
     
     //maak opslagkraan
-    public OpslagKraan(Spatial base, Spatial slider, Spatial hook, Vector3f positie, Node rootNode, AssetManager assetManager) {
+    public Opslagkraan(Spatial base, Spatial slider, Spatial hook, Vector3f positie, Node rootNode, AssetManager assetManager) {
         super(base, slider, hook, positie, rootNode, assetManager);        
         setLocalScale(0.12f, 0.16f, 0.2f);
         rotate(0, FastMath.HALF_PI ,0);  
