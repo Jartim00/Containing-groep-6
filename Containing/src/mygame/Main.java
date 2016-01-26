@@ -12,6 +12,8 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.cinematic.events.MotionTrack;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -236,17 +238,27 @@ public class Main extends SimpleApplication{
         
     }
 
-public void initAgvAansturen(final MotionPath pad, final int id, final int laannummer)
-    {
-        pad.enableDebugShape(assetManager, rootNode);
+public void initAgvAansturen(final MotionPath pad, final int id, final int laannummer, final String beladen)
+    {      
+        if(beladen.equals("beladen")){
+        final Container container = new Container(assetManager);
+        container.rotate(0,FastMath.DEG_TO_RAD * 90f,0);
+        agvs.get(id).attachChild(container);
+        container.setLocalTranslation(0, 0.31f, 0);
+        }
+        pad.enableDebugShape(assetManager, rootNode);               
         MotionEvent event = new MotionEvent (agvs.get(id), pad);
         event.setDirectionType(MotionEvent.Direction.Path);
         pad.setPathSplineType(SplineType.Linear);
         Cinematic cinematic = new Cinematic(agvs.get(id), 999999999); // aantal seconden dat de animatie maximaal duurt, dus maar hoog getal.
         cinematic.addCinematicEvent(0, event);
         stateManager.attach(cinematic);
+        if(beladen.equals("beladen")){
+        event.setInitialDuration(pad.getLength() / 11f / (snelheid/2)); //5.5 meter per seconde.    
+        }
+        else{
         event.setInitialDuration(pad.getLength() / 11f / snelheid); //11 meter per seconde.
-
+        }
         cinematic.play();
         
         pad.addListener( new MotionPathListener() {
@@ -264,11 +276,13 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
               agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsR[vp]); 
               AGV.vrijeParkeerplaatsR[laannr][vp] = 1;
               agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
+          //    agvs.get(id).detachChild(container);              
             }
              else{
                agvs.get(id).parkeerAGV(opslagstroken[laannr].parkeerPlaatsL[vp]);  
                AGV.vrijeParkeerplaatsL[laannr][vp] = 1;
                agvs.get(id).rotate(0,FastMath.HALF_PI, 0);
+          //     agvs.get(id).detachChild(container);           
              }  
             }   
         }
@@ -533,16 +547,20 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
                 splitInput = opdracht.split("/");
                 if(!"".equals(opdracht)){
                     if (opdracht.charAt(0) == 'c') {
-                        for (int i = 2; i < splitInput.length; i++) {
+                        for (int i = 2; i < splitInput.length - 1; i++) {
                             System.out.println("splitinput lengte = " + splitInput.length);
                             inputToInt.add(Integer.parseInt(splitInput[i])); 
                             System.out.println(splitInput[i]);
                         }
+                        String Beladen = "onbeladen";
+                        if(opdracht.charAt(opdracht.length() - 1) == 'b'){
+                        Beladen = "beladen";    
+                        } 
                         MotionPath pad = new MotionPath();
                         for(Integer x : inputToInt){
                             pad.addWayPoint(Waypoint.waypoints.get(x));
                         }
-                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 1));
+                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 2),Beladen);
                         inputToInt.clear();;
                     }
                 }

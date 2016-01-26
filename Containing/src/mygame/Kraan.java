@@ -130,7 +130,7 @@ public abstract class Kraan extends Node implements MotionPathListener{
     
     public void verplaatsHaakY(Vector3f target){
         Vector3f start = hNode.getLocalTranslation();
-        Vector3f bestemming = new Vector3f(0, -target.y*100, 0); 
+        Vector3f bestemming = new Vector3f(0, -target.y*90.5f, 0); 
         maakBeweging(haakControl, haakPath, sliDur, start, bestemming);
 
         System.out.println("doel haak"+doel); 
@@ -159,7 +159,7 @@ public abstract class Kraan extends Node implements MotionPathListener{
         }
     } 
 
-    
+ 
     @Override
     public void onWayPointReach(MotionEvent motionControl, int wayPointIndex){ 
         
