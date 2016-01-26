@@ -75,6 +75,8 @@ public abstract class Kraan extends Node implements MotionPathListener{
      */
     protected Container cont = null;
     
+    protected int hoogte;
+    
     public Kraan(Spatial base, Spatial slider, Spatial hook, Vector3f positie, Node rootNode, AssetManager assetManager){
         this.positie = positie;
         this.basis = base.clone();
@@ -109,7 +111,9 @@ public abstract class Kraan extends Node implements MotionPathListener{
          
         
     }
-        public void verplaatsKraanX(Vector3f target){        
+        public void verplaatsKraanX(Vector3f target, int hoogte, Container c){   
+        this.hoogte = hoogte;
+        this.cont =  c;
         Vector3f start = new Vector3f(this.getLocalTranslation());       
         doel = new Vector3f(target);
         Vector3f bestemming = new Vector3f(target.x,0,0);
@@ -129,12 +133,28 @@ public abstract class Kraan extends Node implements MotionPathListener{
     }
     
     public void verplaatsHaakY(Vector3f target){
+        //CollisionResults results = new CollisionResults();
+        //cont.collideWith(hNode, results);
+        
         Vector3f start = hNode.getLocalTranslation();
-        Vector3f bestemming = new Vector3f(0, -target.y*90.5f, 0); 
+        System.out.println(start);
+        Vector3f bestemming = new Vector3f(0, ((-23.5f)+3.2f*hoogte),0);
         maakBeweging(haakControl, haakPath, sliDur, start, bestemming);
-
+        System.out.println("hNOde" + hNode.getLocalTranslation());
         System.out.println("doel haak"+doel); 
-        System.out.println("targe haak"+target);
+        System.out.println("target haak"+target);
+        System.out.println("bestemming haaky:" + bestemming);
+        if(hNode.getLocalTranslation() == doel){
+            System.out.println("NICE");
+        }
+        
+        
+        
+            //CollisionResult closest  = results.getClosestCollision();
+            //System.out.println("Distance? " + closest.getDistance() );
+        
+            //maakBeweging(haakControl, haakPath, sliDur, start, test);
+        
     }
     public void maakBeweging(MotionEvent mC, MotionPath mP, Float duration, Vector3f start, Vector3f bestemming) {
         
@@ -172,7 +192,16 @@ public abstract class Kraan extends Node implements MotionPathListener{
                 verplaatsHaakY(doel);               
                 doel = null;
             }
-            
+            else if(motionControl.equals(haakControl)){
+                System.out.println("klaar");
+                System.out.println("dinges: " + hNode.getLocalTranslation());
+                Vector3f xs = new Vector3f(hNode.getLocalTranslation().x,hNode.getLocalTranslation().y,hNode.getLocalTranslation().z);
+                System.out.println(xs);
+                //if(doel)
+                
+                hNode.attachChild(cont);
+                
+            }
         }
     }
 }
