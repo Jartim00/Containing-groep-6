@@ -73,6 +73,5 @@ public class VrachtwagenPlaats extends Node {
     public void vertrekt()
     {
         detachChild(vrachtwagenModel);
-        detachChild(cont);
     }
 }

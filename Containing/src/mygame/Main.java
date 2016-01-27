@@ -9,6 +9,7 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.cinematic.events.MotionTrack;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -38,6 +39,7 @@ import static mygame.ZeeschipPlatform.zeeschipNode;
 import static mygame.BinnenVaartPlatform.schepenNode;
 import static mygame.TreinPlatform.treinNode;
 import static mygame.Vrachtwagenplatform.parkeerNode;
+import static mygame.ZeeschipPlatform.zeeschipNode;
 
 
 public class Main extends SimpleApplication{    
@@ -58,12 +60,21 @@ public class Main extends SimpleApplication{
     public static float opslagBreedte = 60;
     public static float wegBreedte = 1.2f;
     
+    Vector3f target;
+    Container c2;
+    
     private final float terreinLengte = 154 + 2.4f + 8;
     private final float terreinBreedte = 60 + 2.4f + 8;
     
     boolean useWater = true;
     private Vector3f lightPos =  new Vector3f(33,12,-29);
     
+    // Modellen voor opslagkranen
+    private Spatial okBasis;
+    private Spatial okHaak;
+    private Spatial okSlider;
+    
+    Kraan[] opslagKranen = new Kraan[77]; 
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     ArrayList<AGV> agvs = new ArrayList<AGV>();
@@ -97,12 +108,14 @@ public class Main extends SimpleApplication{
         initWater();
         initLight();
         initOpslag();
+        initOpslagKranen();
         initTreinPlatform();
 	initVrachtwagenplatform();
         initZeeschipPlatform();
         initBinnenvaartPlatform();
         Waypoint.WaypointMaken();
         initInputs();
+        snelheidUpdate();
         
         //Init AGVs
           initAGVs();
@@ -159,6 +172,10 @@ public class Main extends SimpleApplication{
         vrachtwagens[0].komtAan();
         vrachtwagens[0].vertrekt();
         vrachtwagens[0].storeContainer(c25);
+        
+        c2 = new Container(assetManager);
+        opslagstroken[20].storeContainer(c2, 16, 5, 0);
+        target = new Vector3f(c2.getLocalTranslation());
         
       
         
@@ -330,6 +347,19 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
        
     }
     
+    private void initOpslagKranen(){
+        Vector3f positie;
+        okBasis = assetManager.loadModel("Models/high/crane/storagecrane/crane.j3o");
+        okHaak = assetManager.loadModel("Models/high/crane/storagecrane/grabbingGear.j3o");
+        okSlider = assetManager.loadModel("Models/high/crane/storagecrane/grabbingGearHolder.j3o");
+        
+        for (int i = 0; i < opslagstroken.length; i++) {
+            positie = opslagstroken[i].getLocalTranslation();
+            opslagKranen[i] = new Opslagkraan(okBasis, okSlider, okHaak, positie, rootNode, assetManager);            
+            opslagstroken[i].attachChild(opslagKranen[i]);
+        }
+    }
+    
     public void initAGVs(){
         int laannummer = 0;
         int parkcount = 0;
@@ -396,8 +426,6 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         rootNode.addLight(sun);  
     }
     
-    // methodes waarmee de voertuigen worden aangemaakt
-    
     void treinKomtAan(int x)
     {
         Trein.containerPlaatsen = x;
@@ -406,10 +434,18 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         
     }
         
-    
-    
+    BitmapText hudText;
+    public void snelheidUpdate(){
+        hudText  = new BitmapText(guiFont, false);       
+        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        hudText.setColor(ColorRGBA.White);                             // font color
+        hudText.setText("Snelheid = " + snelheid);             // the text        
+        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
+        guiNode.attachChild(hudText);      
+    }
     @Override 
     public void simpleUpdate(float tpf) {
+ //   hudText.setText("Snelheid = " + snelheid);             // the text
         //TODO: add update code
         //Container container = new Container(assetManager);
         //zeeschip2.storeContainer(container, 5, 2, 9);
@@ -426,39 +462,41 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
 //    }
 //    
         //TODO: add update code
-
                 String[] splitInput;
                 List<Integer> inputToInt = new ArrayList<Integer>();
           //if (s1.getOpdrachten().size() > 0) {
-            for (String opdracht : s1.getOpdrachten()) {
-                System.out.println(opdracht);
-                System.out.println("test");
-                splitInput = opdracht.split("/");
-                if(!"".equals(opdracht)){
-                    if (opdracht.charAt(0) == 'c') {
-                        for (int i = 2; i < splitInput.length; i++) {
-                            System.out.println("splitinput lengte = " + splitInput.length);
-                            inputToInt.add(Integer.parseInt(splitInput[i])); 
-                            System.out.println(splitInput[i]);
-                        }
-                        MotionPath pad = new MotionPath();
-                        for(Integer x : inputToInt){
-                            pad.addWayPoint(Waypoint.waypoints.get(x));
-                        }
-                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 1));
-                        inputToInt.clear();;
-                    }
-                }
+//            for (String opdracht : s1.getOpdrachten()) {
+//                System.out.println(opdracht);
+//                System.out.println("test");
+//                splitInput = opdracht.split("/");
+//                if(!"".equals(opdracht)){
+//                    if (opdracht.charAt(0) == 'c') {
+//                        for (int i = 2; i < splitInput.length - 1; i++) {
+//                            System.out.println("splitinput lengte = " + splitInput.length);
+//                            inputToInt.add(Integer.parseInt(splitInput[i])); 
+//                            System.out.println(splitInput[i]);
+//                        }
+//                        String Beladen = "onbeladen";
+//                        if(opdracht.charAt(opdracht.length() - 1) == 'b'){
+//                        Beladen = "beladen";    
+//                        } 
+//                        MotionPath pad = new MotionPath();
+//                        for(Integer x : inputToInt){
+//                            pad.addWayPoint(Waypoint.waypoints.get(x));
+//                        }
+//                        initAgvAansturen(pad, opdracht.charAt(2), inputToInt.get(inputToInt.size() - 2),Beladen);
+//                        inputToInt.clear();;
+//                    }
+//                }
 //                int x = Integer.parseInt(splitInput[1]); //dit moet bepaald worden vanaf de achterkant
-
 //                int y = Integer.parseInt(splitInput[2]);
 //                int z = Integer.parseInt(splitInput[3]);
-//                //System.out.println("containerPlaatsen = " + containerPlaatsen + " y = " + y + " z = " + z);
-//                int[] xyzarray = {containerPlaatsen,y,z};
-//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), containerPlaatsen, y, z);
+//                //System.out.println("x = " + x + " y = " + y + " z = " + z);
+//                int[] xyzarray = {x,y,z};
+//                this.opslagstroken[5].storeContainer(new Container(this.getAssetManager()), x, y, z);
                 testrun = false;
            
-          }
+//          }
         //treinPlatform.storeContainer(c2, 5);
     }
     
@@ -467,6 +505,10 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
     
     private void initInputs(){
         inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("snelheid_omhoog1", new KeyTrigger(KeyInput.KEY_EQUALS));
+        inputManager.addMapping("snelheid_omlaag1", new KeyTrigger(KeyInput.KEY_MINUS));
+        inputManager.addMapping("snelheid_omhoog100", new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        inputManager.addMapping("snelheid_omlaag100", new KeyTrigger(KeyInput.KEY_NUMPAD2));
         ActionListener acl = new ActionListener() {
             
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -474,22 +516,46 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
                 if (name.equals("play_stop") && keyPressed) {
                     if (playing) {
                         playing = false;
-                        opslagstroken[1].motionControl.stop();
+                        //opslagstroken[1].motionControl.stop();
 //                        for (int i = 0; i < opslagstroken.length; i=i+2) {
 //                            opslagstroken[i].motionControl.stop();
 //                        }
                     } else {
                         playing = true;
-                        opslagstroken[1].motionControl.play();
+                        opslagKranen[20].verplaatsKraanX(target,5,c2);
 //                        for (int i = 0; i < opslagstroken.length; i++) {
 //                            opslagstroken[1].motionControl.play();
 //                        }
                         
                     }
-                } 
+                }
+                if (name.equals("snelheid_omhoog1") && keyPressed){
+                snelheid++;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omlaag1") && keyPressed){
+                snelheid--;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omhoog100") && keyPressed){
+                snelheid = snelheid + 100;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
+                if (name.equals("snelheid_omlaag100") && keyPressed){
+                snelheid = snelheid - 100;
+                guiNode.detachChild(hudText);
+                snelheidUpdate();
+                }
             }
         };
-        inputManager.addListener(acl, "play_stop");
+          inputManager.addListener(acl, "play_stop");
+          inputManager.addListener(acl, "snelheid_omhoog1");
+          inputManager.addListener(acl, "snelheid_omlaag1");
+          inputManager.addListener(acl, "snelheid_omhoog100");
+          inputManager.addListener(acl, "snelheid_omlaag100");
     }
     
     public void logCameraPosition(){
