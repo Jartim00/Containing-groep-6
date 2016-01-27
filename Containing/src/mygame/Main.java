@@ -211,7 +211,7 @@ public class Main extends SimpleApplication{
         zeeschip1.storeContainer(c1000, 19, 0, 15);
         
         c2 = new Container(assetManager);
-        opslagstroken[38].storeContainer(c2, 0, 0, 0);
+        opslagstroken[20].storeContainer(c2, 16, 5, 0);
         target = new Vector3f(c2.getLocalTranslation());
         //opslagKranen[38].verplaatsKraanX(target);
         
@@ -598,7 +598,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
 //                        }
                     } else {
                         playing = true;
-                        opslagKranen[38].verplaatsKraanX(target,0,c2);
+                        opslagKranen[20].verplaatsKraanX(target,5,c2);
 //                        for (int i = 0; i < opslagstroken.length; i++) {
 //                            opslagstroken[1].motionControl.play();
 //                        }

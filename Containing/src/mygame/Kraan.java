@@ -140,15 +140,14 @@ public abstract class Kraan extends Node implements MotionPathListener{
         Vector3f start = hNode.getLocalTranslation();
         System.out.println(start);
         Vector3f bestemming = new Vector3f(0, ((-23.5f)+3.2f*hoogte),0);
+        Vector3f omhoog = new Vector3f(0, 0.01f*((-23.5f)+3.2f*hoogte),0);
         maakBeweging(haakControl, haakPath, sliDur, start, bestemming);
         System.out.println("hNOde" + hNode.getLocalTranslation());
         System.out.println("doel haak"+doel); 
         System.out.println("target haak"+target);
         System.out.println("bestemming haaky:" + bestemming);
-        if(hNode.getLocalTranslation() == doel){
-            System.out.println("NICE");
-        }
         
+        maakBeweging(haakControl, haakPath, sliDur, start, omhoog);
         
         
             //CollisionResult closest  = results.getClosestCollision();
