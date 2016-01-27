@@ -56,8 +56,40 @@ public class Opslagstrook extends Node {
         matA.setColor("Color", ColorRGBA.Gray);
         Material matB = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matB.setColor("Color", ColorRGBA.Black);
+        //Material matC = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         opslag.setMaterial(matA);
         opslagTerrein.setMaterial(matB);
+        //Geometry[] parkArrRechts = new Geometry[6];
+        //Geometry[] parkArrLinks = new Geometry[6];
+        //parkerenRechts = new Node();
+        //parkerenLinks = new Node();
+        //for(int i =0; i < 6; i++){
+            //parkArrRechts[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte, 0.02f,Container.containerBreedte));
+            //parkArrLinks[i] = new Geometry("Box number " + Integer.toString(i), new Box(Container.containerLengte, 0.02f,Container.containerBreedte));
+            //parkArrRechts[i].setMaterial(matC);
+            //parkArrLinks[i].setMaterial(matC);
+           //parkArrRechts[i].setLocalTranslation(0,0,breedteA - Container.containerBreedte - i*2*Container.containerBreedte);
+            //parkArrLinks[i].setLocalTranslation(0,0,breedteA - Container.containerBreedte - i*2*Container.containerBreedte);
+            //matC.setColor("Color", ColorRGBA.Blue);
+            //matC.getAdditionalRenderState().setWireframe(true);
+            //parkerenRechts.attachChild(parkArrRechts[i]);
+            //parkerenLinks.attachChild(parkArrLinks[i]);
+        //}
+        //attachChild(parkerenRechts);
+        //attachChild(parkerenLinks);
+        
+        //parkerenLinks.setLocalTranslation(-lengteA + Container.containerLengte,0,0);
+        //parkerenRechts.setLocalTranslation(lengteA + Container.containerLengte,0,0);
+        attachChild(opslagTerrein);
+        attachChild(opslag);
+        //createMotionPath();
+        //createMotionControl();
+        
+        //kraan = assetManager.loadModel("Scenes/OpslagKraan.j3o");   
+        kraan = assetManager.loadModel("Models/high/crane/storagecrane/crane.j3o");        
+        kraan.setLocalScale(0.12f, 0.16f, 0.2f);
+        kraan.rotate(0, FastMath.HALF_PI ,0);        
+        attachChild(kraan);
         
         for (int x = 0; x < 47; x++) {
             for (int y = 0; y < 6; y++) {
@@ -65,7 +97,8 @@ public class Opslagstrook extends Node {
                     containerOpslag[x][y][z] = null;                       
                 } 
             }
-        }        
+        }
+        
     }
     
     public void maakParkeerPlaatsen(Vector3f locatie){
@@ -98,4 +131,47 @@ public class Opslagstrook extends Node {
         return containerOpslag;
     }
     
+    
+    
+    
+    private void createMotionPath(){        
+        
+        path = new MotionPath();    
+        
+//        path.addWayPoint(new Vector3f(0, 2.5f, 0));
+          
+          
+//        path.addWayPoint(new Vector3f(-lengteA - 2*containerLengte, 2.5f, 0));
+//        path.addWayPoint(new Vector3f(lengteA + 2*containerLengte, 2.5f, 0));        
+//        path.addWayPoint(new Vector3f(0, 2.5f, 0));
+        path.addWayPoint(new Vector3f(-lengteA - Container.containerLengte, 0, 0));
+        for (int x = 0; x < 47; x++){
+            path.addWayPoint(new Vector3f((-lengteA + 2*Container.containerLengte + x*2*Container.containerLengte),0,0));
+        }
+        
+        path.addWayPoint(new Vector3f(lengteA + Container.containerLengte, 0, 0));
+        
+       
+        
+//        for (int x = 0; x < 46; x++) {
+//            for (int y = 0; y < 6; y++) {
+//                for (int z = 0; z < 6; z++) {
+//                    path.addWayPoint(new Vector3f((-lengteA + 2*containerLengte + x*2*containerLengte), 
+//                                                  (containerHoogte + y*2*containerHoogte), 
+//                                                  (breedteA - containerBreedte - z*2*containerBreedte)));
+//                    
+//                }
+//            }
+//        }
+        //path.enableDebugShape(assetManager, this);
+        
+     
+    }
+    
+    private void createMotionControl(){
+        motionControl = new MotionEvent(kraan,path);
+        motionControl.setDirectionType(MotionEvent.Direction.Path);
+        motionControl.setInitialDuration(40f);
+        motionControl.setSpeed(4f);  
+    }
 }
