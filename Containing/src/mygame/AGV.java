@@ -21,7 +21,7 @@ public class AGV extends Node {
    
     private AssetManager assetManager;
     public ParkeerPlaats plaats;
-   public static int[][] vrijeParkeerplaatsL = new int[77][6]; // list met 6x77 vrije parkeerplaatsen voor de linkerkant
+    public static int[][] vrijeParkeerplaatsL = new int[77][6]; // list met 6x77 vrije parkeerplaatsen voor de linkerkant
     public static int[][] vrijeParkeerplaatsR = new int [77][6]; // list met 6x77 vrije parkeerplaatsen voor de rechterkant
     public AGV(AssetManager assetManager) 
     {        

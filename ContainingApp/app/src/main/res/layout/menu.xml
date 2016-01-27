@@ -14,7 +14,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="     Containing Groep 9"
+        android:text="Containing Groep 9"
         android:id="@+id/button"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -30,6 +30,7 @@
     android:layout_height="wrap_content"
     android:layout_width="fill_parent"
     android:layout_alignParentBottom="true"
+    android:layout_alignParentTop="true"
     android:orientation="vertical" >
     <Button
         android:id="@+id/grafiek"
@@ -42,10 +43,10 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/info"
         android:layout_width="fill_parent"
         android:layout_height="100sp"
-        android:text="Zoeken"
+        android:text="Info"
         android:layout_marginTop="1sp"
         android:textColor="#ffffff"
         android:background="#000000"

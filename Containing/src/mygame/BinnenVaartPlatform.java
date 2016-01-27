@@ -11,6 +11,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Node;
+import static mygame.BinnenVaartPlatform.schepenNode;
 
 
 /**
