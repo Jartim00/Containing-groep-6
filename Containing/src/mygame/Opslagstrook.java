@@ -118,7 +118,7 @@ public class Opslagstrook extends Node {
 }       
     
     public void storeContainer(Container container, int x, int y, int z){
-        if (x < 45 && y < 6 && z < 6){ //deze if is tijdelijke om de methode te testen
+        if (x < 45 && y < 6 && z < 6){ //deze if is tijdelijk om de methode te testen
         if(containerOpslag[x][y][z] == null)
             containerOpslag[x][y][z] = container;        
         

@@ -17,24 +17,22 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 
-/**
- *
- * @author Sjoerd
- */
-public class Vrachtwagen extends Node {
+public class VrachtwagenPlaats extends Node {  
     
+    private static AssetManager assetManager;
+    Spatial vrachtwagenModel;
+    Container cont;
     
-    private float breedteA = Container.containerBreedte; // Grootte parkeerplekken
-    private float lengteA = Container.containerLengte;    
     public Vector3f translation;          
     public boolean bezet;   
     
-    AssetManager assetManager;
     
-    public Vrachtwagen(AssetManager assetManager){
+    public VrachtwagenPlaats(AssetManager manager){
+        
+        this.assetManager = manager;
         
         VrachtwagenKraan kraan = new VrachtwagenKraan(assetManager);
-        Box parkeerplaats = new Box(lengteA,0.01f,breedteA);
+        Box parkeerplaats = new Box(Container.containerLengte,0.01f,Container.containerBreedte);
         Geometry agv = new Geometry("agv parkeerplaats",parkeerplaats);
         Geometry vrachtwagen = new Geometry("vrachtwagen parkeerplaats",parkeerplaats);
         Material matP = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -43,22 +41,38 @@ public class Vrachtwagen extends Node {
         matQ.setColor("Color", ColorRGBA.Cyan);
         agv.setMaterial(matP);
         vrachtwagen.setMaterial(matQ);
-        kraan.setLocalTranslation(0, 1, 0);
-        agv.setLocalTranslation(-lengteA, 0.01f, 0);
-        vrachtwagen.setLocalTranslation(lengteA,0.01f,0);
+        agv.setLocalTranslation(-Container.containerLengte, 0.01f, 0);
+        vrachtwagen.setLocalTranslation(Container.containerLengte,0.01f,0);
         attachChild(kraan);
         attachChild(agv);
         attachChild(vrachtwagen);
+        
+        
+        
       
     }
 
-   
     public void storeContainer(Container container)
     {   
-        
-        attachChild(container);
-        container.setLocalTranslation( (lengteA),    // container word op de plaats van de vrachtwagen gezet
-                                       (0.2f), 
+        cont = container;
+        attachChild(cont);
+        container.setLocalTranslation( (Container.containerLengte),    // container word op de plaats van de vrachtwagen gezet
+                                       (0.5f), 
                                        (0));
+    }
+   
+    
+    public void komtAan()
+    {
+        vrachtwagenModel = assetManager.loadModel("Models/medium/truck.j3o");
+        vrachtwagenModel.scale(0.2f);
+        vrachtwagenModel.rotate(0,FastMath.HALF_PI, 0);
+        vrachtwagenModel.setLocalTranslation(1.25f, 0, 0);
+        attachChild(vrachtwagenModel);
+    }
+    public void vertrekt()
+    {
+        detachChild(vrachtwagenModel);
+        detachChild(cont);
     }
 }

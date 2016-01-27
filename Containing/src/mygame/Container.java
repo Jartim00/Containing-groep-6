@@ -32,6 +32,7 @@ public class Container extends Node {
     private Point3d locatie;
     private final AssetManager assetManager;
     
+    //afmetingen van een container.
     public static float containerLengte = 1.2f;
     public static float containerBreedte = 0.25f;
     public static float containerHoogte = 0.26f;    

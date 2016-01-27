@@ -14,46 +14,35 @@ public class Vrachtwagenplatform extends Node {
     private float platformHoogte = 0.001f;
     private float platformLengte = Main.opslagLengte/2 + Main.wegBreedte;
     
-    
-//    private float parkeerLengte;
-//    private float parkeerHoogte;
-//    private float perkeerBreedte;
-    Node platform;
-    Node park;
+    Node platformNode;
+    static Node parkeerNode;
     Node kranenNode;
+    
     
     public Vrachtwagenplatform(AssetManager assetManager) {
         
         this.assetManager = assetManager;
         Box b = new Box(platformBreedte,platformHoogte,platformLengte);
-        Geometry geom = new Geometry("Box", b);
+        Geometry platform = new Geometry("Box", b);
         Material matA = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matA.setColor("Color", ColorRGBA.Black);
-        geom.setMaterial(matA);
-        platform = new Node();
-        park = new Node();
+        platform.setMaterial(matA);
+        platformNode = new Node();
+        parkeerNode = new Node();
         
-        Vrachtwagen[] vrachtwagenPlaatsen = new Vrachtwagen[20];
+        //VrachtwagenPlaats[] vrachtwagenPlaatsen = new VrachtwagenPlaats[20];
 
-       
+        //vrachtwagenplaatsen aanmaken met kranen en parkeerplaatsen voor agvs en vrachtwagens
         
-//            treinKranen[i] = new TreinKraan(assetManager);
-//            attachChild(treinKranen[i]);  
-//            treinKranen[i].setLocalTranslation((i * 4f), 1, 0);
         
-        for(int i = 0; i < vrachtwagenPlaatsen.length;i++){
-            vrachtwagenPlaatsen[i] = new Vrachtwagen(assetManager);
-            vrachtwagenPlaatsen[i].setLocalTranslation(0, 0, 4*i);
-            park.attachChild(vrachtwagenPlaatsen[i]);
-            
+        
+        parkeerNode.setLocalTranslation(-platformBreedte + 2*Container.containerLengte, 0, -1.8f);
+        platformNode.attachChild(platform);
+        platformNode.attachChild(parkeerNode);
+        platformNode.setLocalTranslation(platformBreedte,0,0);
+        attachChild(platformNode);
+        
+        
+    }
+    
         }
-        park.setLocalTranslation(-platformBreedte + 2*Container.containerLengte, 0, -1.8f);
-        platform.attachChild(geom);
-        platform.attachChild(park);
-        platform.setLocalTranslation(platformBreedte,0,0);
-        attachChild(platform);
-        
-    }
-        
-        
-    }

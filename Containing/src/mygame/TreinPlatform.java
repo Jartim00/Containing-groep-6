@@ -21,13 +21,15 @@ public class TreinPlatform extends Node
     
     static Node treinNode;
     Node treinPlatformNode;
-    static float containerOpslagBreedte = 0.25f; // A = opslag voor containers
-    static float containerOpslagLengte = 125.3f;    
-    static float TreinPlatformBreedte = 4f; // B = complete strook inclusief parkeerplekken en ruimte voor kraan
+    
+    // breedte van de trein waar de containers op komen
+    static float containerOpslagBreedte = 0.25f;   
+    
+    //afmetingen van het treinplatform
+    static float TreinPlatformBreedte = 4f; 
     static float treinPlatformLengte = Main.opslagLengte + 2*Main.wegBreedte; 
     
 
-    //maak opslagkraan
     public TreinPlatform(AssetManager assetManager) 
 {
             this.assetManager = assetManager;

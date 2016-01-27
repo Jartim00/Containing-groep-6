@@ -20,6 +20,7 @@ public class ZeeschipKraan extends Node
 {
     private AssetManager assetManager;
     
+    //afmetingen van de kraan
     private final float kraanDikte = 0.25f;
     private final float kraanHoogte = 2.5f;
     private final float kraanBreedte = 1.7f;

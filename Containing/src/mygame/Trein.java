@@ -129,9 +129,10 @@ public class Trein extends Node
             attachChild(wielw3);
             attachChild(wielw4);
             
-            float a = 2.5f;
+            float a = 2.5f; //grootte van de wagon(2.4) + de koppeling(0.1) 
             float b = 2.4f;
             
+            // forloop waarmee het aantal wagons worden aangemaakt waar de trein uitbestaat
             for(int i=1; i<containerPlaatsen; i++){
 
             Geometry wielw5 = new Geometry("Cylinder", wiel);
@@ -155,7 +156,7 @@ public class Trein extends Node
             wielw6.setLocalTranslation(-3.5f - b, -0.33f, 0.31f);
             wielw7.setLocalTranslation(-2f - a, -0.33f, -0.31f);
             wielw8.setLocalTranslation(-3.5f - b, -0.33f, -0.31f);
-            a = a + 2.5f; //grootte van de wagon + de koppeling
+            a = a + 2.5f;   //De hoeveelheid waarmee iedere wagon van de andere wagon word afgezet  
             b = b + 2.5f;
 
             attachChild(wagonModel2);
@@ -174,7 +175,7 @@ public class Trein extends Node
             
             setLocalTranslation(0,0.5f,0);
 } 
-    
+    //Zelfde methode als bij de opslagstrook en de andere vervoersvoertuigen alleen dan word hier maar gebruik gemaakt van 1 variabele.
     public void storeContainer(Container container, int x)
     {
 

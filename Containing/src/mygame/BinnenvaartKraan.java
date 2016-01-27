@@ -20,9 +20,9 @@ public class BinnenvaartKraan extends Node
 {
     private AssetManager assetManager;
     
-    private final float kraanDikte = 0.25f;
-    private final float kraanHoogte = 2.5f;
-    private final float kraanBreedte = 1.7f;
+    private final float kraanDikte = 0.125f;
+    private final float kraanHoogte = 1.25f;
+    private final float kraanBreedte = 1.2f;
     
     public BinnenvaartKraan(AssetManager assetManager) 
     {
@@ -32,8 +32,8 @@ public class BinnenvaartKraan extends Node
         Box poot = new Box(kraanDikte,kraanHoogte,kraanDikte);
         Box xBalk = new Box(kraanBreedte,kraanDikte,kraanDikte);
         Box zBalk = new Box(kraanDikte,kraanDikte,kraanBreedte);
-        Box ballast = new Box(1.5f,0.5f,1.5f);
-        Box arm = new Box(kraanDikte,kraanDikte,5);
+        Box ballast = new Box(kraanBreedte,0.5f,kraanBreedte);
+        Box arm = new Box(kraanDikte,kraanDikte,3);
         Box haak = new Box(Container.containerLengte,0.1f,Container.containerBreedte);
         
         Geometry binnenvaartKraanPoot1 = new Geometry("Box", poot);
@@ -76,9 +76,9 @@ public class BinnenvaartKraan extends Node
         binnenvaartKraanXBalk2.setLocalTranslation(0, 1, kraanBreedte - kraanDikte);
         binnenvaartKraanZBalk1.setLocalTranslation(kraanBreedte - kraanDikte, 1, 0);
         binnenvaartKraanZBalk2.setLocalTranslation(-(kraanBreedte - kraanDikte), 1, 0);
-        binnenvaartKraanArm1.setLocalTranslation(kraanBreedte - kraanDikte, kraanHoogte, 8*Container.containerBreedte + kraanBreedte/2);
-        binnenvaartKraanArm2.setLocalTranslation(-(kraanBreedte - kraanDikte), kraanHoogte, 8*Container.containerBreedte + kraanBreedte/2);
-        binnenvaartKraanBallast.setLocalTranslation(0, kraanHoogte, -3);
+        binnenvaartKraanArm1.setLocalTranslation(kraanBreedte - kraanDikte, kraanHoogte, 4*Container.containerBreedte + kraanBreedte/2);
+        binnenvaartKraanArm2.setLocalTranslation(-(kraanBreedte - kraanDikte), kraanHoogte, 4*Container.containerBreedte + kraanBreedte/2);
+        binnenvaartKraanBallast.setLocalTranslation(0, kraanHoogte, -2*kraanBreedte);
         binnenvaartKraanHaak.setLocalTranslation(0, kraanHoogte, 0); 
         
         attachChild(binnenvaartKraanPoot1);

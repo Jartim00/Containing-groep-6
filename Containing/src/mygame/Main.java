@@ -37,6 +37,7 @@ import static mygame.AGV.vrijeParkeerplaatsR;
 import static mygame.ZeeschipPlatform.zeeschipNode;
 import static mygame.BinnenVaartPlatform.schepenNode;
 import static mygame.TreinPlatform.treinNode;
+import static mygame.Vrachtwagenplatform.parkeerNode;
 
 
 public class Main extends SimpleApplication{    
@@ -66,12 +67,15 @@ public class Main extends SimpleApplication{
     ArrayList<Container> containers = new ArrayList();
     Opslagstrook[] opslagstroken = new Opslagstrook[77];
     ArrayList<AGV> agvs = new ArrayList<AGV>();
+    VrachtwagenPlaats[] vrachtwagens = new VrachtwagenPlaats[20];
 
-    Schip zeeschip1;
-    Schip zeeschip2;
+    ZeeSchip zeeschip1;
+    ZeeSchip zeeschip2;
     BinnenvaartSchip binnenvaartschip1;
     BinnenvaartSchip binnenvaartschip2;
     Trein containerTrein;
+    
+    
     
     //socketdeclaratie
     private static ClientSocket s1;
@@ -102,72 +106,7 @@ public class Main extends SimpleApplication{
         
         //Init AGVs
           initAGVs();
-//        OpslagKraan opslagKraan1 = new OpslagKraan(assetManager);
-//        ZeeschipKraan zeeschipKraan1 = new ZeeschipKraan(assetManager);
-//        BinnenvaartKraan binnenvaartKraan1 = new BinnenvaartKraan(assetManager);
-//        VrachtwagenKraan vrachtwagenKraan1 = new VrachtwagenKraan(assetManager);
-//        TreinKraan treinKraan1 = new TreinKraan(assetManager);
-        //create terrain
-//        Box opslagBox = new Box(155, 0.01f, 60);
-//        Box wegBox = new Box(157.4f, 0, 62.4f);
-//        Box vrachtwagenBinnenvaart = new Box(78.7f, 0, 3);
-//        Box treinBox = new Box(157.4f, 0, 3);
-//        Box zeevaartBox = new Box(-3, 0, 68.4f);
-//        
-//        Geometry Opslag = new Geometry("Box",opslagBox);
-//        Geometry weg = new Geometry("Box",wegBox);
-//        Geometry vrachtwagenvervoer = new Geometry("Box",vrachtwagenBinnenvaart);
-//        Geometry binnenvaart = new Geometry("Box",vrachtwagenBinnenvaart);
-//        Geometry treinplatform = new Geometry("Box",treinBox);
-//        Geometry zeevaart = new Geometry("Box",zeevaartBox);
-//        
-//        Material matb = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        Material matc = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        Material matd = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        Material mate = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        Material matf = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        Material matg = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        
-//        
-//        matb.setColor("Color", ColorRGBA.Blue);
-//        matc.setColor("Color", ColorRGBA.DarkGray);
-//        matd.setColor("Color", ColorRGBA.Green);
-//        mate.setColor("Color", ColorRGBA.Red);
-//        matf.setColor("Color", ColorRGBA.Yellow);
-//        matg.setColor("Color", ColorRGBA.Orange);
-//        
-//        matb.getAdditionalRenderState().setWireframe(false);
-//        matf.getAdditionalRenderState().setWireframe(false);
-//        
-//        Opslag.setMaterial(matb);
-//        weg.setMaterial(matc);
-//        vrachtwagenvervoer.setMaterial(matd);
-//        binnenvaart.setMaterial(mate);
-//        treinplatform.setMaterial(matf);
-//        zeevaart.setMaterial(matg);
-//        
-//        vrachtwagenvervoer.setLocalTranslation(78.7f, 0, 65.4f);
-//        binnenvaart.setLocalTranslation(-78.7f, 0, 65.4f);
-//        treinplatform.setLocalTranslation(0, 0, -65.4f);
-//        zeevaart.setLocalTranslation(-160.4f, 0, 0);
-//        opslagKraan1.setLocalTranslation(0, 2, 0);
-//        zeeschipKraan1.setLocalTranslation(-160, 2, 0);
-//        binnenvaartKraan1.setLocalTranslation(-78, 2, 65);
-//        vrachtwagenKraan1.setLocalTranslation(78, 1, 65);
-//        treinKraan1.setLocalTranslation(0, 1, -65);
-//        
-//        rootNode.attachChild(Opslag);
-//        rootNode.attachChild(weg);
-//        rootNode.attachChild(vrachtwagenvervoer);
-//        rootNode.attachChild(binnenvaart);
-//        rootNode.attachChild(treinplatform);
-//        rootNode.attachChild(zeevaart);
-//        rootNode.attachChild(opslagKraan1);
-//        rootNode.attachChild(zeeschipKraan1);
-//        rootNode.attachChild(binnenvaartKraan1);
-//        rootNode.attachChild(vrachtwagenKraan1);
-//        rootNode.attachChild(treinKraan1);
-        
+
 
 //=======
         // plaatst op elke strook 1 container
@@ -198,9 +137,13 @@ public class Main extends SimpleApplication{
         // Kijk voor de uitleg van de storecontainer functie naar de klasse opslagstrook omdat deze voor de vervoersplatformen hetzelfde is.
         
         Container c1000 = new Container(assetManager);
+        zeeschip1.komtAan();
+        zeeschip2.komtAan();
         zeeschip1.storeContainer(c1000, 0, 0, 0);
         
         Container c1001 = new Container(assetManager);
+        binnenvaartschip1.komtAan();
+        binnenvaartschip2.komtAan();
         binnenvaartschip1.storeContainer(c1001, 0, 0, 0);
         
         Container c22 = new Container(assetManager);
@@ -213,7 +156,11 @@ public class Main extends SimpleApplication{
         containerTrein.storeContainer(c24, 3);
         
         Container c25 = new Container(assetManager);
-        containerTrein.storeContainer(c25, 49);
+        vrachtwagens[0].komtAan();
+        vrachtwagens[0].vertrekt();
+        vrachtwagens[0].storeContainer(c25);
+        
+      
         
 
         for (int x = 0; x < 46; x++) {
@@ -316,8 +263,12 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
     {
         BinnenVaartPlatform binnenvaartplatform = new BinnenVaartPlatform(assetManager);
         binnenvaartplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte,0,opslagLengte/2 + wegBreedte);
-        binnenvaartschip1KomtAan();
-        binnenvaartschip2KomtAan();
+        binnenvaartschip1 = new BinnenvaartSchip(assetManager);
+        binnenvaartschip1.setLocalTranslation(BinnenVaartPlatform.platformLengte/2,0,0);
+        schepenNode.attachChild(binnenvaartschip1);
+        binnenvaartschip2 = new BinnenvaartSchip(assetManager);
+        binnenvaartschip2.setLocalTranslation(-BinnenVaartPlatform.platformLengte/2,0,0);
+        schepenNode.attachChild(binnenvaartschip2);
         rootNode.attachChild(binnenvaartplatform);
     }   // platform word aangemaakt, gepositioneerd en aan een node vastgemaakt.
     
@@ -335,8 +286,12 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         zeeschipPlatformNode = new Node("zeeschipPlatform");
         ZeeschipPlatform zeeschipPlatform = new ZeeschipPlatform(assetManager);
         zeeschipPlatformNode.attachChild(zeeschipPlatform);
-        zeeschip1KomtAan();
-        zeeschip2KomtAan();
+        zeeschip1 = new ZeeSchip(assetManager);
+        zeeschip1.setLocalTranslation(0, 0, ZeeschipPlatform.platformLengte/2);
+        zeeschipNode.attachChild(zeeschip1);
+        zeeschip2 = new ZeeSchip(assetManager);
+        zeeschip2.setLocalTranslation(0,0,-ZeeschipPlatform.platformLengte/2);
+        zeeschipNode.attachChild(zeeschip2);
         zeeschipPlatform.setLocalTranslation(0, 0, opslagLengte + 2*wegBreedte); //opslagPlatform + zeeschipPlatform/2 + wegBreedte
         System.out.println(zeeschipPlatform.getLocalTranslation().toString());
         sceneNode.attachChild(zeeschipPlatformNode);
@@ -344,11 +299,18 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
 	
 	public void initVrachtwagenplatform()
         {
-        VrachtwagenplatformNode = new Node();
-        Vrachtwagenplatform vrachtwagenplatform = new Vrachtwagenplatform(assetManager);
-        VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
-        vrachtwagenplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte, 0, -opslagLengte/2 - wegBreedte);
-        sceneNode.attachChild(VrachtwagenplatformNode);
+            VrachtwagenplatformNode = new Node();
+            Vrachtwagenplatform vrachtwagenplatform = new Vrachtwagenplatform(assetManager);
+            VrachtwagenplatformNode.attachChild(vrachtwagenplatform);
+            vrachtwagenplatform.setLocalTranslation(opslagBreedte + 2*wegBreedte, 0, -opslagLengte/2 - wegBreedte);
+            sceneNode.attachChild(VrachtwagenplatformNode);
+        for(int i = 0; i < vrachtwagens.length;i++)
+            {
+                vrachtwagens[i] = new VrachtwagenPlaats(assetManager);
+                vrachtwagens[i].setLocalTranslation(0, 0, 4*i);  // deze positionering zorgt ervoor dat de vrachtwagenplaatsen gelijk staan met de opslagstroken
+                parkeerNode.attachChild(vrachtwagens[i]);
+            }
+        //vrachtwagenKomtAan(0);
         }
     
 
@@ -434,46 +396,7 @@ public void initAgvAansturen(final MotionPath pad, final int id, final int laann
         rootNode.addLight(sun);  
     }
     
-    void zeeschip1KomtAan()
-    {
-        Schip.xContainers = ZeeschipPlatform.lengteContainerPlaatsen;
-        Schip.yContainers = ZeeschipPlatform.hoogteContainerPlaatsen;
-        Schip.zContainers = ZeeschipPlatform.breedteContainerPlaatsen;
-        zeeschip1 = new Schip(assetManager);
-        zeeschip1.setLocalTranslation(0, 0, ZeeschipPlatform.platformLengte/2);
-        zeeschipNode.attachChild(zeeschip1);
-        
-    }
-    
-    void zeeschip2KomtAan()
-    {
-        Schip.xContainers = ZeeschipPlatform.lengteContainerPlaatsen;
-        Schip.yContainers = ZeeschipPlatform.hoogteContainerPlaatsen;
-        Schip.zContainers = ZeeschipPlatform.breedteContainerPlaatsen;
-        zeeschip2 = new Schip(assetManager);
-        zeeschip2.setLocalTranslation(0,0,-ZeeschipPlatform.platformLengte/2);
-        zeeschipNode.attachChild(zeeschip2);
-    }
-    
-    void binnenvaartschip1KomtAan()
-    {
-        BinnenvaartSchip.xContainers = BinnenVaartPlatform.opslagBreedte;
-        BinnenvaartSchip.yContainers = BinnenVaartPlatform.opslagHoogte;
-        BinnenvaartSchip.zContainers = BinnenVaartPlatform.opslagLengte;
-        binnenvaartschip1 = new BinnenvaartSchip(assetManager);
-        binnenvaartschip1.setLocalTranslation(BinnenVaartPlatform.platformLengte/2,0,0);
-        schepenNode.attachChild(binnenvaartschip1);
-    }
-    
-    void binnenvaartschip2KomtAan()
-    {
-        BinnenvaartSchip.xContainers = BinnenVaartPlatform.opslagBreedte;
-        BinnenvaartSchip.yContainers = BinnenVaartPlatform.opslagHoogte;
-        BinnenvaartSchip.zContainers = BinnenVaartPlatform.opslagLengte;
-        binnenvaartschip2 = new BinnenvaartSchip(assetManager);
-        binnenvaartschip2.setLocalTranslation(-BinnenVaartPlatform.platformLengte/2,0,0);
-        schepenNode.attachChild(binnenvaartschip2);
-    }
+    // methodes waarmee de voertuigen worden aangemaakt
     
     void treinKomtAan(int x)
     {

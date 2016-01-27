@@ -20,6 +20,7 @@ public class VrachtwagenKraan extends Node {
     
     private AssetManager assetManager;
     
+    //afmetingen van de kraan
     private final float kraanHoogte = 1;
     private final float kraanDikte = 0.2f;
     private final float kraanBreedte = 0.7f;
@@ -28,9 +29,9 @@ public class VrachtwagenKraan extends Node {
     {
         this.assetManager = assetManager;
         
-        Box poot = new Box(0.2f,1,0.2f);
-        Box top = new Box(0.2f,0.2f,0.7f);
-        Box haak = new Box(1.2f,0.1f,0.25f);
+        Box poot = new Box(kraanDikte,kraanHoogte,kraanDikte);
+        Box top = new Box(kraanDikte,kraanDikte,kraanBreedte);
+        Box haak = new Box(Container.containerLengte,0.1f,Container.containerBreedte);
         
         Geometry vrachtwagenKraanPoot1 = new Geometry("Box", poot);
         Geometry vrachtwagenKraanPoot2 = new Geometry("Box", poot);
@@ -57,7 +58,6 @@ public class VrachtwagenKraan extends Node {
         attachChild(vrachtwagenKraanPoot2);
         attachChild(vrachtwagenKraanTop);
         attachChild(vrachtwagenKraanHaak);
-        //rotate(0,FastMath.HALF_PI, 0);
         setLocalTranslation(0,kraanHoogte,0);
     }
 }
